@@ -4,7 +4,169 @@ export const lessons = [
     unitId: "alphabet-basics",
     title: "English Letters",
     goal: "تعرف على فكرة الحروف الإنجليزية الكبيرة والصغيرة.",
+    explanation: "الحروف الإنجليزية لها شكل كبير Capital وشكل صغير Small. معرفة الحروف تساعدك على قراءة الكلمات وكتابتها بشكل صحيح.",
+    words: ["letter", "capital", "small"],
+    examples: [
+      { english: "A is a capital letter.", arabic: "A حرف كبير." },
+      { english: "a is a small letter.", arabic: "a حرف صغير." }
+    ],
+    practice: "اكتب ثلاثة حروف كبيرة وثلاثة حروف صغيرة في ورقة أو في ملاحظات الهاتف.",
+    aiTip: "لا تحفظ الحروف وحدها فقط. اربط كل حرف بكلمة بسيطة مثل A = Apple.",
     xpReward: 20,
-    estimatedMinutes: 3
+    estimatedMinutes: 3,
+    order: 1
+  },
+  {
+    id: "eng-002",
+    unitId: "daily-basics",
+    title: "Basic Greetings",
+    goal: "تعلم كيف تبدأ المحادثة بتحية بسيطة.",
+    explanation: "التحيات هي كلمات نستخدمها عندما نقابل شخصاً أو نبدأ الحديث معه.",
+    words: ["hello", "good morning", "thank you"],
+    examples: [
+      { english: "Hello, Ali.", arabic: "مرحباً يا علي." },
+      { english: "Good morning, teacher.", arabic: "صباح الخير يا أستاذ." }
+    ],
+    practice: "قل بصوت منخفض: Hello, how are you? ثم كررها مرتين.",
+    aiTip: "استخدم Hello في أغلب المحادثات العادية كبداية آمنة وبسيطة.",
+    xpReward: 20,
+    estimatedMinutes: 4,
+    order: 2
+  },
+  {
+    id: "eng-003",
+    unitId: "daily-basics",
+    title: "Introducing Yourself",
+    goal: "تعلم كيف تقول اسمك بطريقة بسيطة.",
+    explanation: "عندما تقابل شخصاً جديداً، تستطيع استخدام My name is أو I am لتقديم نفسك.",
+    words: ["name", "my", "I am"],
+    examples: [
+      { english: "My name is Ahmed.", arabic: "اسمي أحمد." },
+      { english: "I am a student.", arabic: "أنا طالب." }
+    ],
+    practice: "اكتب جملة واحدة عن نفسك تبدأ بـ My name is.",
+    aiTip: "My name is أكثر وضوحاً للمبتدئ عندما تريد ذكر اسمك.",
+    xpReward: 20,
+    estimatedMinutes: 4,
+    order: 3
+  },
+  {
+    id: "eng-004",
+    unitId: "daily-basics",
+    title: "Saying Thank You",
+    goal: "تعلم كلمات الشكر والرد عليها.",
+    explanation: "كلمات الشكر تستخدم بعد أن يساعدك شخص أو يعطيك شيئاً.",
+    words: ["thank you", "thanks", "you are welcome"],
+    examples: [
+      { english: "Thank you for your help.", arabic: "شكراً لمساعدتك." },
+      { english: "You are welcome.", arabic: "على الرحب والسعة." }
+    ],
+    practice: "تخيل أن شخصاً ساعدك، واكتب جملة شكر قصيرة بالإنجليزية.",
+    aiTip: "Thanks أقصر وأكثر استخداماً في الكلام اليومي، أما Thank you فهي أوضح وأكثر تهذيباً.",
+    xpReward: 20,
+    estimatedMinutes: 4,
+    order: 4
+  },
+  {
+    id: "eng-005",
+    unitId: "daily-basics",
+    title: "Yes, No, Maybe",
+    goal: "تعلم كلمات الموافقة والرفض والتردد.",
+    explanation: "هذه الكلمات الصغيرة مهمة جداً لأنها تظهر في أغلب المحادثات.",
+    words: ["yes", "no", "maybe"],
+    examples: [
+      { english: "Yes, I understand.", arabic: "نعم، أنا أفهم." },
+      { english: "Maybe tomorrow.", arabic: "ربما غداً." }
+    ],
+    practice: "اختر موقفاً من يومك وأجب عنه بـ Yes أو No أو Maybe.",
+    aiTip: "Maybe تعني أنك غير متأكد، وهي مفيدة عندما لا تريد الإجابة بنعم أو لا مباشرة.",
+    xpReward: 20,
+    estimatedMinutes: 3,
+    order: 5
+  },
+  {
+    id: "eng-006",
+    unitId: "classroom-english",
+    title: "Classroom Words",
+    goal: "تعلم كلمات بسيطة تستخدم في الصف أو الدراسة.",
+    explanation: "هذه الكلمات تساعد الطالب على فهم التعليمات الأساسية داخل الصف أو أثناء الدراسة.",
+    words: ["book", "pen", "teacher", "student"],
+    examples: [
+      { english: "This is my book.", arabic: "هذا كتابي." },
+      { english: "I am a student.", arabic: "أنا طالب." }
+    ],
+    practice: "انظر حولك واكتب اسم شيء دراسي واحد بالإنجليزية.",
+    aiTip: "ابدأ بالكلمات التي تراها يومياً، لأنها أسهل للحفظ.",
+    xpReward: 20,
+    estimatedMinutes: 4,
+    order: 6
+  },
+  {
+    id: "eng-007",
+    unitId: "classroom-english",
+    title: "How Are You?",
+    goal: "تعلم سؤالاً يومياً شائعاً والرد عليه.",
+    explanation: "How are you? من أكثر الأسئلة استخداماً في بداية المحادثات.",
+    words: ["how", "fine", "good"],
+    examples: [
+      { english: "How are you?", arabic: "كيف حالك؟" },
+      { english: "I am fine, thank you.", arabic: "أنا بخير، شكراً لك." }
+    ],
+    practice: "اقرأ الحوار: A: How are you? B: I am fine, thank you.",
+    aiTip: "I am fine جواب بسيط وآمن للمبتدئين.",
+    xpReward: 20,
+    estimatedMinutes: 4,
+    order: 7
+  },
+  {
+    id: "eng-008",
+    unitId: "classroom-english",
+    title: "Simple Questions",
+    goal: "تعرف على كلمات سؤال قصيرة ومهمة.",
+    explanation: "كلمات السؤال تساعدك على طلب المعلومات مثل الاسم، المكان، والطريقة.",
+    words: ["what", "where", "how"],
+    examples: [
+      { english: "What is your name?", arabic: "ما اسمك؟" },
+      { english: "Where are you from?", arabic: "من أين أنت؟" }
+    ],
+    practice: "اكتب سؤالاً واحداً يبدأ بـ What.",
+    aiTip: "لا تحفظ What وحدها؛ احفظها داخل جملة: What is your name?",
+    xpReward: 25,
+    estimatedMinutes: 5,
+    order: 8
+  },
+  {
+    id: "eng-009",
+    unitId: "daily-dialogue",
+    title: "Numbers 1–10",
+    goal: "تعلم الأرقام من 1 إلى 10.",
+    explanation: "الأرقام تستخدم في العمر، الوقت، السعر، والعدّ اليومي.",
+    words: ["one", "two", "three", "ten"],
+    examples: [
+      { english: "I have one book.", arabic: "لدي كتاب واحد." },
+      { english: "I am ten years old.", arabic: "عمري عشر سنوات." }
+    ],
+    practice: "عد من One إلى Ten بصوت منخفض.",
+    aiTip: "ابدأ بالأرقام الصغيرة لأنها تظهر كثيراً في المحادثات اليومية.",
+    xpReward: 20,
+    estimatedMinutes: 4,
+    order: 9
+  },
+  {
+    id: "eng-010",
+    unitId: "daily-dialogue",
+    title: "Short Daily Dialogue",
+    goal: "اقرأ حواراً يومياً قصيراً يجمع ما تعلمته.",
+    explanation: "الحوارات القصيرة تساعدك على رؤية الكلمات داخل موقف حقيقي.",
+    words: ["hello", "how", "fine", "thank you"],
+    examples: [
+      { english: "A: Hello, how are you?", arabic: "أ: مرحباً، كيف حالك؟" },
+      { english: "B: I am fine, thank you.", arabic: "ب: أنا بخير، شكراً لك." }
+    ],
+    practice: "اقرأ الحوار مرتين، مرة ببطء ومرة بسرعة طبيعية.",
+    aiTip: "عندما تجمع الكلمات في حوار، تصبح أسهل للحفظ من حفظها منفصلة.",
+    xpReward: 30,
+    estimatedMinutes: 5,
+    order: 10
   }
 ];
