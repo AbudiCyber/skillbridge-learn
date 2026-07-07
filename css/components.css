@@ -139,7 +139,8 @@ button:disabled {
 .lesson-card,
 .category-card,
 .guide-action-card,
-.word-card {
+.word-card,
+.quiz-question-card {
   padding: 14px;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -149,7 +150,8 @@ button:disabled {
 .feature-card h3,
 .lesson-card h3,
 .category-card h3,
-.guide-action-card h3 {
+.guide-action-card h3,
+.quiz-question-card h3 {
   margin: 0 0 8px;
   font-size: 1rem;
 }
@@ -158,7 +160,8 @@ button:disabled {
 .lesson-card p,
 .category-card p,
 .guide-action-card p,
-.word-card p {
+.word-card p,
+.quiz-question-card p {
   margin: 0;
   color: var(--muted);
   line-height: 1.7;
@@ -184,6 +187,45 @@ button:disabled {
 .word-card .ghost-button {
   margin-top: 12px;
   min-height: 42px;
+}
+
+.quiz-options {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.quiz-option {
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(15, 23, 42, 0.35);
+  color: var(--text);
+  text-align: inherit;
+  font-weight: 700;
+}
+
+.quiz-option.is-selected {
+  border-color: rgba(37, 99, 235, 0.75);
+  background: rgba(37, 99, 235, 0.18);
+}
+
+.quiz-option.is-correct {
+  border-color: rgba(34, 197, 94, 0.75);
+  background: rgba(34, 197, 94, 0.15);
+}
+
+.quiz-option.is-wrong {
+  border-color: rgba(239, 68, 68, 0.75);
+  background: rgba(239, 68, 68, 0.13);
+}
+
+.quiz-explanation {
+  margin-top: 10px !important;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(15, 23, 42, 0.35);
 }
 
 .progress-bar {
