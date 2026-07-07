@@ -68,6 +68,17 @@
   color: var(--text);
 }
 
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.inline-back-button {
+  width: auto;
+  min-height: 38px;
+  padding: 0 12px;
+}
+
 .button-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -118,7 +129,8 @@
   font-size: 1.25rem;
 }
 
-.card-grid {
+.card-grid,
+.word-grid {
   display: grid;
   gap: 12px;
 }
@@ -126,7 +138,8 @@
 .feature-card,
 .lesson-card,
 .category-card,
-.guide-action-card {
+.guide-action-card,
+.word-card {
   padding: 14px;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -144,10 +157,33 @@
 .feature-card p,
 .lesson-card p,
 .category-card p,
-.guide-action-card p {
+.guide-action-card p,
+.word-card p {
   margin: 0;
   color: var(--muted);
   line-height: 1.7;
+}
+
+.word-card div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.word-card strong {
+  font-size: 1.15rem;
+}
+
+.word-card span {
+  color: #bbf7d0;
+  font-weight: 700;
+}
+
+.word-card .ghost-button {
+  margin-top: 12px;
+  min-height: 42px;
 }
 
 .progress-bar {
