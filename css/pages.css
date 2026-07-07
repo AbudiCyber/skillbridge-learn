@@ -1,0 +1,19 @@
+.page-title {
+  margin: 0 0 14px;
+  font-size: 1.6rem;
+}
+
+.page-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.page-list li {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(51, 65, 85, 0.42);
+}
