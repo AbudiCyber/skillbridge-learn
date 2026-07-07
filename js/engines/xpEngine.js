@@ -8,3 +8,18 @@ export const XP_REWARDS = {
 export function addXP(currentXP, amount) {
   return Math.max(0, currentXP + amount);
 }
+
+export function createXPEvent(sourceType, sourceId, amount, reason) {
+  return {
+    id: `${sourceType}-${sourceId}-${Date.now()}`,
+    sourceType,
+    sourceId,
+    amount,
+    reason,
+    createdAt: new Date().toISOString()
+  };
+}
+
+export function hasXPEvent(state, sourceType, sourceId) {
+  return (state.xpEvents || []).some((event) => event.sourceType === sourceType && event.sourceId === sourceId);
+}
