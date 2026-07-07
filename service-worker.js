@@ -15,6 +15,8 @@ const CORE_ASSETS = [
   "./js/state.js",
   "./js/storage.js",
   "./js/ui.js",
+  "./js/i18n/i18n.js",
+  "./js/i18n/translations.js",
   "./js/pages/homePage.js",
   "./js/pages/learnPage.js",
   "./js/pages/lessonPage.js",
