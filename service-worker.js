@@ -17,12 +17,19 @@ const CORE_ASSETS = [
   "./js/ui.js",
   "./js/pages/homePage.js",
   "./js/pages/learnPage.js",
+  "./js/pages/lessonPage.js",
   "./js/pages/libraryPage.js",
   "./js/pages/progressPage.js",
   "./js/pages/savedPage.js",
   "./js/pages/aiGuidePage.js",
   "./js/pages/settingsPage.js",
-  "./js/engines/aiGuideEngine.js"
+  "./js/engines/lessonEngine.js",
+  "./js/engines/xpEngine.js",
+  "./js/engines/aiGuideEngine.js",
+  "./js/data/lessons.js",
+  "./js/data/units.js",
+  "./js/data/words.js",
+  "./js/data/vocabularySections.js"
 ];
 
 self.addEventListener("install", (event) => {
