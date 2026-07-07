@@ -1,6 +1,8 @@
 import { lessons } from "../data/lessons.js";
+import { quizzes } from "../data/quizzes.js";
 import { words } from "../data/words.js";
 import { getLessonById, getLessonWords, isLessonCompleted } from "../engines/lessonEngine.js";
+import { getQuizByLessonId } from "../engines/quizEngine.js";
 
 function renderWordCards(lessonWords) {
   if (!lessonWords.length) {
@@ -43,6 +45,7 @@ export function renderLessonPage(state) {
   const lesson = getLessonById(lessons, lessonId) || lessons[0];
   const lessonWords = getLessonWords(words, lesson.id);
   const completed = isLessonCompleted(state, lesson.id);
+  const quiz = getQuizByLessonId(quizzes, lesson.id);
 
   return `
     <section class="content-card">
@@ -80,9 +83,14 @@ export function renderLessonPage(state) {
     <section class="content-card">
       <h2>🤖 نصيحة المساعد</h2>
       <p>${lesson.aiTip}</p>
-      <button class="primary-button" data-action="complete-lesson" data-lesson-id="${lesson.id}">
-        ${completed ? "تم إكمال الدرس ✅" : "إنهاء الدرس والحصول على XP"}
-      </button>
+      <div class="button-row">
+        <button class="primary-button" data-action="complete-lesson" data-lesson-id="${lesson.id}">
+          ${completed ? "تم إكمال الدرس ✅" : "إنهاء الدرس"}
+        </button>
+        <button class="ghost-button" data-route="quiz" data-lesson-id="${lesson.id}" ${quiz ? "" : "disabled"}>
+          ${quiz ? "بدء الاختبار" : "لا يوجد اختبار"}
+        </button>
+      </div>
     </section>
   `;
 }
