@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#2563eb" />
+  <meta name="description" content="SkillBridge Learn - Mobile-first learning PWA with short lessons, quizzes, XP, streaks, and AI guide cards." />
+
+  <title>SkillBridge Learn</title>
+
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Small lessons. Real progress.</p>
+        <h1>🌉 SkillBridge Learn</h1>
+      </div>
+      <span class="version-badge">v0.1.0</span>
+    </header>
+
+    <main id="app-root" class="app-main" aria-live="polite">
+      <section class="hero-card">
+        <h2>مرحباً بك 👋</h2>
+        <p>
+          SkillBridge Learn هو تطبيق PWA تعليمي خفيف يساعد المبتدئين على تعلم الإنجليزية بخطوات قصيرة،
+          اختبارات بسيطة، XP، Streak، ومساعد إرشادي ذكي.
+        </p>
+        <button class="primary-button" data-route="learn">ابدأ التعلم</button>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="nav-item is-active" data-route="home">الرئيسية</button>
+      <button class="nav-item" data-route="learn">التعلم</button>
+      <button class="nav-item" data-route="library">المكتبة</button>
+      <button class="nav-item" data-route="progress">التقدم</button>
+      <button class="nav-item" data-route="settings">الإعدادات</button>
+    </nav>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
