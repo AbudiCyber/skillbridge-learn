@@ -2,17 +2,27 @@ import { ROUTES } from "./constants.js";
 import { words } from "./data/words.js";
 import { completeLesson } from "./engines/lessonEngine.js";
 import { addXP } from "./engines/xpEngine.js";
+import { applyDocumentLanguage, normalizeLanguage } from "./i18n/i18n.js";
 import { loadUserState, saveUserState } from "./storage.js";
 import { getState, setState } from "./state.js";
 import { renderRoute } from "./router.js";
 import { mountPage, setActiveNav } from "./ui.js";
 
+function getLanguage(state) {
+  return normalizeLanguage(state.uiLanguage || "ar");
+}
+
+function renderApp(route, state) {
+  applyDocumentLanguage(getLanguage(state));
+  mountPage(renderRoute(route, state));
+  setActiveNav(route);
+}
+
 function navigate(route, payload = {}) {
   const nextRoute = route || ROUTES.HOME;
   const state = setState({ route: nextRoute, ...payload });
   saveUserState(state);
-  mountPage(renderRoute(nextRoute, state));
-  setActiveNav(nextRoute);
+  renderApp(nextRoute, state);
 }
 
 function handleCompleteLesson(lessonId) {
@@ -25,7 +35,7 @@ function handleCompleteLesson(lessonId) {
 
   setState(stateWithXP);
   saveUserState(stateWithXP);
-  mountPage(renderRoute(ROUTES.LESSON, stateWithXP));
+  renderApp(ROUTES.LESSON, stateWithXP);
 }
 
 function handleSaveWord(wordId) {
@@ -41,14 +51,21 @@ function handleSaveWord(wordId) {
   });
 
   saveUserState(nextState);
-  mountPage(renderRoute(currentState.route, nextState));
+  renderApp(currentState.route, nextState);
+}
+
+function handleSetLanguage(language) {
+  const currentState = getState();
+  const nextState = setState({ uiLanguage: normalizeLanguage(language) });
+  saveUserState(nextState);
+  renderApp(currentState.route, nextState);
 }
 
 function bindNavigation() {
   document.addEventListener("click", (event) => {
     const actionTarget = event.target.closest("[data-action]");
     if (actionTarget) {
-      const { action, lessonId, wordId } = actionTarget.dataset;
+      const { action, lessonId, wordId, language } = actionTarget.dataset;
 
       if (action === "complete-lesson" && lessonId) {
         handleCompleteLesson(lessonId);
@@ -57,6 +74,11 @@ function bindNavigation() {
 
       if (action === "save-word" && wordId) {
         handleSaveWord(wordId);
+        return;
+      }
+
+      if (action === "set-language" && language) {
+        handleSetLanguage(language);
         return;
       }
     }
