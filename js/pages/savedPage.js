@@ -13,15 +13,15 @@ export function renderSavedPage(state) {
         ? `
           <div class="empty-state">
             <h3>لا توجد كلمات محفوظة بعد</h3>
-            <p>عندما تظهر Word Cards داخل الدروس، سيتمكن المستخدم من حفظ الكلمات هنا.</p>
+            <p>افتح أي درس، ثم اضغط حفظ الكلمة داخل Word Cards.</p>
           </div>
         `
         : `
           <div class="saved-word-preview">
             ${savedWords.map((word) => `
               <article class="feature-card">
-                <strong>${word}</strong>
-                <p>سيظهر هنا الترجمة والمثال وعدد مرات المراجعة.</p>
+                <strong>${word.word} = ${word.translation}</strong>
+                <p>${word.example}</p>
               </article>
             `).join("")}
           </div>
