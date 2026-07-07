@@ -3,7 +3,7 @@ import { quizzes } from "./data/quizzes.js";
 import { words } from "./data/words.js";
 import { completeLesson } from "./engines/lessonEngine.js";
 import { hasPassedQuiz } from "./engines/quizEngine.js";
-import { addXP } from "./engines/xpEngine.js";
+import { addXP, createXPEvent, hasXPEvent } from "./engines/xpEngine.js";
 import { applyDocumentLanguage, normalizeLanguage } from "./i18n/i18n.js";
 import { loadUserState, saveUserState } from "./storage.js";
 import { getState, setState } from "./state.js";
@@ -31,11 +31,16 @@ function navigate(route, payload = {}) {
 
 function handleCompleteLesson(lessonId) {
   const currentState = getState();
-  const alreadyCompleted = currentState.completedLessons.includes(lessonId);
+  const alreadyRewarded = hasXPEvent(currentState, "lesson", lessonId);
   const nextState = completeLesson(currentState, lessonId);
-  const stateWithXP = alreadyCompleted
+  const points = 20;
+  const stateWithXP = alreadyRewarded
     ? nextState
-    : { ...nextState, xp: addXP(nextState.xp, 20) };
+    : {
+        ...nextState,
+        xp: addXP(nextState.xp, points),
+        xpEvents: [...(nextState.xpEvents || []), createXPEvent("lesson", lessonId, points, "complete_lesson")]
+      };
 
   setState(stateWithXP);
   saveUserState(stateWithXP);
@@ -97,10 +102,15 @@ function handleFinishQuiz(quizId) {
   const passed = hasPassedQuiz(quiz, answers);
   const completedQuizzes = currentState.completedQuizzes || [];
   const alreadyCompleted = completedQuizzes.includes(quizId);
+  const alreadyRewarded = hasXPEvent(currentState, "quiz", quizId);
+  const points = 15;
 
   const nextState = setState({
     completedQuizzes: passed && !alreadyCompleted ? [...completedQuizzes, quizId] : completedQuizzes,
-    xp: passed && !alreadyCompleted ? addXP(currentState.xp, 15) : currentState.xp
+    xp: passed && !alreadyRewarded ? addXP(currentState.xp, points) : currentState.xp,
+    xpEvents: passed && !alreadyRewarded
+      ? [...(currentState.xpEvents || []), createXPEvent("quiz", quizId, points, "pass_quiz")]
+      : currentState.xpEvents || []
   });
 
   saveUserState(nextState);
