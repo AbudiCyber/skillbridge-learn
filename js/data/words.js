@@ -2,181 +2,375 @@ export const words = [
   {
     id: "word-letter",
     lessonId: "eng-001",
+    sectionId: "alphabet-vocabulary",
     word: "Letter",
     translation: "حرف",
     example: "A is a letter.",
     category: "alphabet",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["alphabet", "foundation"]
   },
   {
     id: "word-capital",
     lessonId: "eng-001",
+    sectionId: "alphabet-vocabulary",
     word: "Capital",
     translation: "كبير / حرف كبير",
     example: "A is a capital letter.",
     category: "alphabet",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["alphabet", "capital-letter"]
   },
   {
     id: "word-small",
     lessonId: "eng-001",
+    sectionId: "alphabet-vocabulary",
     word: "Small",
     translation: "صغير",
     example: "a is a small letter.",
     category: "alphabet",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["alphabet", "small-letter"]
   },
   {
     id: "word-hello",
     lessonId: "eng-002",
+    sectionId: "daily-basics-vocabulary",
     word: "Hello",
     translation: "مرحباً",
     example: "Hello, Ali.",
     category: "greetings",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["greeting", "daily"]
   },
   {
     id: "word-good-morning",
     lessonId: "eng-002",
+    sectionId: "daily-basics-vocabulary",
     word: "Good morning",
     translation: "صباح الخير",
     example: "Good morning, teacher.",
     category: "greetings",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["greeting", "morning"]
   },
   {
     id: "word-thank-you",
     lessonId: "eng-004",
+    sectionId: "daily-basics-vocabulary",
     word: "Thank you",
     translation: "شكراً لك",
     example: "Thank you for your help.",
     category: "politeness",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["politeness", "daily"]
   },
   {
     id: "word-name",
     lessonId: "eng-003",
+    sectionId: "daily-basics-vocabulary",
     word: "Name",
     translation: "اسم",
     example: "What is your name?",
     category: "introduction",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["introduction", "identity"]
   },
   {
     id: "word-student",
     lessonId: "eng-003",
+    sectionId: "school-vocabulary",
     word: "Student",
     translation: "طالب",
     example: "I am a student.",
     category: "classroom",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["school", "person"]
   },
   {
     id: "word-yes",
     lessonId: "eng-005",
+    sectionId: "daily-basics-vocabulary",
     word: "Yes",
     translation: "نعم",
     example: "Yes, I understand.",
     category: "answers",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["answer", "daily"]
   },
   {
     id: "word-no",
     lessonId: "eng-005",
+    sectionId: "daily-basics-vocabulary",
     word: "No",
     translation: "لا",
     example: "No, thank you.",
     category: "answers",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["answer", "daily"]
   },
   {
     id: "word-maybe",
     lessonId: "eng-005",
+    sectionId: "daily-basics-vocabulary",
     word: "Maybe",
     translation: "ربما",
     example: "Maybe tomorrow.",
     category: "answers",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["answer", "uncertainty"]
   },
   {
     id: "word-book",
     lessonId: "eng-006",
+    sectionId: "school-vocabulary",
     word: "Book",
     translation: "كتاب",
     example: "This is my book.",
     category: "classroom",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["school", "tool"]
   },
   {
     id: "word-pen",
     lessonId: "eng-006",
+    sectionId: "school-vocabulary",
     word: "Pen",
     translation: "قلم",
     example: "I have a pen.",
     category: "classroom",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["school", "tool"]
+  },
+  {
+    id: "word-pencil",
+    lessonId: "eng-006",
+    sectionId: "school-vocabulary",
+    word: "Pencil",
+    translation: "قلم رصاص",
+    example: "I write with a pencil.",
+    category: "classroom",
+    difficulty: "easy",
+    tags: ["school", "tool"]
+  },
+  {
+    id: "word-eraser",
+    lessonId: "eng-006",
+    sectionId: "school-vocabulary",
+    word: "Eraser",
+    translation: "ممحاة",
+    example: "I need an eraser.",
+    category: "classroom",
+    difficulty: "easy",
+    tags: ["school", "tool"]
+  },
+  {
+    id: "word-sharpener",
+    lessonId: "eng-006",
+    sectionId: "school-vocabulary",
+    word: "Sharpener",
+    translation: "مبراة",
+    example: "This is a sharpener.",
+    category: "classroom",
+    difficulty: "easy",
+    tags: ["school", "tool"]
+  },
+  {
+    id: "word-ruler",
+    lessonId: "eng-006",
+    sectionId: "school-vocabulary",
+    word: "Ruler",
+    translation: "مسطرة",
+    example: "The ruler is long.",
+    category: "classroom",
+    difficulty: "easy",
+    tags: ["school", "tool"]
+  },
+  {
+    id: "word-notebook",
+    lessonId: "eng-006",
+    sectionId: "school-vocabulary",
+    word: "Notebook",
+    translation: "دفتر",
+    example: "My notebook is blue.",
+    category: "classroom",
+    difficulty: "easy",
+    tags: ["school", "tool"]
+  },
+  {
+    id: "word-bag",
+    lessonId: "eng-006",
+    sectionId: "school-vocabulary",
+    word: "Bag",
+    translation: "حقيبة",
+    example: "My bag is heavy.",
+    category: "classroom",
+    difficulty: "easy",
+    tags: ["school", "tool"]
   },
   {
     id: "word-teacher",
     lessonId: "eng-006",
+    sectionId: "school-vocabulary",
     word: "Teacher",
     translation: "معلم / أستاذ",
     example: "Good morning, teacher.",
     category: "classroom",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["school", "person"]
   },
   {
     id: "word-how",
     lessonId: "eng-007",
+    sectionId: "question-words-vocabulary",
     word: "How",
     translation: "كيف",
     example: "How are you?",
     category: "questions",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["question", "daily"]
   },
   {
     id: "word-fine",
     lessonId: "eng-007",
+    sectionId: "daily-basics-vocabulary",
     word: "Fine",
     translation: "بخير",
     example: "I am fine.",
     category: "daily",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["feeling", "daily"]
   },
   {
     id: "word-what",
     lessonId: "eng-008",
+    sectionId: "question-words-vocabulary",
     word: "What",
     translation: "ماذا / ما",
     example: "What is your name?",
     category: "questions",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["question"]
   },
   {
     id: "word-where",
     lessonId: "eng-008",
+    sectionId: "question-words-vocabulary",
     word: "Where",
     translation: "أين",
     example: "Where are you from?",
     category: "questions",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["question", "place"]
+  },
+  {
+    id: "word-when",
+    lessonId: "eng-008",
+    sectionId: "question-words-vocabulary",
+    word: "When",
+    translation: "متى",
+    example: "When is the lesson?",
+    category: "questions",
+    difficulty: "easy",
+    tags: ["question", "time"]
+  },
+  {
+    id: "word-who",
+    lessonId: "eng-008",
+    sectionId: "question-words-vocabulary",
+    word: "Who",
+    translation: "من",
+    example: "Who is your teacher?",
+    category: "questions",
+    difficulty: "easy",
+    tags: ["question", "person"]
+  },
+  {
+    id: "word-why",
+    lessonId: "eng-008",
+    sectionId: "question-words-vocabulary",
+    word: "Why",
+    translation: "لماذا",
+    example: "Why are you late?",
+    category: "questions",
+    difficulty: "easy",
+    tags: ["question", "reason"]
   },
   {
     id: "word-one",
     lessonId: "eng-009",
+    sectionId: "numbers-vocabulary",
     word: "One",
     translation: "واحد",
     example: "I have one book.",
     category: "numbers",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["number"]
+  },
+  {
+    id: "word-two",
+    lessonId: "eng-009",
+    sectionId: "numbers-vocabulary",
+    word: "Two",
+    translation: "اثنان",
+    example: "I have two pens.",
+    category: "numbers",
+    difficulty: "easy",
+    tags: ["number"]
+  },
+  {
+    id: "word-three",
+    lessonId: "eng-009",
+    sectionId: "numbers-vocabulary",
+    word: "Three",
+    translation: "ثلاثة",
+    example: "Three students are here.",
+    category: "numbers",
+    difficulty: "easy",
+    tags: ["number"]
   },
   {
     id: "word-ten",
     lessonId: "eng-009",
+    sectionId: "numbers-vocabulary",
     word: "Ten",
     translation: "عشرة",
     example: "I am ten years old.",
     category: "numbers",
-    difficulty: "easy"
+    difficulty: "easy",
+    tags: ["number"]
+  },
+  {
+    id: "word-passport",
+    lessonId: null,
+    sectionId: "travel-vocabulary",
+    word: "Passport",
+    translation: "جواز سفر",
+    example: "I need my passport.",
+    category: "travel",
+    difficulty: "easy",
+    tags: ["travel", "document", "future"]
+  },
+  {
+    id: "word-visa",
+    lessonId: null,
+    sectionId: "travel-vocabulary",
+    word: "Visa",
+    translation: "تأشيرة / فيزا",
+    example: "Do you have a visa?",
+    category: "travel",
+    difficulty: "easy",
+    tags: ["travel", "document", "future"]
+  },
+  {
+    id: "word-airport",
+    lessonId: null,
+    sectionId: "airport-vocabulary",
+    word: "Airport",
+    translation: "مطار",
+    example: "The airport is busy.",
+    category: "travel",
+    difficulty: "easy",
+    tags: ["airport", "future"]
   }
 ];
