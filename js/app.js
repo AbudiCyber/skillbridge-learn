@@ -1,6 +1,8 @@
 import { ROUTES } from "./constants.js";
+import { quizzes } from "./data/quizzes.js";
 import { words } from "./data/words.js";
 import { completeLesson } from "./engines/lessonEngine.js";
+import { hasPassedQuiz } from "./engines/quizEngine.js";
 import { addXP } from "./engines/xpEngine.js";
 import { applyDocumentLanguage, normalizeLanguage } from "./i18n/i18n.js";
 import { loadUserState, saveUserState } from "./storage.js";
@@ -63,11 +65,64 @@ function handleSetLanguage(language) {
   renderApp(currentState.route, nextState);
 }
 
+function handleQuizAnswer(questionId, answer) {
+  const currentState = getState();
+  const lessonId = currentState.activeLessonId || "eng-001";
+  const quiz = quizzes.find((item) => item.lessonId === lessonId);
+  if (!quiz) return;
+
+  const currentQuizAnswers = currentState.quizAnswers || {};
+  const answersForQuiz = currentQuizAnswers[quiz.id] || {};
+
+  const nextState = setState({
+    quizAnswers: {
+      ...currentQuizAnswers,
+      [quiz.id]: {
+        ...answersForQuiz,
+        [questionId]: answer
+      }
+    }
+  });
+
+  saveUserState(nextState);
+  renderApp(ROUTES.TEST, nextState);
+}
+
+function handleFinishQuiz(quizId) {
+  const currentState = getState();
+  const quiz = quizzes.find((item) => item.id === quizId);
+  if (!quiz) return;
+
+  const answers = currentState.quizAnswers?.[quizId] || {};
+  const passed = hasPassedQuiz(quiz, answers);
+  const completedQuizzes = currentState.completedQuizzes || [];
+  const alreadyCompleted = completedQuizzes.includes(quizId);
+
+  const nextState = setState({
+    completedQuizzes: passed && !alreadyCompleted ? [...completedQuizzes, quizId] : completedQuizzes,
+    xp: passed && !alreadyCompleted ? addXP(currentState.xp, 15) : currentState.xp
+  });
+
+  saveUserState(nextState);
+  renderApp(ROUTES.TEST, nextState);
+}
+
+function handleResetQuiz(quizId) {
+  const currentState = getState();
+  const currentQuizAnswers = currentState.quizAnswers || {};
+  const nextQuizAnswers = { ...currentQuizAnswers };
+  delete nextQuizAnswers[quizId];
+
+  const nextState = setState({ quizAnswers: nextQuizAnswers });
+  saveUserState(nextState);
+  renderApp(ROUTES.TEST, nextState);
+}
+
 function bindNavigation() {
   document.addEventListener("click", (event) => {
     const actionTarget = event.target.closest("[data-action]");
     if (actionTarget) {
-      const { action, lessonId, wordId, language } = actionTarget.dataset;
+      const { action, lessonId, wordId, language, questionId, answer, quizId } = actionTarget.dataset;
 
       if (action === "complete-lesson" && lessonId) {
         handleCompleteLesson(lessonId);
@@ -81,6 +136,21 @@ function bindNavigation() {
 
       if (action === "set-language" && language) {
         handleSetLanguage(language);
+        return;
+      }
+
+      if (action === "answer-quiz" && questionId && answer) {
+        handleQuizAnswer(questionId, answer);
+        return;
+      }
+
+      if (action === "finish-quiz" && quizId) {
+        handleFinishQuiz(quizId);
+        return;
+      }
+
+      if (action === "reset-quiz" && quizId) {
+        handleResetQuiz(quizId);
         return;
       }
     }
