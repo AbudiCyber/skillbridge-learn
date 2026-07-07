@@ -5,6 +5,7 @@ export const ROUTES = {
   HOME: "home",
   LEARN: "learn",
   LESSON: "lesson",
+  TEST: "quiz",
   LIBRARY: "library",
   PROGRESS: "progress",
   SAVED: "saved",
