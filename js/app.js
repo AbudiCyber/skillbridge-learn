@@ -6,14 +6,16 @@ import { applyDocumentLanguage, normalizeLanguage } from "./i18n/i18n.js";
 import { loadUserState, saveUserState } from "./storage.js";
 import { getState, setState } from "./state.js";
 import { renderRoute } from "./router.js";
-import { mountPage, setActiveNav } from "./ui.js";
+import { mountPage, setActiveNav, updateNavigationLanguage } from "./ui.js";
 
 function getLanguage(state) {
   return normalizeLanguage(state.uiLanguage || "ar");
 }
 
 function renderApp(route, state) {
-  applyDocumentLanguage(getLanguage(state));
+  const language = getLanguage(state);
+  applyDocumentLanguage(language);
+  updateNavigationLanguage(language);
   mountPage(renderRoute(route, state));
   setActiveNav(route);
 }
