@@ -177,6 +177,29 @@ button:disabled {
   gap: 10px;
 }
 
+.quiz-result-card {
+  margin-bottom: 42px;
+}
+
+.quiz-result-actions {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  align-items: stretch;
+}
+
+.quiz-result-actions .primary-button,
+.quiz-result-actions .ghost-button {
+  min-height: 42px;
+  padding-inline: 10px;
+  font-size: clamp(0.82rem, 3.8vw, 0.95rem);
+}
+
+.quiz-finish-note {
+  margin-top: 10px !important;
+  margin-bottom: 0 !important;
+  font-size: 0.82rem;
+  text-align: center;
+}
+
 .version-badge,
 .status-badge {
   display: inline-flex;
@@ -431,6 +454,16 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 
+  .quiz-result-actions {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+
+  .quiz-result-actions .primary-button,
+  .quiz-result-actions .ghost-button {
+    min-height: 40px;
+    font-size: 0.78rem;
+  }
+
   .premium-hero-card h2 {
     max-width: 100%;
     font-size: clamp(1.42rem, 8vw, 1.85rem);
@@ -453,6 +486,10 @@ button:disabled {
 
 @media (max-width: 340px) {
   .premium-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quiz-result-actions {
     grid-template-columns: 1fr;
   }
 
