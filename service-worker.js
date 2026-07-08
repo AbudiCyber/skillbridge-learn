@@ -30,6 +30,7 @@ const CORE_ASSETS = [
   "./js/pages/aiGuidePage.js",
   "./js/pages/settingsPage.js",
   "./js/pages/contentQaPage.js",
+  "./js/engines/analyticsEngine.js",
   "./js/engines/lessonEngine.js",
   "./js/engines/quizEngine.js",
   "./js/engines/xpEngine.js",
