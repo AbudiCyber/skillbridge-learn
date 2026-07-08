@@ -7,6 +7,7 @@ export const ROUTES = {
   LESSON: "lesson",
   TEST: "quiz",
   LIBRARY: "library",
+  VOCABULARY_SECTION: "vocabulary-section",
   PROGRESS: "progress",
   SAVED: "saved",
   GUIDE: "guide",
