@@ -1,4 +1,4 @@
-import { ROUTES } from "./constants.js";
+import { APP_VERSION, ROUTES } from "./constants.js";
 import { lessons } from "./data/lessons.js";
 import { quizzes } from "./data/quizzes.js";
 import { words } from "./data/words.js";
@@ -18,12 +18,18 @@ function getLanguage(state) {
   return normalizeLanguage(state.uiLanguage || "ar");
 }
 
+function renderVersionBadge() {
+  const badge = document.querySelector("[data-app-version]");
+  if (badge) badge.textContent = `v${APP_VERSION}`;
+}
+
 function renderApp(route, state) {
   const language = getLanguage(state);
   applyDocumentLanguage(language);
   updateNavigationLanguage(language);
   mountPage(renderRoute(route, state));
   setActiveNav(route);
+  renderVersionBadge();
 }
 
 function navigate(route, payload = {}) {
@@ -264,6 +270,7 @@ function registerServiceWorker() {
 function init() {
   setState(loadUserState());
   bindNavigation();
+  renderVersionBadge();
   navigate(getState().route || ROUTES.HOME);
   registerServiceWorker();
 }
