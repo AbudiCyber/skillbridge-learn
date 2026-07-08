@@ -4,6 +4,7 @@ import { words } from "./data/words.js";
 import { completeLesson } from "./engines/lessonEngine.js";
 import { hasPassedQuiz } from "./engines/quizEngine.js";
 import { markWordReviewed } from "./engines/reviewEngine.js";
+import { applyDailyActivity } from "./engines/streakEngine.js";
 import { addXP, createXPEvent, hasXPEvent } from "./engines/xpEngine.js";
 import { applyDocumentLanguage, normalizeLanguage } from "./i18n/i18n.js";
 import { loadUserState, saveUserState } from "./storage.js";
@@ -33,7 +34,7 @@ function navigate(route, payload = {}) {
 function handleCompleteLesson(lessonId) {
   const currentState = getState();
   const alreadyRewarded = hasXPEvent(currentState, "lesson", lessonId);
-  const nextState = completeLesson(currentState, lessonId);
+  const nextState = applyDailyActivity(completeLesson(currentState, lessonId));
   const points = 20;
   const stateWithXP = alreadyRewarded
     ? nextState
@@ -56,9 +57,10 @@ function handleSaveWord(wordId) {
   const alreadySaved = currentState.savedWords.some((item) => item.id === word.id);
   if (alreadySaved) return;
 
-  const nextState = setState({
+  const nextState = setState(applyDailyActivity({
+    ...currentState,
     savedWords: [...currentState.savedWords, word]
-  });
+  }));
 
   saveUserState(nextState);
   renderApp(currentState.route, nextState);
@@ -66,7 +68,7 @@ function handleSaveWord(wordId) {
 
 function handleReviewWord(wordId) {
   const currentState = getState();
-  const nextState = markWordReviewed(currentState, wordId);
+  const nextState = applyDailyActivity(markWordReviewed(currentState, wordId));
   setState(nextState);
   saveUserState(nextState);
   renderApp(ROUTES.SAVED, nextState);
@@ -88,7 +90,8 @@ function handleQuizAnswer(questionId, answer) {
   const currentQuizAnswers = currentState.quizAnswers || {};
   const answersForQuiz = currentQuizAnswers[quiz.id] || {};
 
-  const nextState = setState({
+  const nextState = setState(applyDailyActivity({
+    ...currentState,
     quizAnswers: {
       ...currentQuizAnswers,
       [quiz.id]: {
@@ -96,7 +99,7 @@ function handleQuizAnswer(questionId, answer) {
         [questionId]: answer
       }
     }
-  });
+  }));
 
   saveUserState(nextState);
   renderApp(ROUTES.TEST, nextState);
@@ -114,13 +117,14 @@ function handleFinishQuiz(quizId) {
   const alreadyRewarded = hasXPEvent(currentState, "quiz", quizId);
   const points = 15;
 
-  const nextState = setState({
+  const nextState = setState(applyDailyActivity({
+    ...currentState,
     completedQuizzes: passed && !alreadyCompleted ? [...completedQuizzes, quizId] : completedQuizzes,
     xp: passed && !alreadyRewarded ? addXP(currentState.xp, points) : currentState.xp,
     xpEvents: passed && !alreadyRewarded
       ? [...(currentState.xpEvents || []), createXPEvent("quiz", quizId, points, "pass_quiz")]
       : currentState.xpEvents || []
-  });
+  }));
 
   saveUserState(nextState);
   renderApp(ROUTES.TEST, nextState);
