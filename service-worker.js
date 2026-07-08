@@ -1,54 +1,7 @@
+import { APP_SHELL, CORE_ASSETS } from "./js/config/appShellAssets.js";
+
 const CACHE_VERSION = "v0.2.1";
 const CACHE_NAME = `skillbridge-learn-${CACHE_VERSION}`;
-const APP_SHELL = "./index.html";
-const CORE_ASSETS = [
-  "./",
-  APP_SHELL,
-  "./manifest.json",
-  "./assets/icons/icon.svg",
-  "./css/base.css",
-  "./css/layout.css",
-  "./css/components.css",
-  "./css/pages.css",
-  "./css/themes.css",
-  "./js/app.js",
-  "./js/constants.js",
-  "./js/router.js",
-  "./js/state.js",
-  "./js/storage.js",
-  "./js/ui.js",
-  "./js/i18n/i18n.js",
-  "./js/i18n/translations.js",
-  "./js/pages/homePage.js",
-  "./js/pages/learnPage.js",
-  "./js/pages/lessonPage.js",
-  "./js/pages/quizPage.js",
-  "./js/pages/libraryPage.js",
-  "./js/pages/vocabularySectionPage.js",
-  "./js/pages/progressPage.js",
-  "./js/pages/savedPage.js",
-  "./js/pages/aiGuidePage.js",
-  "./js/pages/settingsPage.js",
-  "./js/pages/contentQaPage.js",
-  "./js/engines/analyticsEngine.js",
-  "./js/engines/lessonEngine.js",
-  "./js/engines/quizEngine.js",
-  "./js/engines/xpEngine.js",
-  "./js/engines/vocabularyEngine.js",
-  "./js/engines/reviewEngine.js",
-  "./js/engines/streakEngine.js",
-  "./js/engines/achievementEngine.js",
-  "./js/engines/aiGuideEngine.js",
-  "./js/engines/contentQaEngine.js",
-  "./js/data/achievements.js",
-  "./js/data/learningGoals.js",
-  "./js/data/lessons.js",
-  "./js/data/quizzes.js",
-  "./js/data/tracks.js",
-  "./js/data/units.js",
-  "./js/data/words.js",
-  "./js/data/vocabularySections.js"
-];
 
 async function precacheCoreAssets() {
   const cache = await caches.open(CACHE_NAME);
