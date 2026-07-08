@@ -17,7 +17,7 @@ function renderSavedWordCard(word, state) {
   const confidenceLabel = getConfidenceLabel(status.confidence);
 
   return `
-    <article class="feature-card">
+    <article class="feature-card review-card ${status.isDue ? "is-due" : ""}">
       <div class="track-header">
         <strong>${word.word} = ${word.translation}</strong>
         <span class="status-badge ${status.confidence === "strong" ? "is-open" : "is-locked"}">${confidenceLabel}</span>
@@ -39,7 +39,7 @@ function renderQueueCard(item) {
   const confidenceLabel = getConfidenceLabel(item.status.confidence);
 
   return `
-    <article class="feature-card">
+    <article class="feature-card review-card is-due">
       <div class="track-header">
         <strong>${item.word.word}</strong>
         <span class="status-badge ${item.status.confidence === "strong" ? "is-open" : "is-locked"}">${confidenceLabel}</span>
@@ -57,10 +57,34 @@ function renderQueueCard(item) {
   `;
 }
 
+function renderQueueContent(savedWords, reviewQueue) {
+  if (!savedWords.length) {
+    return `
+      <div class="empty-state">
+        <h3>لا توجد كلمات محفوظة بعد</h3>
+        <p>افتح أي درس أو قسم مفردات، ثم اضغط حفظ الكلمة داخل Word Cards.</p>
+        <button class="secondary-button" data-route="learn" style="margin-top: 12px;">اذهب إلى الدروس</button>
+      </div>
+    `;
+  }
+
+  if (!reviewQueue.length) {
+    return `
+      <div class="empty-state">
+        <h3>لا توجد كلمات عاجلة اليوم ✅</h3>
+        <p>يمكنك مراجعة خفيفة من القائمة الكاملة أو إضافة كلمات جديدة من المكتبة.</p>
+        <button class="secondary-button" data-route="library" style="margin-top: 12px;">فتح المكتبة</button>
+      </div>
+    `;
+  }
+
+  return `<div class="saved-word-preview">${reviewQueue.map(renderQueueCard).join("")}</div>`;
+}
+
 export function renderSavedPage(state) {
   const savedWords = state.savedWords || [];
   const summary = getSavedWordsReviewSummary(state);
-  const reviewQueue = buildReviewQueue(state, 5);
+  const reviewQueue = buildReviewQueue(state, 5).filter((item) => item.status.isDue);
 
   return `
     <section class="content-card">
@@ -85,17 +109,9 @@ export function renderSavedPage(state) {
           <p class="section-label">Review Queue</p>
           <h2>🔁 الكلمات المقترحة للمراجعة</h2>
         </div>
-        <span class="status-badge is-open">Top ${reviewQueue.length}</span>
+        <span class="status-badge ${reviewQueue.length ? "is-locked" : "is-open"}">${reviewQueue.length ? `Due ${reviewQueue.length}` : "Clear"}</span>
       </div>
-      ${savedWords.length === 0
-        ? `
-          <div class="empty-state">
-            <h3>لا توجد كلمات محفوظة بعد</h3>
-            <p>افتح أي درس أو قسم مفردات، ثم اضغط حفظ الكلمة داخل Word Cards.</p>
-          </div>
-        `
-        : `<div class="saved-word-preview">${reviewQueue.map(renderQueueCard).join("")}</div>`
-      }
+      ${renderQueueContent(savedWords, reviewQueue)}
     </section>
 
     <section class="content-card">
