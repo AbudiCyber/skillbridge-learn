@@ -42,15 +42,16 @@ function findDuplicateValues(items = []) {
 
 function findInactiveSectionWordLeaks(words, vocabularySections) {
   const sectionStatus = new Map(vocabularySections.map((section) => [section.id, section.status]));
-  return words.filter((word) => sectionStatus.get(word.sectionId) !== "active");
+  return words.filter((word) => sectionStatus.get(word.sectionId) === "inactive");
 }
 
 function findInvalidQuizQuestions(quizzes) {
   return quizzes.flatMap((quiz) => {
     const invalidQuestions = quiz.questions.filter((question) => {
+      const hasPrompt = Boolean(question.prompt || question.question);
       const hasOptions = Array.isArray(question.options) && question.options.length >= 2;
       const hasCorrectAnswer = hasOptions && question.options.includes(question.correctAnswer);
-      return !question.id || !question.prompt || !hasOptions || !hasCorrectAnswer;
+      return !question.id || !hasPrompt || !hasOptions || !hasCorrectAnswer;
     });
 
     return invalidQuestions.map((question) => `${quiz.id}:${question.id || "missing-question-id"}`);
