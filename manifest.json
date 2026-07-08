@@ -1,14 +1,17 @@
 {
   "name": "SkillBridge Learn",
   "short_name": "SkillBridge",
-  "description": "Mobile-first learning PWA with short lessons, quizzes, XP, streaks, and AI guide cards.",
+  "description": "Mobile-first learning PWA with short lessons, quizzes, XP, streaks, achievements, and AI guide cards.",
+  "id": "./index.html",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#0f172a",
   "theme_color": "#2563eb",
   "dir": "rtl",
   "lang": "ar",
+  "categories": ["education", "productivity"],
   "icons": [
     {
       "src": "assets/icons/icon.svg",
