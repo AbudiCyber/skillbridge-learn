@@ -8,15 +8,15 @@ SkillBridge Learn is a mobile-first learning PWA designed to help Arabic-speakin
 
 Build a modular learning engine that starts with English and can later expand into programming English, other languages, and practical skills.
 
-## v0.2.1 Goal
+## v0.2.2 Goal
 
-Stabilize the expanded local-first learning experience after review intelligence, analytics, premium dashboard UI, and AI guide upgrades:
+Stabilize the app shell architecture by keeping routes, page assets, required engines, and offline cache assets in one source of truth:
 
 ```text
-Learn → Practice → Quiz → Save Words → Review → Track Activity → Get Guide Plan → Return Tomorrow
+App Shell Registry → Service Worker Cache → Content QA Checks → Stable Offline Learning
 ```
 
-## v0.2.1 Features
+## v0.2.2 Features
 
 - Mobile-first PWA shell
 - English beginner track
@@ -34,7 +34,9 @@ Learn → Practice → Quiz → Save Words → Review → Track Activity → Get
 - Activity timeline
 - Premium home dashboard UI
 - Settings system
-- Content QA report
+- Expanded Content QA report
+- Shared app shell asset registry
+- Module Service Worker registration
 - Offline-first Service Worker
 - Analytics-aware AI guide cards
 
@@ -51,13 +53,14 @@ Learn → Practice → Quiz → Save Words → Review → Track Activity → Get
 ## Current Version
 
 ```text
-v0.2.1 = Stable local-first learning loop + premium UI + analytics-aware guide
+v0.2.2 = App shell source-of-truth cleanup + offline QA stability
 ```
 
 ## Roadmap
 
 - v0.2.0: Stable Core Learning Loop
 - v0.2.1: Premium UI + local analytics + AI guide stability
+- v0.2.2: App shell source-of-truth cleanup
 - v0.3.0: Review intelligence + spaced repetition foundations
 - v0.4.0: Audio and pronunciation layer
 - v0.5.0: Grammar Lite
