@@ -1,11 +1,13 @@
 import { APP_VERSION, ROUTES } from "./constants.js";
 import { lessons } from "./data/lessons.js";
 import { quizzes } from "./data/quizzes.js";
+import { vocabularySections } from "./data/vocabularySections.js";
 import { words } from "./data/words.js";
 import { appendActivityEvent, createActivityEvent } from "./engines/analyticsEngine.js";
 import { completeLesson, getLessonById } from "./engines/lessonEngine.js";
 import { hasPassedQuiz } from "./engines/quizEngine.js";
 import { markWordReviewed } from "./engines/reviewEngine.js";
+import { ensureArray, getSafeLessonId, normalizeRoute, sanitizeRoutePayload, sanitizeStateForRoute } from "./engines/runtimeSafetyEngine.js";
 import { applyDailyActivity } from "./engines/streakEngine.js";
 import { addXP, createXPEvent, hasXPEvent } from "./engines/xpEngine.js";
 import { applyDocumentLanguage, normalizeLanguage } from "./i18n/i18n.js";
@@ -13,6 +15,8 @@ import { loadUserState, saveUserState } from "./storage.js";
 import { createResetState, getState, setState } from "./state.js";
 import { renderRoute } from "./router.js";
 import { mountPage, setActiveNav, updateNavigationLanguage } from "./ui.js";
+
+const runtimeCollections = { routes: ROUTES, lessons, vocabularySections };
 
 function getLanguage(state) {
   return normalizeLanguage(state.uiLanguage || "ar");
@@ -24,38 +28,47 @@ function renderVersionBadge() {
 }
 
 function renderApp(route, state) {
-  const language = getLanguage(state);
+  const safeRoute = normalizeRoute(route, ROUTES);
+  const safeState = sanitizeStateForRoute(safeRoute, state, runtimeCollections);
+  const language = getLanguage(safeState);
+
   applyDocumentLanguage(language);
   updateNavigationLanguage(language);
-  mountPage(renderRoute(route, state));
-  setActiveNav(route);
+  mountPage(renderRoute(safeRoute, safeState));
+  setActiveNav(safeRoute);
   renderVersionBadge();
 }
 
 function navigate(route, payload = {}) {
-  const nextRoute = route || ROUTES.HOME;
-  const state = setState({ route: nextRoute, resetConfirmArmed: false, ...payload });
+  const nextRoute = normalizeRoute(route || ROUTES.HOME, ROUTES);
+  const safePayload = sanitizeRoutePayload(nextRoute, payload, runtimeCollections);
+  const state = setState({ route: nextRoute, resetConfirmArmed: false, ...safePayload });
+
   saveUserState(state);
   renderApp(nextRoute, state);
 }
 
 function handleCompleteLesson(lessonId) {
+  const safeLessonId = getSafeLessonId(lessons, lessonId);
+  if (!safeLessonId) return;
+
   const currentState = getState();
-  const lesson = getLessonById(lessons, lessonId);
-  const alreadyCompleted = currentState.completedLessons?.includes(lessonId);
-  const alreadyRewarded = hasXPEvent(currentState, "lesson", lessonId);
-  const nextState = applyDailyActivity(completeLesson(currentState, lessonId));
+  const lesson = getLessonById(lessons, safeLessonId);
+  const completedLessons = ensureArray(currentState.completedLessons);
+  const alreadyCompleted = completedLessons.includes(safeLessonId);
+  const alreadyRewarded = hasXPEvent(currentState, "lesson", safeLessonId);
+  const nextState = applyDailyActivity(completeLesson(currentState, safeLessonId));
   const points = lesson?.xpReward || 20;
   const stateWithXP = alreadyRewarded
     ? nextState
     : {
         ...nextState,
         xp: addXP(nextState.xp, points),
-        xpEvents: [...(nextState.xpEvents || []), createXPEvent("lesson", lessonId, points, "complete_lesson")]
+        xpEvents: [...ensureArray(nextState.xpEvents), createXPEvent("lesson", safeLessonId, points, "complete_lesson")]
       };
   const stateWithActivity = alreadyCompleted
     ? stateWithXP
-    : appendActivityEvent(stateWithXP, createActivityEvent("complete_lesson", lessonId, { points }));
+    : appendActivityEvent(stateWithXP, createActivityEvent("complete_lesson", safeLessonId, { points }));
 
   setState(stateWithActivity);
   saveUserState(stateWithActivity);
@@ -67,12 +80,13 @@ function handleSaveWord(wordId) {
   const word = words.find((item) => item.id === wordId);
   if (!word) return;
 
-  const alreadySaved = currentState.savedWords.some((item) => item.id === word.id);
+  const savedWords = ensureArray(currentState.savedWords);
+  const alreadySaved = savedWords.some((item) => item.id === word.id);
   if (alreadySaved) return;
 
   const nextState = setState(appendActivityEvent(applyDailyActivity({
     ...currentState,
-    savedWords: [...currentState.savedWords, word]
+    savedWords: [...savedWords, word]
   }), createActivityEvent("save_word", wordId, { word: word.word })));
 
   saveUserState(nextState);
@@ -81,6 +95,9 @@ function handleSaveWord(wordId) {
 
 function handleReviewWord(wordId) {
   const currentState = getState();
+  const hasWord = ensureArray(currentState.savedWords).some((word) => word.id === wordId);
+  if (!hasWord) return;
+
   const nextState = appendActivityEvent(
     applyDailyActivity(markWordReviewed(currentState, wordId)),
     createActivityEvent("review_word", wordId)
@@ -121,16 +138,19 @@ function handleResetProgress() {
 
 function handleQuizAnswer(questionId, answer) {
   const currentState = getState();
-  const lessonId = currentState.activeLessonId || "eng-001";
+  const lessonId = getSafeLessonId(lessons, currentState.activeLessonId || "eng-001");
   const quiz = quizzes.find((item) => item.lessonId === lessonId);
   if (!quiz) return;
 
   const currentQuizAnswers = currentState.quizAnswers || {};
   const answersForQuiz = currentQuizAnswers[quiz.id] || {};
+  const question = quiz.questions.find((item) => item.id === questionId);
   const alreadyAnswered = Boolean(answersForQuiz[questionId]);
+  if (!question || !question.options.includes(answer)) return;
 
   const nextState = setState(appendActivityEvent(applyDailyActivity({
     ...currentState,
+    activeLessonId: lessonId,
     quizAnswers: {
       ...currentQuizAnswers,
       [quiz.id]: {
@@ -153,7 +173,7 @@ function handleFinishQuiz(quizId) {
 
   const answers = currentState.quizAnswers?.[quizId] || {};
   const passed = hasPassedQuiz(quiz, answers);
-  const completedQuizzes = currentState.completedQuizzes || [];
+  const completedQuizzes = ensureArray(currentState.completedQuizzes);
   const alreadyCompleted = completedQuizzes.includes(quizId);
   const alreadyRewarded = hasXPEvent(currentState, "quiz", quizId);
   const points = 15;
@@ -163,8 +183,8 @@ function handleFinishQuiz(quizId) {
     completedQuizzes: passed && !alreadyCompleted ? [...completedQuizzes, quizId] : completedQuizzes,
     xp: passed && !alreadyRewarded ? addXP(currentState.xp, points) : currentState.xp,
     xpEvents: passed && !alreadyRewarded
-      ? [...(currentState.xpEvents || []), createXPEvent("quiz", quizId, points, "pass_quiz")]
-      : currentState.xpEvents || []
+      ? [...ensureArray(currentState.xpEvents), createXPEvent("quiz", quizId, points, "pass_quiz")]
+      : ensureArray(currentState.xpEvents)
   }), alreadyCompleted
     ? null
     : createActivityEvent("finish_quiz", quizId, { passed, points: passed ? points : 0 })));
@@ -175,6 +195,9 @@ function handleFinishQuiz(quizId) {
 
 function handleResetQuiz(quizId) {
   const currentState = getState();
+  const quiz = quizzes.find((item) => item.id === quizId);
+  if (!quiz) return;
+
   const currentQuizAnswers = currentState.quizAnswers || {};
   const nextQuizAnswers = { ...currentQuizAnswers };
   delete nextQuizAnswers[quizId];
@@ -185,17 +208,10 @@ function handleResetQuiz(quizId) {
 }
 
 function buildRoutePayload(routeTarget) {
-  const payload = {};
-
-  if (routeTarget.dataset.lessonId) {
-    payload.activeLessonId = routeTarget.dataset.lessonId;
-  }
-
-  if (routeTarget.dataset.sectionId) {
-    payload.activeVocabularySectionId = routeTarget.dataset.sectionId;
-  }
-
-  return payload;
+  return sanitizeRoutePayload(routeTarget.dataset.route, {
+    activeLessonId: routeTarget.dataset.lessonId,
+    activeVocabularySectionId: routeTarget.dataset.sectionId
+  }, runtimeCollections);
 }
 
 function bindNavigation() {
@@ -271,7 +287,7 @@ function init() {
   setState(loadUserState());
   bindNavigation();
   renderVersionBadge();
-  navigate(getState().route || ROUTES.HOME);
+  navigate(getState().route || ROUTES.HOME, getState());
   registerServiceWorker();
 }
 
