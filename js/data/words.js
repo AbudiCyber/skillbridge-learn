@@ -55,6 +55,28 @@ export const words = [
     tags: ["greeting", "morning"]
   },
   {
+    id: "word-good-evening",
+    lessonId: "eng-002",
+    sectionId: "daily-basics-vocabulary",
+    word: "Good evening",
+    translation: "مساء الخير",
+    example: "Good evening, my friend.",
+    category: "greetings",
+    difficulty: "easy",
+    tags: ["greeting", "evening"]
+  },
+  {
+    id: "word-goodbye",
+    lessonId: "eng-002",
+    sectionId: "daily-basics-vocabulary",
+    word: "Goodbye",
+    translation: "وداعاً",
+    example: "Goodbye, see you tomorrow.",
+    category: "greetings",
+    difficulty: "easy",
+    tags: ["greeting", "daily"]
+  },
+  {
     id: "word-thank-you",
     lessonId: "eng-004",
     sectionId: "daily-basics-vocabulary",
@@ -75,6 +97,28 @@ export const words = [
     category: "introduction",
     difficulty: "easy",
     tags: ["introduction", "identity"]
+  },
+  {
+    id: "word-my",
+    lessonId: "eng-003",
+    sectionId: "daily-basics-vocabulary",
+    word: "My",
+    translation: "خاصتي / لي",
+    example: "My name is Ahmed.",
+    category: "introduction",
+    difficulty: "easy",
+    tags: ["introduction", "pronoun"]
+  },
+  {
+    id: "word-i-am",
+    lessonId: "eng-003",
+    sectionId: "daily-basics-vocabulary",
+    word: "I am",
+    translation: "أنا",
+    example: "I am a student.",
+    category: "introduction",
+    difficulty: "easy",
+    tags: ["sentence", "identity"]
   },
   {
     id: "word-student",
@@ -119,6 +163,17 @@ export const words = [
     category: "answers",
     difficulty: "easy",
     tags: ["answer", "uncertainty"]
+  },
+  {
+    id: "word-understand",
+    lessonId: "eng-005",
+    sectionId: "daily-basics-vocabulary",
+    word: "Understand",
+    translation: "يفهم",
+    example: "I understand the lesson.",
+    category: "daily",
+    difficulty: "easy",
+    tags: ["daily", "learning"]
   },
   {
     id: "word-book",
@@ -220,6 +275,17 @@ export const words = [
     tags: ["school", "person"]
   },
   {
+    id: "word-classroom",
+    lessonId: "eng-006",
+    sectionId: "school-vocabulary",
+    word: "Classroom",
+    translation: "صف دراسي",
+    example: "The classroom is clean.",
+    category: "classroom",
+    difficulty: "easy",
+    tags: ["school", "place"]
+  },
+  {
     id: "word-how",
     lessonId: "eng-007",
     sectionId: "question-words-vocabulary",
@@ -237,6 +303,17 @@ export const words = [
     word: "Fine",
     translation: "بخير",
     example: "I am fine.",
+    category: "daily",
+    difficulty: "easy",
+    tags: ["feeling", "daily"]
+  },
+  {
+    id: "word-good",
+    lessonId: "eng-007",
+    sectionId: "daily-basics-vocabulary",
+    word: "Good",
+    translation: "جيد",
+    example: "I am good today.",
     category: "daily",
     difficulty: "easy",
     tags: ["feeling", "daily"]
@@ -330,6 +407,28 @@ export const words = [
     tags: ["number"]
   },
   {
+    id: "word-four",
+    lessonId: "eng-009",
+    sectionId: "numbers-vocabulary",
+    word: "Four",
+    translation: "أربعة",
+    example: "I have four books.",
+    category: "numbers",
+    difficulty: "easy",
+    tags: ["number"]
+  },
+  {
+    id: "word-five",
+    lessonId: "eng-009",
+    sectionId: "numbers-vocabulary",
+    word: "Five",
+    translation: "خمسة",
+    example: "Five students are here.",
+    category: "numbers",
+    difficulty: "easy",
+    tags: ["number"]
+  },
+  {
     id: "word-ten",
     lessonId: "eng-009",
     sectionId: "numbers-vocabulary",
@@ -339,6 +438,182 @@ export const words = [
     category: "numbers",
     difficulty: "easy",
     tags: ["number"]
+  },
+  {
+    id: "word-today",
+    lessonId: "eng-011",
+    sectionId: "time-days-vocabulary",
+    word: "Today",
+    translation: "اليوم",
+    example: "Today is Monday.",
+    category: "time",
+    difficulty: "easy",
+    tags: ["time", "day"]
+  },
+  {
+    id: "word-tomorrow",
+    lessonId: "eng-011",
+    sectionId: "time-days-vocabulary",
+    word: "Tomorrow",
+    translation: "غداً",
+    example: "Tomorrow is Friday.",
+    category: "time",
+    difficulty: "easy",
+    tags: ["time", "day"]
+  },
+  {
+    id: "word-monday",
+    lessonId: "eng-011",
+    sectionId: "time-days-vocabulary",
+    word: "Monday",
+    translation: "الاثنين",
+    example: "I study on Monday.",
+    category: "days",
+    difficulty: "easy",
+    tags: ["day", "week"]
+  },
+  {
+    id: "word-friday",
+    lessonId: "eng-011",
+    sectionId: "time-days-vocabulary",
+    word: "Friday",
+    translation: "الجمعة",
+    example: "Friday is a good day.",
+    category: "days",
+    difficulty: "easy",
+    tags: ["day", "week"]
+  },
+  {
+    id: "word-now",
+    lessonId: "eng-012",
+    sectionId: "time-days-vocabulary",
+    word: "Now",
+    translation: "الآن",
+    example: "I study now.",
+    category: "time",
+    difficulty: "easy",
+    tags: ["time", "daily"]
+  },
+  {
+    id: "word-later",
+    lessonId: "eng-012",
+    sectionId: "time-days-vocabulary",
+    word: "Later",
+    translation: "لاحقاً",
+    example: "We can talk later.",
+    category: "time",
+    difficulty: "easy",
+    tags: ["time", "daily"]
+  },
+  {
+    id: "word-father",
+    lessonId: "eng-013",
+    sectionId: "family-vocabulary",
+    word: "Father",
+    translation: "أب",
+    example: "My father is kind.",
+    category: "family",
+    difficulty: "easy",
+    tags: ["family"]
+  },
+  {
+    id: "word-mother",
+    lessonId: "eng-013",
+    sectionId: "family-vocabulary",
+    word: "Mother",
+    translation: "أم",
+    example: "My mother is kind.",
+    category: "family",
+    difficulty: "easy",
+    tags: ["family"]
+  },
+  {
+    id: "word-brother",
+    lessonId: "eng-013",
+    sectionId: "family-vocabulary",
+    word: "Brother",
+    translation: "أخ",
+    example: "My brother is a student.",
+    category: "family",
+    difficulty: "easy",
+    tags: ["family"]
+  },
+  {
+    id: "word-sister",
+    lessonId: "eng-013",
+    sectionId: "family-vocabulary",
+    word: "Sister",
+    translation: "أخت",
+    example: "My sister is a student.",
+    category: "family",
+    difficulty: "easy",
+    tags: ["family"]
+  },
+  {
+    id: "word-red",
+    lessonId: "eng-014",
+    sectionId: "colors-vocabulary",
+    word: "Red",
+    translation: "أحمر",
+    example: "The apple is red.",
+    category: "colors",
+    difficulty: "easy",
+    tags: ["color"]
+  },
+  {
+    id: "word-blue",
+    lessonId: "eng-014",
+    sectionId: "colors-vocabulary",
+    word: "Blue",
+    translation: "أزرق",
+    example: "The pen is blue.",
+    category: "colors",
+    difficulty: "easy",
+    tags: ["color"]
+  },
+  {
+    id: "word-green",
+    lessonId: "eng-014",
+    sectionId: "colors-vocabulary",
+    word: "Green",
+    translation: "أخضر",
+    example: "The book is green.",
+    category: "colors",
+    difficulty: "easy",
+    tags: ["color"]
+  },
+  {
+    id: "word-black",
+    lessonId: "eng-014",
+    sectionId: "colors-vocabulary",
+    word: "Black",
+    translation: "أسود",
+    example: "My bag is black.",
+    category: "colors",
+    difficulty: "easy",
+    tags: ["color"]
+  },
+  {
+    id: "word-i-have",
+    lessonId: "eng-015",
+    sectionId: "daily-basics-vocabulary",
+    word: "I have",
+    translation: "لدي",
+    example: "I have a blue pen.",
+    category: "sentences",
+    difficulty: "easy",
+    tags: ["sentence", "daily"]
+  },
+  {
+    id: "word-i-like",
+    lessonId: "eng-015",
+    sectionId: "daily-basics-vocabulary",
+    word: "I like",
+    translation: "أنا أحب / يعجبني",
+    example: "I like English.",
+    category: "sentences",
+    difficulty: "easy",
+    tags: ["sentence", "daily"]
   },
   {
     id: "word-passport",
