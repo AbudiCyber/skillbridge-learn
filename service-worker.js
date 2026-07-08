@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v0.2.0";
+const CACHE_VERSION = "v0.2.1";
 const CACHE_NAME = `skillbridge-learn-${CACHE_VERSION}`;
 const APP_SHELL = "./index.html";
 const CORE_ASSETS = [
