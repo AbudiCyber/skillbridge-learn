@@ -2,6 +2,7 @@ import { ROUTES } from "./constants.js";
 import { lessons } from "./data/lessons.js";
 import { quizzes } from "./data/quizzes.js";
 import { words } from "./data/words.js";
+import { appendActivityEvent, createActivityEvent } from "./engines/analyticsEngine.js";
 import { completeLesson, getLessonById } from "./engines/lessonEngine.js";
 import { hasPassedQuiz } from "./engines/quizEngine.js";
 import { markWordReviewed } from "./engines/reviewEngine.js";
@@ -35,6 +36,7 @@ function navigate(route, payload = {}) {
 function handleCompleteLesson(lessonId) {
   const currentState = getState();
   const lesson = getLessonById(lessons, lessonId);
+  const alreadyCompleted = currentState.completedLessons?.includes(lessonId);
   const alreadyRewarded = hasXPEvent(currentState, "lesson", lessonId);
   const nextState = applyDailyActivity(completeLesson(currentState, lessonId));
   const points = lesson?.xpReward || 20;
@@ -45,10 +47,13 @@ function handleCompleteLesson(lessonId) {
         xp: addXP(nextState.xp, points),
         xpEvents: [...(nextState.xpEvents || []), createXPEvent("lesson", lessonId, points, "complete_lesson")]
       };
+  const stateWithActivity = alreadyCompleted
+    ? stateWithXP
+    : appendActivityEvent(stateWithXP, createActivityEvent("complete_lesson", lessonId, { points }));
 
-  setState(stateWithXP);
-  saveUserState(stateWithXP);
-  renderApp(ROUTES.LESSON, stateWithXP);
+  setState(stateWithActivity);
+  saveUserState(stateWithActivity);
+  renderApp(ROUTES.LESSON, stateWithActivity);
 }
 
 function handleSaveWord(wordId) {
@@ -59,10 +64,10 @@ function handleSaveWord(wordId) {
   const alreadySaved = currentState.savedWords.some((item) => item.id === word.id);
   if (alreadySaved) return;
 
-  const nextState = setState(applyDailyActivity({
+  const nextState = setState(appendActivityEvent(applyDailyActivity({
     ...currentState,
     savedWords: [...currentState.savedWords, word]
-  }));
+  }), createActivityEvent("save_word", wordId, { word: word.word })));
 
   saveUserState(nextState);
   renderApp(currentState.route, nextState);
@@ -70,7 +75,10 @@ function handleSaveWord(wordId) {
 
 function handleReviewWord(wordId) {
   const currentState = getState();
-  const nextState = applyDailyActivity(markWordReviewed(currentState, wordId));
+  const nextState = appendActivityEvent(
+    applyDailyActivity(markWordReviewed(currentState, wordId)),
+    createActivityEvent("review_word", wordId)
+  );
   setState(nextState);
   saveUserState(nextState);
   renderApp(ROUTES.SAVED, nextState);
@@ -113,8 +121,9 @@ function handleQuizAnswer(questionId, answer) {
 
   const currentQuizAnswers = currentState.quizAnswers || {};
   const answersForQuiz = currentQuizAnswers[quiz.id] || {};
+  const alreadyAnswered = Boolean(answersForQuiz[questionId]);
 
-  const nextState = setState(applyDailyActivity({
+  const nextState = setState(appendActivityEvent(applyDailyActivity({
     ...currentState,
     quizAnswers: {
       ...currentQuizAnswers,
@@ -123,7 +132,9 @@ function handleQuizAnswer(questionId, answer) {
         [questionId]: answer
       }
     }
-  }));
+  }), alreadyAnswered
+    ? null
+    : createActivityEvent("answer_quiz", quiz.id, { questionId })));
 
   saveUserState(nextState);
   renderApp(ROUTES.TEST, nextState);
@@ -141,14 +152,16 @@ function handleFinishQuiz(quizId) {
   const alreadyRewarded = hasXPEvent(currentState, "quiz", quizId);
   const points = 15;
 
-  const nextState = setState(applyDailyActivity({
+  const nextState = setState(appendActivityEvent(applyDailyActivity({
     ...currentState,
     completedQuizzes: passed && !alreadyCompleted ? [...completedQuizzes, quizId] : completedQuizzes,
     xp: passed && !alreadyRewarded ? addXP(currentState.xp, points) : currentState.xp,
     xpEvents: passed && !alreadyRewarded
       ? [...(currentState.xpEvents || []), createXPEvent("quiz", quizId, points, "pass_quiz")]
       : currentState.xpEvents || []
-  }));
+  }), alreadyCompleted
+    ? null
+    : createActivityEvent("finish_quiz", quizId, { passed, points: passed ? points : 0 })));
 
   saveUserState(nextState);
   renderApp(ROUTES.TEST, nextState);
