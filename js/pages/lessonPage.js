@@ -4,12 +4,26 @@ import { words } from "../data/words.js";
 import { getLessonById, getLessonWords, isLessonCompleted } from "../engines/lessonEngine.js";
 import { getQuizByLessonId } from "../engines/quizEngine.js";
 
-function renderWordCards(lessonWords, lesson) {
+function isWordSaved(state, wordId) {
+  return (state.savedWords || []).some((word) => word.id === wordId);
+}
+
+function renderSaveButton(word, state) {
+  const saved = isWordSaved(state, word.id);
+
+  return `
+    <button class="${saved ? "secondary-button" : "ghost-button"}" data-action="save-word" data-word-id="${word.id}" ${saved ? "disabled" : ""}>
+      ${saved ? "محفوظة بالفعل ✅" : "حفظ الكلمة"}
+    </button>
+  `;
+}
+
+function renderWordCards(lessonWords, lesson, state) {
   if (!lessonWords.length && lesson.words?.length) {
     return `
       <div class="word-grid">
         ${lesson.words.map((word) => `
-          <article class="word-card">
+          <article class="word-card is-fallback-word">
             <div>
               <strong>${word}</strong>
               <span>Lesson word</span>
@@ -27,16 +41,20 @@ function renderWordCards(lessonWords, lesson) {
 
   return `
     <div class="word-grid">
-      ${lessonWords.map((word) => `
-        <article class="word-card">
-          <div>
-            <strong>${word.word}</strong>
-            <span>${word.translation}</span>
-          </div>
-          <p>${word.example}</p>
-          <button class="ghost-button" data-action="save-word" data-word-id="${word.id}">حفظ الكلمة</button>
-        </article>
-      `).join("")}
+      ${lessonWords.map((word) => {
+        const saved = isWordSaved(state, word.id);
+
+        return `
+          <article class="word-card ${saved ? "is-saved" : ""}">
+            <div>
+              <strong>${word.word}</strong>
+              <span>${word.translation}</span>
+            </div>
+            <p>${word.example}</p>
+            ${renderSaveButton(word, state)}
+          </article>
+        `;
+      }).join("")}
     </div>
   `;
 }
@@ -83,7 +101,7 @@ export function renderLessonPage(state) {
 
     <section class="content-card">
       <h2>الكلمات</h2>
-      ${renderWordCards(lessonWords, lesson)}
+      ${renderWordCards(lessonWords, lesson, state)}
     </section>
 
     <section class="content-card">
