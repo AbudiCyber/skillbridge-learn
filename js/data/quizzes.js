@@ -279,6 +279,30 @@ export const quizzes = [
       },
       {
         id: "q-eng-009-3",
+        type: "multiple_choice",
+        question: "Six means:",
+        options: ["ستة", "سبعة", "تسعة"],
+        correctAnswer: "ستة",
+        explanation: "Six means ستة."
+      },
+      {
+        id: "q-eng-009-4",
+        type: "multiple_choice",
+        question: "Eight means:",
+        options: ["ثمانية", "خمسة", "أربعة"],
+        correctAnswer: "ثمانية",
+        explanation: "Eight means ثمانية."
+      },
+      {
+        id: "q-eng-009-5",
+        type: "multiple_choice",
+        question: "Nine means:",
+        options: ["تسعة", "واحد", "اثنان"],
+        correctAnswer: "تسعة",
+        explanation: "Nine means تسعة."
+      },
+      {
+        id: "q-eng-009-6",
         type: "true_false",
         question: "Ten means عشرة.",
         options: ["True", "False"],
