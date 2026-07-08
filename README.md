@@ -8,23 +8,23 @@ SkillBridge Learn is a mobile-first learning PWA designed to help Arabic-speakin
 
 Build a modular learning engine that starts with English and can later expand into programming English, other languages, and practical skills.
 
-## v0.2.7 Goal
+## v0.2.8 Goal
 
-Validate the storage integrity guard with explicit QA checks for invalid JSON, missing state, stale routes, stale IDs, broken arrays, broken objects, and invalid numbers:
+Close the release-candidate QA findings by aligning Content QA with the current quiz data model and improving mobile bottom spacing around the fixed navigation:
 
 ```text
-Storage Integrity Guard → Storage QA Edge Cases → Safer LocalStorage Recovery
+RC QA Findings → Content QA Patch → Mobile Spacing Polish → Freeze Candidate
 ```
 
 ## Release Candidate Status
 
 ```text
-v0.2.7 = Release Candidate for v0.2.x freeze
+v0.2.8 = QA patch candidate for v0.2.x freeze
 QA report: docs/release-candidate-v0.2.7.md
 Manual smoke test: docs/manual-smoke-test-v0.2.7.md
 ```
 
-## v0.2.7 Features
+## v0.2.8 Features
 
 - Mobile-first PWA shell
 - English beginner track
@@ -50,6 +50,8 @@ Manual smoke test: docs/manual-smoke-test-v0.2.7.md
 - Runtime route and payload safety layer
 - Render error boundary
 - Storage integrity guard
+- Content QA data-model patch
+- Mobile bottom spacing polish
 - Offline-first Service Worker
 - Analytics-aware AI guide cards
 
@@ -66,7 +68,7 @@ Manual smoke test: docs/manual-smoke-test-v0.2.7.md
 ## Current Version
 
 ```text
-v0.2.7 = Storage QA edge cases + safer LocalStorage validation
+v0.2.8 = Content QA fix patch + mobile bottom spacing polish
 ```
 
 ## Roadmap
@@ -79,6 +81,7 @@ v0.2.7 = Storage QA edge cases + safer LocalStorage validation
 - v0.2.5: Render error boundary
 - v0.2.6: Storage integrity guard
 - v0.2.7: Storage QA edge cases
+- v0.2.8: Content QA patch + mobile spacing polish
 - v0.3.0: Review intelligence + spaced repetition foundations
 - v0.4.0: Audio and pronunciation layer
 - v0.5.0: Grammar Lite
