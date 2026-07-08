@@ -61,6 +61,20 @@ function getActivityAdvice(analytics) {
   return "لم يبدأ نشاطك بعد. أفضل بداية هي درس قصير أو حفظ كلمة واحدة.";
 }
 
+export function buildGuideActivitySummary(state) {
+  const analytics = buildAnalyticsSummary(state);
+  const strength = getActivityStrength(analytics);
+  const weekActions = analytics.lastSevenDays.reduce((total, day) => total + day.count, 0);
+
+  return {
+    strength,
+    weekActions,
+    totalActions: analytics.totalActions,
+    bestDay: analytics.bestDay,
+    advice: getActivityAdvice(analytics)
+  };
+}
+
 export function getGuideMessage(state, lessons = [], quizzes = []) {
   const completedLessons = state.completedLessons || [];
   const nextLesson = getNextLesson(lessons, state);
@@ -119,6 +133,7 @@ export function buildTodayPlan(state, lessons = [], quizzes = []) {
     plan.push({
       title: "راجع الكلمات المحفوظة",
       description: `ابدأ بهذه الكلمات: ${firstItems}.`,
+      reason: "لأن هذه الكلمات مستحقة للمراجعة الآن، ومراجعتها قبل الدرس تجعل الحفظ أقوى.",
       route: "saved",
       priority: "high"
     });
@@ -128,6 +143,7 @@ export function buildTodayPlan(state, lessons = [], quizzes = []) {
     plan.push({
       title: "خطوة بداية سريعة",
       description: `افتح ${nextLesson.title} فقط. لا تحتاج أكثر من ${nextLesson.estimatedMinutes} دقائق.`,
+      reason: "لأن النشاط لم يبدأ بعد، وأفضل بداية هي مهمة صغيرة لا تسبب ضغطاً.",
       route: "lesson",
       lessonId: nextLesson.id,
       priority: "high"
@@ -136,6 +152,9 @@ export function buildTodayPlan(state, lessons = [], quizzes = []) {
     plan.push({
       title: "افتح الدرس التالي",
       description: `${nextLesson.title} — ${nextLesson.estimatedMinutes} دقائق تقريباً.`,
+      reason: activityStrength === "excellent"
+        ? "نشاطك ممتاز، لذلك يكفي درس خفيف للحفاظ على الإيقاع."
+        : "هذا هو الدرس التالي غير المكتمل في المسار.",
       route: "lesson",
       lessonId: nextLesson.id,
       priority: activityStrength === "excellent" ? "low" : "medium"
@@ -146,6 +165,7 @@ export function buildTodayPlan(state, lessons = [], quizzes = []) {
     plan.push({
       title: "حل اختبار قصير",
       description: `${quizNeed.activeQuiz.title} لتثبيت الدرس الحالي.`,
+      reason: "لأن الاختبار يثبت فهم الدرس ويكشف النقاط التي تحتاج مراجعة.",
       route: "quiz",
       lessonId: quizNeed.activeQuiz.lessonId,
       priority: "medium"
@@ -156,6 +176,7 @@ export function buildTodayPlan(state, lessons = [], quizzes = []) {
     plan.push({
       title: "مراجعة عامة",
       description: "راجع المحفوظات أو افتح المكتبة لاختيار قسم مفردات جديد.",
+      reason: "لا توجد مهمة عاجلة، لذلك مراجعة خفيفة تكفي للحفاظ على الاستمرارية.",
       route: "library",
       priority: "low"
     });
