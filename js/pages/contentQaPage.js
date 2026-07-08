@@ -8,6 +8,7 @@ import { vocabularySections } from "../data/vocabularySections.js";
 import { words } from "../data/words.js";
 import { runContentQA } from "../engines/contentQaEngine.js";
 import { runRuntimeQA } from "../engines/runtimeQaEngine.js";
+import { runStorageQA } from "../engines/storageQaEngine.js";
 
 function renderCheck(check) {
   const passed = check.status === "pass";
@@ -43,16 +44,18 @@ export function renderContentQaPage() {
     cachePrefix: CACHE_PREFIX
   });
   const runtimeReport = runRuntimeQA({ routes: ROUTES, lessons, vocabularySections });
+  const storageReport = runStorageQA({ routes: ROUTES, lessons, vocabularySections });
   const failedChecks = report.checks.filter((check) => check.status === "fail");
   const failedRuntimeChecks = runtimeReport.checks.filter((check) => check.status === "fail");
-  const finalStatus = report.status === "pass" && runtimeReport.status === "pass" ? "pass" : "fail";
+  const failedStorageChecks = storageReport.checks.filter((check) => check.status === "fail");
+  const finalStatus = report.status === "pass" && runtimeReport.status === "pass" && storageReport.status === "pass" ? "pass" : "fail";
 
   return `
     <section class="content-card">
       <button class="ghost-button inline-back-button" data-route="settings">← الرجوع إلى الإعدادات</button>
       <p class="section-label" style="margin-top: 14px;">Content QA</p>
       <h2 class="page-title">🧪 فحص تناسق المحتوى</h2>
-      <p>هذا التقرير يفحص الدروس، الكلمات، الاختبارات، المسارات، ملفات الصفحات، ملفات العمل دون اتصال، وحالات التشغيل الطرفية.</p>
+      <p>هذا التقرير يفحص المحتوى، المسارات، ملفات offline، حالات التشغيل الطرفية، وسلامة التخزين المحلي.</p>
       <span class="status-badge ${finalStatus === "pass" ? "is-open" : "is-locked"}">
         ${finalStatus === "pass" ? "All checks passed" : "Needs review"}
       </span>
@@ -65,19 +68,19 @@ export function renderContentQaPage() {
         <div class="stat-card">Units<strong>${report.totals.units}</strong></div>
         <div class="stat-card">Words<strong>${report.totals.words}</strong></div>
         <div class="stat-card">Quizzes<strong>${report.totals.quizzes}</strong></div>
-        <div class="stat-card">Routes<strong>${report.totals.routes}</strong></div>
-        <div class="stat-card">Assets<strong>${report.totals.appShellAssets}</strong></div>
         <div class="stat-card">Content QA<strong>${report.totals.passed}/${report.totals.checks}</strong></div>
         <div class="stat-card">Runtime QA<strong>${runtimeReport.totals.passed}/${runtimeReport.totals.checks}</strong></div>
+        <div class="stat-card">Storage QA<strong>${storageReport.totals.passed}/${storageReport.totals.checks}</strong></div>
+        <div class="stat-card">Failed<strong>${report.totals.failed + runtimeReport.totals.failed + storageReport.totals.failed}</strong></div>
       </div>
     </section>
 
-    ${failedChecks.length || failedRuntimeChecks.length
+    ${failedChecks.length || failedRuntimeChecks.length || failedStorageChecks.length
       ? `
         <section class="content-card">
           <h2>⚠️ يحتاج مراجعة</h2>
           <div class="card-grid">
-            ${[...failedChecks, ...failedRuntimeChecks].map(renderCheck).join("")}
+            ${[...failedChecks, ...failedRuntimeChecks, ...failedStorageChecks].map(renderCheck).join("")}
           </div>
         </section>
       `
@@ -85,11 +88,19 @@ export function renderContentQaPage() {
         <section class="content-card">
           <div class="empty-state">
             <h3>كل الفحوصات ناجحة ✅</h3>
-            <p>المحتوى، المسارات، ملفات offline، وحالات التشغيل الطرفية متناسقة حالياً.</p>
+            <p>المحتوى، المسارات، ملفات offline، runtime، و localStorage متناسقة حالياً.</p>
           </div>
         </section>
       `
     }
+
+    <section class="content-card">
+      <h2>Storage QA</h2>
+      <p>فحص لحالات مثل JSON غير صالح، state ناقص، route قديم، arrays تالفة، و activeLessonId قديم.</p>
+      <div class="card-grid">
+        ${storageReport.checks.map(renderCheck).join("")}
+      </div>
+    </section>
 
     <section class="content-card">
       <h2>Runtime QA</h2>
