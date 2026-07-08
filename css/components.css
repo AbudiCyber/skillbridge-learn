@@ -1,6 +1,7 @@
 .hero-card,
 .content-card,
 .premium-hero-card {
+  min-width: 0;
   padding: 18px;
   background: linear-gradient(180deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.96));
   border: 1px solid var(--border);
@@ -49,11 +50,13 @@
   margin: 0 0 10px;
   font-size: clamp(1.22rem, 5.6vw, 1.45rem);
   line-height: 1.22;
+  overflow-wrap: anywhere;
 }
 
 .premium-hero-card h2 {
+  max-width: 12ch;
   color: #f8fafc;
-  font-size: clamp(1.65rem, 8vw, 2.2rem);
+  font-size: clamp(1.62rem, 7.4vw, 2.18rem);
   letter-spacing: -0.04em;
 }
 
@@ -80,23 +83,30 @@
 }
 
 .premium-stat-card {
+  min-width: 0;
   min-height: 108px;
   display: grid;
   place-items: center;
-  padding: 16px;
+  align-content: center;
+  gap: 8px;
+  padding: 16px 10px;
   border: 1px solid rgba(234, 179, 8, 0.28);
   border-radius: 24px;
   background: rgba(15, 23, 42, 0.52);
+  text-align: center;
 }
 
 .premium-stat-card strong {
+  max-width: 100%;
   color: #eab308;
-  font-size: clamp(1.65rem, 8vw, 2.15rem);
+  font-size: clamp(1.55rem, 7.4vw, 2.05rem);
   line-height: 1;
+  overflow-wrap: anywhere;
 }
 
 .premium-stat-card span {
   color: var(--muted);
+  font-size: 0.86rem;
   font-weight: 800;
 }
 
@@ -119,6 +129,7 @@
   display: block;
   margin-top: 5px;
   font-size: 1.1rem;
+  overflow-wrap: anywhere;
 }
 
 .primary-button,
@@ -365,6 +376,13 @@ button:disabled {
   text-align: center;
 }
 
+@media (min-width: 470px) {
+  .premium-action-card {
+    grid-template-columns: 1.35fr 0.9fr;
+    align-items: center;
+  }
+}
+
 @media (max-width: 390px) {
   .hero-card,
   .content-card,
@@ -384,12 +402,32 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 
+  .premium-hero-card h2 {
+    max-width: 100%;
+    font-size: clamp(1.42rem, 8vw, 1.85rem);
+  }
+
   .premium-stat-grid {
     gap: 9px;
+    margin: 14px 0;
   }
 
   .premium-stat-card {
     min-height: 92px;
     border-radius: 20px;
+  }
+
+  .premium-stat-card span {
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 340px) {
+  .premium-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .premium-stat-card {
+    min-height: 76px;
   }
 }
