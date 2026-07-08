@@ -1,6 +1,7 @@
 import { lessons } from "../data/lessons.js";
 import { quizzes } from "../data/quizzes.js";
 import { buildProgressSummary } from "../engines/progressEngine.js";
+import { getStreakMessage } from "../engines/streakEngine.js";
 
 export function renderProgressPage(state) {
   const summary = buildProgressSummary(state, {
@@ -15,6 +16,17 @@ export function renderProgressPage(state) {
       <p>Your learning progress is saved locally on this device.</p>
       <div class="progress-bar" aria-label="Lesson progress"><span style="width: ${summary.lessonProgressPercent}%"></span></div>
       <p style="margin-top: 10px;">Lesson progress: ${summary.lessonProgressPercent}%</p>
+    </section>
+
+    <section class="content-card">
+      <h2>Daily Streak</h2>
+      <p>${getStreakMessage(state)}</p>
+      <div class="stat-grid">
+        <div class="stat-card">Current<strong>${state.streak || 0}</strong></div>
+        <div class="stat-card">Best<strong>${state.bestStreak || 0}</strong></div>
+        <div class="stat-card">Last Day<strong>${state.lastActivityDate || "None"}</strong></div>
+        <div class="stat-card">Status<strong>${state.lastActivityDate ? "Tracked" : "New"}</strong></div>
+      </div>
     </section>
 
     <section class="content-card">
@@ -48,6 +60,7 @@ export function renderProgressPage(state) {
       <ul class="page-list">
         <li>First Lesson - complete one lesson</li>
         <li>First Quiz - complete one quiz</li>
+        <li>3-Day Streak - learn for three days</li>
         <li>10 Saved Words - save ten words</li>
       </ul>
     </section>
