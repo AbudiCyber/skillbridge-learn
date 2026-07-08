@@ -2,7 +2,7 @@
   width: min(100%, 520px);
   min-height: 100vh;
   margin: 0 auto;
-  padding: 14px 14px calc(126px + var(--safe-bottom));
+  padding: 14px 14px calc(112px + var(--safe-bottom));
 }
 
 .app-header {
@@ -34,31 +34,31 @@
 .app-main {
   display: grid;
   gap: 14px;
-  padding-bottom: 36px;
+  padding-bottom: 74px;
 }
 
 .bottom-nav {
   position: fixed;
   right: 50%;
-  bottom: 10px;
+  bottom: 8px;
   transform: translateX(50%);
   width: min(calc(100% - 20px), 520px);
   display: grid;
   grid-template-columns: repeat(6, minmax(52px, 1fr));
-  gap: 5px;
-  padding: 7px;
-  padding-bottom: calc(7px + var(--safe-bottom));
-  background: rgba(15, 23, 42, 0.92);
-  border: 1px solid rgba(234, 179, 8, 0.22);
-  border-radius: 22px;
-  box-shadow: var(--shadow);
+  gap: 4px;
+  padding: 6px;
+  padding-bottom: calc(6px + var(--safe-bottom));
+  background: rgba(7, 11, 22, 0.88);
+  border: 1px solid rgba(234, 179, 8, 0.24);
+  border-radius: 20px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.42);
   backdrop-filter: blur(18px);
 }
 
 .nav-item {
-  min-height: 44px;
+  min-height: 40px;
   border: 0;
-  border-radius: 15px;
+  border-radius: 13px;
   background: transparent;
   color: var(--muted);
   font-size: 0.66rem;
@@ -73,18 +73,24 @@
 
 @media (max-width: 430px) {
   .app-shell {
-    padding-bottom: calc(172px + var(--safe-bottom));
+    padding-bottom: calc(142px + var(--safe-bottom));
   }
 
   .bottom-nav {
     grid-template-columns: repeat(3, 1fr);
+    width: min(calc(100% - 28px), 500px);
+    gap: 3px;
+  }
+
+  .nav-item {
+    min-height: 34px;
   }
 }
 
 @media (max-width: 390px) {
   .app-shell {
     padding-inline: 10px;
-    padding-bottom: calc(190px + var(--safe-bottom));
+    padding-bottom: calc(150px + var(--safe-bottom));
   }
 
   .app-header {
@@ -92,13 +98,15 @@
   }
 
   .bottom-nav {
-    width: calc(100% - 12px);
-    border-radius: 20px;
+    width: calc(100% - 18px);
+    border-radius: 18px;
+    padding: 5px;
+    padding-bottom: calc(5px + var(--safe-bottom));
   }
 
   .nav-item {
-    min-height: 38px;
-    font-size: 0.72rem;
+    min-height: 32px;
+    font-size: 0.68rem;
   }
 }
 
