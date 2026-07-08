@@ -29,7 +29,8 @@ export const REQUIRED_ENGINES = [
   "./js/engines/contentQaEngine.js",
   "./js/engines/runtimeSafetyEngine.js",
   "./js/engines/runtimeQaEngine.js",
-  "./js/engines/errorBoundaryEngine.js"
+  "./js/engines/errorBoundaryEngine.js",
+  "./js/engines/storageIntegrityEngine.js"
 ];
 
 export const REQUIRED_ASSETS = [
