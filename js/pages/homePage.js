@@ -1,5 +1,7 @@
+import { achievements } from "../data/achievements.js";
 import { lessons } from "../data/lessons.js";
 import { quizzes } from "../data/quizzes.js";
+import { getUnlockedAchievements } from "../engines/achievementEngine.js";
 import { buildProgressSummary } from "../engines/progressEngine.js";
 import { getStreakMessage } from "../engines/streakEngine.js";
 import { createTranslator } from "../i18n/i18n.js";
@@ -10,6 +12,7 @@ export function renderHomePage(state) {
     lessons: lessons.length,
     quizzes: quizzes.length
   });
+  const unlockedAchievements = getUnlockedAchievements(achievements, state);
 
   return `
     <section class="hero-card">
@@ -32,6 +35,15 @@ export function renderHomePage(state) {
         <div class="stat-card">Current<strong>${state.streak || 0}</strong></div>
         <div class="stat-card">Best<strong>${state.bestStreak || 0}</strong></div>
       </div>
+    </section>
+
+    <section class="content-card">
+      <div class="track-header">
+        <h2>🏆 Achievements</h2>
+        <span class="status-badge is-open">${unlockedAchievements.length}/${achievements.length}</span>
+      </div>
+      <p>افتح الإنجازات عبر التعلم، الاختبارات، حفظ الكلمات، والمراجعة اليومية.</p>
+      <button class="secondary-button" data-route="progress">عرض الإنجازات</button>
     </section>
 
     <section class="content-card">
