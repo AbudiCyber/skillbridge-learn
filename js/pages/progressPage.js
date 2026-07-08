@@ -36,6 +36,25 @@ function renderActivityDay(day) {
   `;
 }
 
+function renderTimelineItem(item) {
+  return `
+    <article class="timeline-item">
+      <div class="timeline-icon">${item.presentation.icon}</div>
+      <div>
+        <div class="track-header">
+          <strong>${item.presentation.title}</strong>
+          <span class="status-badge is-open">${item.timeLabel}</span>
+        </div>
+        <p>${item.presentation.description}</p>
+        <div class="category-meta">
+          <span>${item.dateLabel}</span>
+          ${item.entityId ? `<span>${item.entityId}</span>` : ""}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
 export function renderProgressPage(state) {
   const summary = buildProgressSummary(state, {
     lessons: lessons.length,
@@ -82,6 +101,20 @@ export function renderProgressPage(state) {
       <div class="stat-grid">
         ${analytics.lastSevenDays.map(renderActivityDay).join("")}
       </div>
+    </section>
+
+    <section class="content-card">
+      <div class="track-header">
+        <div>
+          <p class="section-label">Activity Timeline</p>
+          <h2>🧾 آخر النشاطات</h2>
+        </div>
+        <span class="status-badge ${analytics.timeline.length ? "is-open" : "is-locked"}">${analytics.timeline.length}</span>
+      </div>
+      ${analytics.timeline.length === 0
+        ? `<div class="empty-state"><h3>لا توجد نشاطات بعد</h3><p>أكمل درساً، احفظ كلمة، أو راجع كلمة حتى يبدأ الخط الزمني بالظهور.</p></div>`
+        : `<div class="timeline-list">${analytics.timeline.map(renderTimelineItem).join("")}</div>`
+      }
     </section>
 
     <section class="content-card">
