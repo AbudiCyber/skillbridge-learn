@@ -9,6 +9,7 @@ export const defaultState = {
   quizAnswers: {},
   xpEvents: [],
   savedWords: [],
+  wordReviews: {},
   selectedGoal: null
 };
 
