@@ -12,6 +12,8 @@ function getLastNDays(count = 7, date = new Date()) {
 
 function countByDate(events = []) {
   return events.reduce((result, event) => {
+    if (!event) return result;
+
     const dateKey = event.dateKey || (event.createdAt ? getDateKey(new Date(event.createdAt)) : null);
     if (!dateKey) return result;
 
@@ -36,6 +38,8 @@ export function createActivityEvent(type, entityId, metadata = {}) {
 }
 
 export function appendActivityEvent(state, event) {
+  if (!event) return state;
+
   return {
     ...state,
     activityEvents: [...(state.activityEvents || []), event].slice(-300)
@@ -62,7 +66,7 @@ export function getBestActivityDay(state) {
 }
 
 export function buildAnalyticsSummary(state) {
-  const activityEvents = state.activityEvents || [];
+  const activityEvents = (state.activityEvents || []).filter(Boolean);
   const lessonEvents = activityEvents.filter((event) => event.type === "complete_lesson");
   const saveWordEvents = activityEvents.filter((event) => event.type === "save_word");
   const reviewEvents = activityEvents.filter((event) => event.type === "review_word");
