@@ -1,6 +1,7 @@
 import { lessons } from "../data/lessons.js";
 import { quizzes } from "../data/quizzes.js";
 import { buildProgressSummary } from "../engines/progressEngine.js";
+import { getStreakMessage } from "../engines/streakEngine.js";
 import { createTranslator } from "../i18n/i18n.js";
 
 export function renderHomePage(state) {
@@ -18,6 +19,18 @@ export function renderHomePage(state) {
       <div class="button-row">
         <button class="primary-button" data-route="learn">${t("startLearning")}</button>
         <button class="ghost-button" data-route="guide">${t("askGuide")}</button>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <div class="track-header">
+        <h2>🔥 Daily Streak</h2>
+        <span class="status-badge is-open">${state.streak || 0} days</span>
+      </div>
+      <p>${getStreakMessage(state)}</p>
+      <div class="stat-grid">
+        <div class="stat-card">Current<strong>${state.streak || 0}</strong></div>
+        <div class="stat-card">Best<strong>${state.bestStreak || 0}</strong></div>
       </div>
     </section>
 
