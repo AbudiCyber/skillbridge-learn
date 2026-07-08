@@ -4,6 +4,8 @@ export const defaultState = {
   uiLanguage: "ar",
   xp: 0,
   streak: 0,
+  bestStreak: 0,
+  lastActivityDate: null,
   completedLessons: [],
   completedQuizzes: [],
   quizAnswers: {},
