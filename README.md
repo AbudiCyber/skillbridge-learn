@@ -8,15 +8,15 @@ SkillBridge Learn is a mobile-first learning PWA designed to help Arabic-speakin
 
 Build a modular learning engine that starts with English and can later expand into programming English, other languages, and practical skills.
 
-## v0.2.3 Goal
+## v0.2.4 Goal
 
-Reduce runtime crashes and white-screen risk by validating routes, lesson IDs, section IDs, quiz answers, and user-state arrays before rendering or mutating state:
+Validate the runtime safety layer with explicit edge-case checks for unknown routes, missing lesson IDs, missing section IDs, unsafe payloads, and sanitized state rendering:
 
 ```text
-Unsafe Input → Runtime Safety Layer → Valid Route/Payload → Stable Page Render
+Runtime Safety Layer → Runtime QA Edge Cases → Safer App Navigation
 ```
 
-## v0.2.3 Features
+## v0.2.4 Features
 
 - Mobile-first PWA shell
 - English beginner track
@@ -35,6 +35,7 @@ Unsafe Input → Runtime Safety Layer → Valid Route/Payload → Stable Page Re
 - Premium home dashboard UI
 - Settings system
 - Expanded Content QA report
+- Runtime QA edge-case report
 - Shared app shell asset registry
 - Module Service Worker registration
 - Runtime route and payload safety layer
@@ -54,7 +55,7 @@ Unsafe Input → Runtime Safety Layer → Valid Route/Payload → Stable Page Re
 ## Current Version
 
 ```text
-v0.2.3 = Runtime safety layer + route payload guards
+v0.2.4 = Runtime QA edge cases + safer navigation validation
 ```
 
 ## Roadmap
@@ -63,6 +64,7 @@ v0.2.3 = Runtime safety layer + route payload guards
 - v0.2.1: Premium UI + local analytics + AI guide stability
 - v0.2.2: App shell source-of-truth cleanup
 - v0.2.3: Runtime safety layer
+- v0.2.4: Runtime QA edge cases
 - v0.3.0: Review intelligence + spaced repetition foundations
 - v0.4.0: Audio and pronunciation layer
 - v0.5.0: Grammar Lite
