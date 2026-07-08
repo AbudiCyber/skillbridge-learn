@@ -24,6 +24,18 @@ function countByDate(events = []) {
   }, {});
 }
 
+function formatTime(dateValue) {
+  if (!dateValue) return "--:--";
+
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return "--:--";
+
+  return date.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
 export function createActivityEvent(type, entityId, metadata = {}) {
   const createdAt = new Date().toISOString();
 
@@ -44,6 +56,56 @@ export function appendActivityEvent(state, event) {
     ...state,
     activityEvents: [...(state.activityEvents || []), event].slice(-300)
   };
+}
+
+export function getActivityPresentation(event) {
+  const map = {
+    complete_lesson: {
+      icon: "📖",
+      title: "إكمال درس",
+      description: "تم إنهاء درس وإضافة تقدمه إلى مسارك."
+    },
+    save_word: {
+      icon: "⭐",
+      title: "حفظ كلمة",
+      description: "تمت إضافة كلمة جديدة إلى المحفوظات."
+    },
+    review_word: {
+      icon: "🔁",
+      title: "مراجعة كلمة",
+      description: "تمت مراجعة كلمة محفوظة وتقوية ذاكرتها."
+    },
+    answer_quiz: {
+      icon: "📝",
+      title: "إجابة اختبار",
+      description: "تم تسجيل إجابة داخل اختبار قصير."
+    },
+    finish_quiz: {
+      icon: "✅",
+      title: "إنهاء اختبار",
+      description: event?.metadata?.passed ? "تم اجتياز الاختبار بنجاح." : "تم إنهاء الاختبار ويحتاج محاولة أفضل."
+    }
+  };
+
+  return map[event?.type] || {
+    icon: "•",
+    title: "نشاط تعلّم",
+    description: "تم تسجيل نشاط داخل التطبيق."
+  };
+}
+
+export function buildActivityTimeline(state, limit = 8) {
+  return (state.activityEvents || [])
+    .filter(Boolean)
+    .slice()
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, limit)
+    .map((event) => ({
+      ...event,
+      presentation: getActivityPresentation(event),
+      timeLabel: formatTime(event.createdAt),
+      dateLabel: event.dateKey || (event.createdAt ? getDateKey(new Date(event.createdAt)) : "unknown")
+    }));
 }
 
 export function buildLastSevenDaysActivity(state) {
@@ -73,6 +135,7 @@ export function buildAnalyticsSummary(state) {
   const quizEvents = activityEvents.filter((event) => event.type === "finish_quiz" || event.type === "answer_quiz");
   const lastSevenDays = buildLastSevenDaysActivity(state);
   const bestDay = getBestActivityDay(state);
+  const timeline = buildActivityTimeline(state, 8);
   const totalActions = activityEvents.length;
 
   return {
@@ -86,6 +149,7 @@ export function buildAnalyticsSummary(state) {
     quizEvents: quizEvents.length,
     lastSevenDays,
     bestDay,
+    timeline,
     hasActivity: totalActions > 0
   };
 }
