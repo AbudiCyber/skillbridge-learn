@@ -28,6 +28,18 @@ function findMissingItems(requiredItems = [], availableItems = []) {
   return requiredItems.filter((item) => !available.has(item));
 }
 
+function findDuplicateValues(items = []) {
+  const seen = new Set();
+  const duplicates = new Set();
+
+  items.forEach((item) => {
+    if (seen.has(item)) duplicates.add(item);
+    seen.add(item);
+  });
+
+  return Array.from(duplicates);
+}
+
 function findInactiveSectionWordLeaks(words, vocabularySections) {
   const sectionStatus = new Map(vocabularySections.map((section) => [section.id, section.status]));
   return words.filter((word) => sectionStatus.get(word.sectionId) !== "active");
@@ -55,7 +67,10 @@ export function runContentQA({
   routePages = {},
   appShellAssets = [],
   requiredAssets = [],
-  requiredEngines = []
+  requiredEngines = [],
+  appVersion,
+  cacheVersion,
+  cachePrefix
 }) {
   const lessonIds = new Set(lessons.map((lesson) => lesson.id));
   const unitIds = new Set(units.map((unit) => unit.id));
@@ -86,7 +101,10 @@ export function runContentQA({
   const routePagesMissingFromCache = findMissingItems(Object.values(routePages), appShellAssets);
   const missingRequiredAssets = findMissingItems(requiredAssets, appShellAssets);
   const enginesMissingFromCache = findMissingItems(requiredEngines, appShellAssets);
+  const duplicateAppShellAssets = findDuplicateValues(appShellAssets);
   const routeIdsWithoutValues = routeKeys.filter((key) => !routes[key]);
+  const invalidCacheVersion = cacheVersion !== `v${appVersion}`;
+  const invalidCachePrefix = cachePrefix !== "skillbridge-learn";
 
   const checks = [
     createCheck("duplicate-ids", "No duplicate IDs", duplicateIds.length === 0, duplicateIds),
@@ -105,7 +123,10 @@ export function runContentQA({
     createCheck("route-values-exist", "Every route key has a value", routeIdsWithoutValues.length === 0, routeIdsWithoutValues),
     createCheck("route-pages-cached", "Route pages are cached offline", routePagesMissingFromCache.length === 0, routePagesMissingFromCache),
     createCheck("required-assets-cached", "Required app shell assets are cached", missingRequiredAssets.length === 0, missingRequiredAssets),
-    createCheck("engines-cached", "Core engines are cached offline", enginesMissingFromCache.length === 0, enginesMissingFromCache)
+    createCheck("engines-cached", "Core engines are cached offline", enginesMissingFromCache.length === 0, enginesMissingFromCache),
+    createCheck("app-shell-no-duplicates", "App shell assets are unique", duplicateAppShellAssets.length === 0, duplicateAppShellAssets),
+    createCheck("cache-version-matches-app", "Cache version matches app version", !invalidCacheVersion, invalidCacheVersion ? [`${cacheVersion} != v${appVersion}`] : []),
+    createCheck("cache-prefix-valid", "Cache prefix is valid", !invalidCachePrefix, invalidCachePrefix ? [cachePrefix] : [])
   ];
 
   const failedChecks = checks.filter((check) => check.status === "fail");
