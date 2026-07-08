@@ -55,6 +55,13 @@ export function renderSettingsPage(state) {
     </section>
 
     <section class="content-card">
+      <p class="section-label">Quality</p>
+      <h2>🧪 فحص المحتوى</h2>
+      <p>افتح تقرير QA للتأكد من أن الدروس والكلمات والاختبارات مترابطة بشكل صحيح.</p>
+      <button class="secondary-button" data-route="content-qa">فتح تقرير QA</button>
+    </section>
+
+    <section class="content-card">
       <p class="section-label">Theme</p>
       <h2>🌙 الثيم</h2>
       <p>الوضع الداكن مفعل حالياً كخيار أساسي للنسخة الأولى.</p>
