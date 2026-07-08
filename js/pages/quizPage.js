@@ -65,16 +65,17 @@ function renderQuizResult(quiz, selectedAnswers) {
   }
 
   return `
-    <section class="content-card">
+    <section class="content-card quiz-result-card">
       <h2>${passed ? "نجحت ✅" : "راجع ثم حاول مرة أخرى"}</h2>
       <p>درجتك: ${score.correct} / ${score.total} — ${score.percent}%</p>
       <div class="progress-bar"><span style="width: ${score.percent}%"></span></div>
-      <div class="button-row" style="margin-top: 14px;">
+      <div class="button-row quiz-result-actions" style="margin-top: 14px;">
         <button class="primary-button" data-action="finish-quiz" data-quiz-id="${quiz.id}">
-          ${passed ? "إنهاء الاختبار والحصول على XP" : "حفظ المحاولة"}
+          ${passed ? "إنهاء الاختبار + XP" : "حفظ المحاولة"}
         </button>
         <button class="ghost-button" data-action="reset-quiz" data-quiz-id="${quiz.id}">إعادة المحاولة</button>
       </div>
+      ${passed ? `<p class="quiz-finish-note">سيتم احتساب الاختبار والدرس معاً عند الضغط على زر XP.</p>` : ""}
     </section>
   `;
 }
