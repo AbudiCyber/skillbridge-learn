@@ -141,13 +141,14 @@ export const lessons = [
     title: "Numbers 1-10",
     goal: "تعلم الأرقام من 1 إلى 10.",
     explanation: "الأرقام تستخدم في العمر، الوقت، السعر، والعد اليومي.",
-    words: ["one", "two", "three", "ten"],
+    words: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"],
     examples: [
       { english: "I have one book.", arabic: "لدي كتاب واحد." },
+      { english: "Five students are here.", arabic: "خمسة طلاب هنا." },
       { english: "I am ten years old.", arabic: "عمري عشر سنوات." }
     ],
-    practice: "عد من One إلى Ten بصوت منخفض.",
-    aiTip: "ابدأ بالأرقام الصغيرة لأنها تظهر كثيراً في المحادثات اليومية.",
+    practice: "عد من One إلى Ten بصوت منخفض، ثم اكتب 6 إلى 9 مرة واحدة.",
+    aiTip: "لا تقفز من Five إلى Ten. تدرب على Six, Seven, Eight, Nine لأنها تربط منتصف السلسلة.",
     xpReward: 20,
     estimatedMinutes: 4,
     order: 9
