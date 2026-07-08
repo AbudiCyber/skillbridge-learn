@@ -27,7 +27,8 @@ export const REQUIRED_ENGINES = [
   "./js/engines/achievementEngine.js",
   "./js/engines/aiGuideEngine.js",
   "./js/engines/contentQaEngine.js",
-  "./js/engines/runtimeSafetyEngine.js"
+  "./js/engines/runtimeSafetyEngine.js",
+  "./js/engines/runtimeQaEngine.js"
 ];
 
 export const REQUIRED_ASSETS = [
