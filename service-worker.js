@@ -31,6 +31,7 @@ const CORE_ASSETS = [
   "./js/engines/quizEngine.js",
   "./js/engines/xpEngine.js",
   "./js/engines/vocabularyEngine.js",
+  "./js/engines/reviewEngine.js",
   "./js/engines/aiGuideEngine.js",
   "./js/data/lessons.js",
   "./js/data/quizzes.js",
