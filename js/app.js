@@ -171,26 +171,47 @@ function handleFinishQuiz(quizId) {
   const quiz = quizzes.find((item) => item.id === quizId);
   if (!quiz) return;
 
+  const lesson = getLessonById(lessons, quiz.lessonId);
+  const safeLessonId = getSafeLessonId(lessons, quiz.lessonId);
   const answers = currentState.quizAnswers?.[quizId] || {};
   const passed = hasPassedQuiz(quiz, answers);
   const completedQuizzes = ensureArray(currentState.completedQuizzes);
-  const alreadyCompleted = completedQuizzes.includes(quizId);
-  const alreadyRewarded = hasXPEvent(currentState, "quiz", quizId);
-  const points = 15;
+  const completedLessons = ensureArray(currentState.completedLessons);
+  const alreadyCompletedQuiz = completedQuizzes.includes(quizId);
+  const alreadyCompletedLesson = safeLessonId ? completedLessons.includes(safeLessonId) : true;
+  const alreadyRewardedQuiz = hasXPEvent(currentState, "quiz", quizId);
+  const alreadyRewardedLesson = safeLessonId ? hasXPEvent(currentState, "lesson", safeLessonId) : true;
+  const quizPoints = 15;
+  const lessonPoints = lesson?.xpReward || 20;
+  const shouldCompleteLesson = passed && safeLessonId && !alreadyCompletedLesson;
+  const shouldRewardQuiz = passed && !alreadyRewardedQuiz;
+  const shouldRewardLesson = shouldCompleteLesson && !alreadyRewardedLesson;
+  const totalPoints = (shouldRewardQuiz ? quizPoints : 0) + (shouldRewardLesson ? lessonPoints : 0);
 
-  const nextState = setState(appendActivityEvent(applyDailyActivity({
+  const stateWithProgress = applyDailyActivity({
     ...currentState,
-    completedQuizzes: passed && !alreadyCompleted ? [...completedQuizzes, quizId] : completedQuizzes,
-    xp: passed && !alreadyRewarded ? addXP(currentState.xp, points) : currentState.xp,
-    xpEvents: passed && !alreadyRewarded
-      ? [...ensureArray(currentState.xpEvents), createXPEvent("quiz", quizId, points, "pass_quiz")]
-      : ensureArray(currentState.xpEvents)
-  }), alreadyCompleted
-    ? null
-    : createActivityEvent("finish_quiz", quizId, { passed, points: passed ? points : 0 })));
+    route: passed ? ROUTES.HOME : ROUTES.TEST,
+    activeLessonId: safeLessonId || currentState.activeLessonId,
+    completedQuizzes: passed && !alreadyCompletedQuiz ? [...completedQuizzes, quizId] : completedQuizzes,
+    completedLessons: shouldCompleteLesson ? [...completedLessons, safeLessonId] : completedLessons,
+    xp: totalPoints ? addXP(currentState.xp, totalPoints) : currentState.xp,
+    xpEvents: [
+      ...ensureArray(currentState.xpEvents),
+      ...(shouldRewardQuiz ? [createXPEvent("quiz", quizId, quizPoints, "pass_quiz")] : []),
+      ...(shouldRewardLesson ? [createXPEvent("lesson", safeLessonId, lessonPoints, "complete_lesson_from_quiz")] : [])
+    ]
+  });
 
-  saveUserState(nextState);
-  renderApp(ROUTES.TEST, nextState);
+  const stateWithQuizActivity = alreadyCompletedQuiz
+    ? stateWithProgress
+    : appendActivityEvent(stateWithProgress, createActivityEvent("finish_quiz", quizId, { passed, points: shouldRewardQuiz ? quizPoints : 0 }));
+  const finalState = shouldCompleteLesson
+    ? appendActivityEvent(stateWithQuizActivity, createActivityEvent("complete_lesson", safeLessonId, { points: shouldRewardLesson ? lessonPoints : 0, source: "quiz" }))
+    : stateWithQuizActivity;
+
+  setState(finalState);
+  saveUserState(finalState);
+  renderApp(finalState.route, finalState);
 }
 
 function handleResetQuiz(quizId) {
