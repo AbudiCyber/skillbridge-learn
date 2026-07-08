@@ -2,7 +2,7 @@ import { lessons } from "../data/lessons.js";
 import { quizzes } from "../data/quizzes.js";
 import { words } from "../data/words.js";
 import { getLessonById, getLessonWords, isLessonCompleted } from "../engines/lessonEngine.js";
-import { getQuizByLessonId } from "../engines/quizEngine.js";
+import { getQuizByLessonId, hasPassedQuiz } from "../engines/quizEngine.js";
 
 function isWordSaved(state, wordId) {
   return (state.savedWords || []).some((word) => word.id === wordId);
@@ -18,24 +18,27 @@ function renderSaveButton(word, state) {
   `;
 }
 
-function renderWordCards(lessonWords, lesson, state) {
-  if (!lessonWords.length && lesson.words?.length) {
-    return `
-      <div class="word-grid">
-        ${lesson.words.map((word) => `
-          <article class="word-card is-fallback-word">
-            <div>
-              <strong>${word}</strong>
-              <span>Lesson word</span>
-            </div>
-            <p>هذه كلمة أساسية داخل الدرس. سيتم ربطها بكرت حفظ كامل لاحقاً إذا احتاجت تفاصيل أكثر.</p>
-          </article>
-        `).join("")}
-      </div>
-    `;
-  }
+function normalizeWordKey(value) {
+  return String(value || "").trim().toLowerCase();
+}
 
-  if (!lessonWords.length) {
+function renderFallbackWordCard(word) {
+  return `
+    <article class="word-card is-fallback-word">
+      <div>
+        <strong>${word}</strong>
+        <span>Lesson word</span>
+      </div>
+      <p>هذه كلمة أساسية داخل الدرس. سيتم ربطها بكرت حفظ كامل لاحقاً إذا احتاجت تفاصيل أكثر.</p>
+    </article>
+  `;
+}
+
+function renderWordCards(lessonWords, lesson, state) {
+  const detailedWordKeys = new Set(lessonWords.map((word) => normalizeWordKey(word.word)));
+  const fallbackWords = (lesson.words || []).filter((word) => !detailedWordKeys.has(normalizeWordKey(word)));
+
+  if (!lessonWords.length && !fallbackWords.length) {
     return `<p class="empty-state">لا توجد كلمات مرتبطة بهذا الدرس بعد.</p>`;
   }
 
@@ -55,6 +58,7 @@ function renderWordCards(lessonWords, lesson, state) {
           </article>
         `;
       }).join("")}
+      ${fallbackWords.map(renderFallbackWordCard).join("")}
     </div>
   `;
 }
@@ -74,12 +78,29 @@ function renderExamples(examples) {
   `;
 }
 
+function renderCompletionButton({ completed, quizPassed, lesson }) {
+  const canComplete = completed || quizPassed;
+
+  return `
+    <button
+      class="${canComplete ? "primary-button" : "secondary-button"}"
+      data-action="complete-lesson"
+      data-lesson-id="${lesson.id}"
+      ${canComplete ? "" : "disabled"}
+    >
+      ${completed ? "تم إكمال الدرس ✅" : quizPassed ? "إنهاء الدرس" : "🔒 انجح بالاختبار أولاً"}
+    </button>
+  `;
+}
+
 export function renderLessonPage(state) {
   const lessonId = state.activeLessonId || "eng-001";
   const lesson = getLessonById(lessons, lessonId) || lessons[0];
   const lessonWords = getLessonWords(words, lesson.id);
   const completed = isLessonCompleted(state, lesson.id);
   const quiz = getQuizByLessonId(quizzes, lesson.id);
+  const quizAnswers = quiz ? state.quizAnswers?.[quiz.id] || {} : {};
+  const quizPassed = quiz ? hasPassedQuiz(quiz, quizAnswers) : false;
 
   return `
     <section class="content-card">
@@ -118,13 +139,12 @@ export function renderLessonPage(state) {
       <h2>🤖 نصيحة المساعد</h2>
       <p>${lesson.aiTip}</p>
       <div class="button-row">
-        <button class="primary-button" data-action="complete-lesson" data-lesson-id="${lesson.id}">
-          ${completed ? "تم إكمال الدرس ✅" : "إنهاء الدرس"}
-        </button>
+        ${renderCompletionButton({ completed, quizPassed, lesson })}
         <button class="ghost-button" data-route="quiz" data-lesson-id="${lesson.id}" ${quiz ? "" : "disabled"}>
           ${quiz ? "بدء الاختبار" : "لا يوجد اختبار"}
         </button>
       </div>
+      ${!completed && !quizPassed ? `<p class="lesson-lock-note">افتح الاختبار ونجح أولاً. بعدها سيتم احتساب الدرس تلقائياً مع XP.</p>` : ""}
     </section>
   `;
 }
