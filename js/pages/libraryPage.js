@@ -1,50 +1,67 @@
-const categories = [
-  {
-    icon: "🔤",
-    title: "Alphabet",
-    description: "الحروف الكبيرة والصغيرة، والنطق التقريبي لاحقاً.",
-    meta: ["V1", "Beginner"]
-  },
-  {
-    icon: "🧠",
-    title: "Basic Vocabulary",
-    description: "كلمات أساسية مترجمة مع أمثلة قصيرة.",
-    meta: ["50 كلمة", "قريباً"]
-  },
-  {
-    icon: "💬",
-    title: "Basic Sentences",
-    description: "جمل يومية قصيرة تساعد المستخدم على البدء بالمحادثة.",
-    meta: ["Daily", "قريباً"]
-  },
-  {
-    icon: "📘",
-    title: "Grammar Lite",
-    description: "قواعد خفيفة مثل الضمائر و a/an/the و question words.",
-    meta: ["V2", "Future"]
-  }
-];
+import { vocabularySections } from "../data/vocabularySections.js";
+import { words } from "../data/words.js";
+import { buildVocabularySectionSummary } from "../engines/vocabularyEngine.js";
 
-export function renderLibraryPage() {
+const statusLabels = {
+  active: "متاح",
+  planned: "مخطط",
+  future: "مستقبلي"
+};
+
+function renderSectionCard(section) {
+  const statusClass = section.status === "active" ? "is-open" : "is-locked";
+  const canOpen = section.status === "active" || section.wordCount > 0;
+
+  return `
+    <article class="category-card">
+      <div class="category-card-header">
+        <h3>${section.icon} ${section.arabicTitle}</h3>
+        <span class="status-badge ${statusClass}">${statusLabels[section.status] || section.status}</span>
+      </div>
+      <p>${section.description}</p>
+      <div class="category-meta">
+        <span>${section.title}</span>
+        <span>${section.wordCount} كلمات</span>
+        <span>${section.group}</span>
+      </div>
+      <button class="${canOpen ? "primary-button" : "secondary-button"}" data-route="vocabulary-section" data-section-id="${section.id}" ${canOpen ? "" : "disabled"} style="margin-top: 12px;">
+        ${canOpen ? "فتح القسم" : "قريباً"}
+      </button>
+    </article>
+  `;
+}
+
+function renderSectionGroup(title, sections) {
+  if (!sections.length) return "";
+
   return `
     <section class="content-card">
-      <p class="section-label">Library</p>
-      <h2 class="page-title">🗂️ المكتبة</h2>
-      <p>فهرس منظم للمحتوى، مستوحى من فكرة القواميس لكن بواجهة حديثة وسهلة.</p>
+      <h2>${title}</h2>
+      <div class="card-grid">
+        ${sections.map(renderSectionCard).join("")}
+      </div>
+    </section>
+  `;
+}
+
+export function renderLibraryPage() {
+  const summaries = vocabularySections
+    .map((section) => buildVocabularySectionSummary(section, words))
+    .sort((a, b) => a.order - b.order);
+
+  const activeSections = summaries.filter((section) => section.status === "active");
+  const plannedSections = summaries.filter((section) => section.status === "planned");
+  const futureSections = summaries.filter((section) => section.status === "future");
+
+  return `
+    <section class="content-card">
+      <p class="section-label">Vocabulary Library</p>
+      <h2 class="page-title">🗂️ مكتبة المفردات</h2>
+      <p>المفردات الآن منظمة داخل أقسام واضحة حتى يتعلم المستخدم كلمات مترابطة، وليس كلمات عشوائية.</p>
     </section>
 
-    <section class="card-grid">
-      ${categories.map((category) => `
-        <article class="category-card">
-          <div class="category-card-header">
-            <h3>${category.icon} ${category.title}</h3>
-          </div>
-          <p>${category.description}</p>
-          <div class="category-meta">
-            ${category.meta.map((item) => `<span>${item}</span>`).join("")}
-          </div>
-        </article>
-      `).join("")}
-    </section>
+    ${renderSectionGroup("الأقسام المتاحة", activeSections)}
+    ${renderSectionGroup("الأقسام المخطط لها", plannedSections)}
+    ${renderSectionGroup("الأقسام المستقبلية", futureSections)}
   `;
 }
