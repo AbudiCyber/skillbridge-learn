@@ -4,7 +4,23 @@ import { words } from "../data/words.js";
 import { getLessonById, getLessonWords, isLessonCompleted } from "../engines/lessonEngine.js";
 import { getQuizByLessonId } from "../engines/quizEngine.js";
 
-function renderWordCards(lessonWords) {
+function renderWordCards(lessonWords, lesson) {
+  if (!lessonWords.length && lesson.words?.length) {
+    return `
+      <div class="word-grid">
+        ${lesson.words.map((word) => `
+          <article class="word-card">
+            <div>
+              <strong>${word}</strong>
+              <span>Lesson word</span>
+            </div>
+            <p>هذه كلمة أساسية داخل الدرس. سيتم ربطها بكرت حفظ كامل لاحقاً إذا احتاجت تفاصيل أكثر.</p>
+          </article>
+        `).join("")}
+      </div>
+    `;
+  }
+
   if (!lessonWords.length) {
     return `<p class="empty-state">لا توجد كلمات مرتبطة بهذا الدرس بعد.</p>`;
   }
@@ -67,7 +83,7 @@ export function renderLessonPage(state) {
 
     <section class="content-card">
       <h2>الكلمات</h2>
-      ${renderWordCards(lessonWords)}
+      ${renderWordCards(lessonWords, lesson)}
     </section>
 
     <section class="content-card">
