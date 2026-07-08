@@ -8,23 +8,23 @@ SkillBridge Learn is a mobile-first learning PWA designed to help Arabic-speakin
 
 Build a modular learning engine that starts with English and can later expand into programming English, other languages, and practical skills.
 
-## v0.2.9 Goal
+## v0.2.10 Goal
 
-Polish the quiz completion flow so one primary action can finish the quiz, award quiz XP, complete the lesson when passed, and keep the result screen visually clean:
+Close final mobile polish findings before freezing v0.2.x: complete the Numbers 1-10 lesson sequence, lock manual lesson completion until quiz success, compact the bottom navigation, and restore a deeper premium dark theme:
 
 ```text
-Pass Quiz → Finish Quiz + XP → Complete Lesson → Return Home
+Final Phone Test → Content Polish → Locked Lesson Flow → Compact Navigation → Freeze Candidate
 ```
 
 ## Release Candidate Status
 
 ```text
-v0.2.9 = Quiz completion UX candidate for v0.2.x freeze
+v0.2.10 = Final mobile polish candidate for v0.2.x freeze
 QA report: docs/release-candidate-v0.2.7.md
 Manual smoke test: docs/manual-smoke-test-v0.2.7.md
 ```
 
-## v0.2.9 Features
+## v0.2.10 Features
 
 - Mobile-first PWA shell
 - English beginner track
@@ -51,8 +51,11 @@ Manual smoke test: docs/manual-smoke-test-v0.2.7.md
 - Render error boundary
 - Storage integrity guard
 - Content QA data-model patch
-- Mobile bottom spacing polish
 - Quiz completion flow polish
+- Completed Numbers 1-10 lesson sequence
+- Locked lesson completion until quiz pass
+- Compact mobile bottom navigation
+- Deeper premium dark theme
 - Offline-first Service Worker
 - Analytics-aware AI guide cards
 
@@ -69,7 +72,7 @@ Manual smoke test: docs/manual-smoke-test-v0.2.7.md
 ## Current Version
 
 ```text
-v0.2.9 = Quiz completion flow polish + clean result actions
+v0.2.10 = Final mobile UX + content polish
 ```
 
 ## Roadmap
@@ -84,6 +87,7 @@ v0.2.9 = Quiz completion flow polish + clean result actions
 - v0.2.7: Storage QA edge cases
 - v0.2.8: Content QA patch + mobile spacing polish
 - v0.2.9: Quiz completion flow polish
+- v0.2.10: Final mobile UX + content polish
 - v0.3.0: Review intelligence + spaced repetition foundations
 - v0.4.0: Audio and pronunciation layer
 - v0.5.0: Grammar Lite
