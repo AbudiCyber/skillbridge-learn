@@ -9,6 +9,7 @@ import { renderProgressPage } from "./pages/progressPage.js";
 import { renderSavedPage } from "./pages/savedPage.js";
 import { renderAiGuidePage } from "./pages/aiGuidePage.js";
 import { renderSettingsPage } from "./pages/settingsPage.js";
+import { renderContentQaPage } from "./pages/contentQaPage.js";
 
 const routeRenderers = {
   [ROUTES.HOME]: renderHomePage,
@@ -20,7 +21,8 @@ const routeRenderers = {
   [ROUTES.PROGRESS]: renderProgressPage,
   [ROUTES.SAVED]: renderSavedPage,
   [ROUTES.GUIDE]: renderAiGuidePage,
-  [ROUTES.SETTINGS]: renderSettingsPage
+  [ROUTES.SETTINGS]: renderSettingsPage,
+  [ROUTES.CONTENT_QA]: renderContentQaPage
 };
 
 export function renderRoute(route, state) {
