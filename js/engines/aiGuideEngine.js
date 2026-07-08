@@ -1,3 +1,4 @@
+import { buildAnalyticsSummary } from "./analyticsEngine.js";
 import { buildReviewQueue } from "./reviewEngine.js";
 
 function getNextLesson(lessons, state) {
@@ -33,19 +34,56 @@ function getQuizNeed(quizzes, state) {
   };
 }
 
+function getActivityStrength(analytics) {
+  const weekActions = analytics.lastSevenDays.reduce((total, day) => total + day.count, 0);
+
+  if (weekActions >= 20) return "excellent";
+  if (weekActions >= 8) return "good";
+  if (weekActions >= 1) return "light";
+  return "none";
+}
+
+function getActivityAdvice(analytics) {
+  const strength = getActivityStrength(analytics);
+
+  if (strength === "excellent") {
+    return "نشاطك خلال آخر 7 أيام ممتاز. حافظ على الإيقاع ولا تضغط نفسك بمهام كثيرة.";
+  }
+
+  if (strength === "good") {
+    return "نشاطك جيد. خطوة صغيرة يومياً ستجعل التقدم ثابتاً.";
+  }
+
+  if (strength === "light") {
+    return "نشاطك خفيف. اختر مهمة واحدة فقط اليوم حتى لا تنقطع السلسلة.";
+  }
+
+  return "لم يبدأ نشاطك بعد. أفضل بداية هي درس قصير أو حفظ كلمة واحدة.";
+}
+
 export function getGuideMessage(state, lessons = [], quizzes = []) {
   const completedLessons = state.completedLessons || [];
   const nextLesson = getNextLesson(lessons, state);
   const reviewNeed = getReviewNeed(state);
   const quizNeed = getQuizNeed(quizzes, state);
+  const analytics = buildAnalyticsSummary(state);
+  const activityStrength = getActivityStrength(analytics);
 
   if (!completedLessons.length) {
     return "ابدأ بأول درس قصير. الهدف اليوم بسيط: افتح الدرس الأول، احفظ كلمة واحدة، ثم جرّب الاختبار.";
   }
 
+  if (activityStrength === "none") {
+    return "لا توجد نشاطات مسجلة بعد. نفّذ خطوة صغيرة الآن: راجع كلمة أو افتح الدرس التالي.";
+  }
+
   if (reviewNeed.shouldReview) {
     const firstWord = reviewNeed.queue[0]?.word?.word;
     return `لديك ${reviewNeed.pendingCount} كلمات تحتاج مراجعة. ابدأ بـ ${firstWord || "الكلمة الأولى"} قبل درس جديد.`;
+  }
+
+  if (quizNeed.shouldQuiz && analytics.quizEvents > analytics.lessonEvents + 3) {
+    return "أنت تتفاعل مع الاختبارات كثيراً. الأفضل الآن أن تفتح درساً جديداً حتى يتوازن الفهم مع التدريب.";
   }
 
   if (quizNeed.shouldQuiz) {
@@ -54,6 +92,10 @@ export function getGuideMessage(state, lessons = [], quizzes = []) {
 
   if ((state.streak || 0) === 0) {
     return "نفّذ نشاطاً صغيراً اليوم لبناء أول سلسلة تعلم. حفظ كلمة أو إجابة اختبار يكفي كبداية.";
+  }
+
+  if (activityStrength === "excellent") {
+    return "أداؤك ممتاز هذا الأسبوع. حافظ على إيقاع خفيف: درس قصير أو مراجعة فقط.";
   }
 
   if (nextLesson) {
@@ -67,6 +109,8 @@ export function buildTodayPlan(state, lessons = [], quizzes = []) {
   const nextLesson = getNextLesson(lessons, state);
   const reviewNeed = getReviewNeed(state);
   const quizNeed = getQuizNeed(quizzes, state);
+  const analytics = buildAnalyticsSummary(state);
+  const activityStrength = getActivityStrength(analytics);
   const plan = [];
 
   if (reviewNeed.shouldReview) {
@@ -80,17 +124,25 @@ export function buildTodayPlan(state, lessons = [], quizzes = []) {
     });
   }
 
-  if (nextLesson) {
+  if (activityStrength === "none" && nextLesson) {
+    plan.push({
+      title: "خطوة بداية سريعة",
+      description: `افتح ${nextLesson.title} فقط. لا تحتاج أكثر من ${nextLesson.estimatedMinutes} دقائق.`,
+      route: "lesson",
+      lessonId: nextLesson.id,
+      priority: "high"
+    });
+  } else if (nextLesson) {
     plan.push({
       title: "افتح الدرس التالي",
       description: `${nextLesson.title} — ${nextLesson.estimatedMinutes} دقائق تقريباً.`,
       route: "lesson",
       lessonId: nextLesson.id,
-      priority: "medium"
+      priority: activityStrength === "excellent" ? "low" : "medium"
     });
   }
 
-  if (quizNeed.shouldQuiz) {
+  if (quizNeed.shouldQuiz && activityStrength !== "none") {
     plan.push({
       title: "حل اختبار قصير",
       description: `${quizNeed.activeQuiz.title} لتثبيت الدرس الحالي.`,
@@ -119,6 +171,8 @@ export function buildGuideInsights(state, lessons = [], quizzes = []) {
   const reviews = Object.values(state.wordReviews || {}).filter((review) => review.reviewCount > 0).length;
   const reviewQueue = buildReviewQueue(state, 5);
   const dueWords = reviewQueue.filter((item) => item.status.isDue).length;
+  const analytics = buildAnalyticsSummary(state);
+  const activityStrength = getActivityStrength(analytics);
 
   return [
     {
@@ -129,7 +183,7 @@ export function buildGuideInsights(state, lessons = [], quizzes = []) {
     {
       label: "الاختبارات",
       value: completedQuizzes,
-      hint: completedQuizzes === 0 ? "اختبار قصير سيقوي الفهم" : "استمر"
+      hint: analytics.quizEvents > analytics.lessonEvents + 3 ? "وازنها بدروس جديدة" : "استمر"
     },
     {
       label: "الكلمات",
@@ -137,9 +191,19 @@ export function buildGuideInsights(state, lessons = [], quizzes = []) {
       hint: dueWords > 0 ? `${dueWords} تحتاج مراجعة` : "مكتبة جيدة"
     },
     {
+      label: "النشاط",
+      value: analytics.totalActions,
+      hint: getActivityAdvice(analytics)
+    },
+    {
       label: "المراجعات",
       value: reviews,
       hint: reviews === 0 ? "راجع كلمة محفوظة" : "تثبيت ممتاز"
+    },
+    {
+      label: "آخر 7 أيام",
+      value: analytics.lastSevenDays.reduce((total, day) => total + day.count, 0),
+      hint: activityStrength === "excellent" ? "إيقاع ممتاز" : "قابل للتحسين"
     }
   ];
 }
