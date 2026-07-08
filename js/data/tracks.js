@@ -7,9 +7,9 @@ export const tracks = [
     supportLanguage: "Arabic",
     level: "beginner",
     status: "active",
-    totalUnits: 4,
-    totalLessons: 10,
-    estimatedMinutes: 40,
+    totalUnits: 5,
+    totalLessons: 15,
+    estimatedMinutes: 65,
     tagline: "ابدأ بالأساسيات، ثم انتقل إلى كلمات وجمل يومية قصيرة."
   }
 ];
