@@ -22,9 +22,9 @@ function renderPlanCard(item, index) {
         <span class="status-badge ${getPriorityClass(item.priority)}">${priorityLabels[item.priority] || item.priority}</span>
       </div>
       <p>${item.description}</p>
-      <div class="guide-reason-box">
+      <div class="guide-reason-box" style="margin-top: 12px; padding: 12px; border: 1px solid rgba(234, 179, 8, 0.22); border-radius: 14px; background: rgba(15, 23, 42, 0.36);">
         <strong>سبب الاقتراح</strong>
-        <p>${item.reason || "هذه الخطوة مناسبة لحالتك الحالية."}</p>
+        <p style="margin-top: 6px;">${item.reason || "هذه الخطوة مناسبة لحالتك الحالية."}</p>
       </div>
       <button class="secondary-button" data-route="${item.route}" ${item.lessonId ? `data-lesson-id="${item.lessonId}"` : ""} style="margin-top: 12px;">
         تنفيذ الخطوة
