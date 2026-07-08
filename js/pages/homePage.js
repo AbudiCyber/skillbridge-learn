@@ -1,10 +1,14 @@
+import { lessons } from "../data/lessons.js";
+import { quizzes } from "../data/quizzes.js";
+import { buildProgressSummary } from "../engines/progressEngine.js";
 import { createTranslator } from "../i18n/i18n.js";
 
 export function renderHomePage(state) {
   const t = createTranslator(state.uiLanguage);
-  const completedCount = state.completedLessons.length;
-  const savedCount = state.savedWords.length;
-  const progressPercent = Math.min(100, Math.round((completedCount / 10) * 100));
+  const summary = buildProgressSummary(state, {
+    lessons: lessons.length,
+    quizzes: quizzes.length
+  });
 
   return `
     <section class="hero-card">
@@ -28,12 +32,12 @@ export function renderHomePage(state) {
 
     <section class="content-card">
       <h2>${t("progressSummary")}</h2>
-      <div class="progress-bar" aria-label="Progress"><span style="width: ${progressPercent}%"></span></div>
+      <div class="progress-bar" aria-label="Progress"><span style="width: ${summary.lessonProgressPercent}%"></span></div>
       <div class="stat-grid" style="margin-top: 14px;">
-        <div class="stat-card">XP<strong>${state.xp}</strong></div>
-        <div class="stat-card">Streak<strong>${state.streak}</strong></div>
-        <div class="stat-card">${t("lessons")}<strong>${completedCount}/10</strong></div>
-        <div class="stat-card">${t("saved")}<strong>${savedCount}</strong></div>
+        <div class="stat-card">XP<strong>${summary.points}</strong></div>
+        <div class="stat-card">Level<strong>${summary.level.title}</strong></div>
+        <div class="stat-card">${t("lessons")}<strong>${summary.completedLessons}/${lessons.length}</strong></div>
+        <div class="stat-card">Quizzes<strong>${summary.completedQuizzes}/${quizzes.length}</strong></div>
       </div>
     </section>
   `;
