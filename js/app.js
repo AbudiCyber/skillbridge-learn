@@ -128,6 +128,20 @@ function handleResetQuiz(quizId) {
   renderApp(ROUTES.TEST, nextState);
 }
 
+function buildRoutePayload(routeTarget) {
+  const payload = {};
+
+  if (routeTarget.dataset.lessonId) {
+    payload.activeLessonId = routeTarget.dataset.lessonId;
+  }
+
+  if (routeTarget.dataset.sectionId) {
+    payload.activeVocabularySectionId = routeTarget.dataset.sectionId;
+  }
+
+  return payload;
+}
+
 function bindNavigation() {
   document.addEventListener("click", (event) => {
     const actionTarget = event.target.closest("[data-action]");
@@ -168,11 +182,7 @@ function bindNavigation() {
     const routeTarget = event.target.closest("[data-route]");
     if (!routeTarget) return;
 
-    const payload = routeTarget.dataset.lessonId
-      ? { activeLessonId: routeTarget.dataset.lessonId }
-      : {};
-
-    navigate(routeTarget.dataset.route, payload);
+    navigate(routeTarget.dataset.route, buildRoutePayload(routeTarget));
   });
 }
 
