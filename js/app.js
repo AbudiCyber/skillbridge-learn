@@ -8,7 +8,7 @@ import { applyDailyActivity } from "./engines/streakEngine.js";
 import { addXP, createXPEvent, hasXPEvent } from "./engines/xpEngine.js";
 import { applyDocumentLanguage, normalizeLanguage } from "./i18n/i18n.js";
 import { loadUserState, saveUserState } from "./storage.js";
-import { getState, setState } from "./state.js";
+import { createResetState, getState, setState } from "./state.js";
 import { renderRoute } from "./router.js";
 import { mountPage, setActiveNav, updateNavigationLanguage } from "./ui.js";
 
@@ -26,7 +26,7 @@ function renderApp(route, state) {
 
 function navigate(route, payload = {}) {
   const nextRoute = route || ROUTES.HOME;
-  const state = setState({ route: nextRoute, ...payload });
+  const state = setState({ route: nextRoute, resetConfirmArmed: false, ...payload });
   saveUserState(state);
   renderApp(nextRoute, state);
 }
@@ -76,9 +76,31 @@ function handleReviewWord(wordId) {
 
 function handleSetLanguage(language) {
   const currentState = getState();
-  const nextState = setState({ uiLanguage: normalizeLanguage(language) });
+  const nextState = setState({ uiLanguage: normalizeLanguage(language), resetConfirmArmed: false });
   saveUserState(nextState);
   renderApp(currentState.route, nextState);
+}
+
+function handleSetGoal(goalId) {
+  const currentState = getState();
+  const nextState = setState({ selectedGoal: goalId, resetConfirmArmed: false });
+  saveUserState(nextState);
+  renderApp(ROUTES.SETTINGS, nextState);
+}
+
+function handleResetProgress() {
+  const currentState = getState();
+
+  if (!currentState.resetConfirmArmed) {
+    const armedState = setState({ resetConfirmArmed: true });
+    saveUserState(armedState);
+    renderApp(ROUTES.SETTINGS, armedState);
+    return;
+  }
+
+  const resetState = setState(createResetState(currentState));
+  saveUserState(resetState);
+  renderApp(ROUTES.SETTINGS, resetState);
 }
 
 function handleQuizAnswer(questionId, answer) {
@@ -159,7 +181,7 @@ function bindNavigation() {
   document.addEventListener("click", (event) => {
     const actionTarget = event.target.closest("[data-action]");
     if (actionTarget) {
-      const { action, lessonId, wordId, language, questionId, answer, quizId } = actionTarget.dataset;
+      const { action, lessonId, wordId, language, questionId, answer, quizId, goalId } = actionTarget.dataset;
 
       if (action === "complete-lesson" && lessonId) {
         handleCompleteLesson(lessonId);
@@ -178,6 +200,16 @@ function bindNavigation() {
 
       if (action === "set-language" && language) {
         handleSetLanguage(language);
+        return;
+      }
+
+      if (action === "set-goal" && goalId) {
+        handleSetGoal(goalId);
+        return;
+      }
+
+      if (action === "reset-progress") {
+        handleResetProgress();
         return;
       }
 
