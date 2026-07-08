@@ -53,9 +53,9 @@ export const vocabularySections = [
     id: "time-days-vocabulary",
     title: "Time & Days",
     arabicTitle: "الوقت والأيام",
-    description: "أيام الأسبوع، الوقت، اليوم، الغد، والأمس.",
+    description: "أيام الأسبوع، الوقت، اليوم، الغد، والآن ولاحقاً.",
     group: "daily-life",
-    status: "planned",
+    status: "active",
     order: 6,
     icon: "⏰"
   },
@@ -65,7 +65,7 @@ export const vocabularySections = [
     arabicTitle: "مفردات العائلة",
     description: "الأب، الأم، الأخ، الأخت، وأفراد العائلة.",
     group: "daily-life",
-    status: "planned",
+    status: "active",
     order: 7,
     icon: "👨‍👩‍👧"
   },
@@ -75,7 +75,7 @@ export const vocabularySections = [
     arabicTitle: "مفردات الألوان",
     description: "الألوان الأساسية مع أمثلة قصيرة.",
     group: "daily-life",
-    status: "planned",
+    status: "active",
     order: 8,
     icon: "🎨"
   },
