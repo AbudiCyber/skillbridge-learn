@@ -72,7 +72,7 @@
 
 button:disabled {
   cursor: not-allowed;
-  opacity: 0.55;
+  opacity: 0.6;
 }
 
 .inline-back-button {
@@ -158,13 +158,24 @@ button:disabled {
   background: rgba(51, 65, 85, 0.42);
 }
 
-.achievement-card.is-unlocked {
+.achievement-card.is-unlocked,
+.word-card.is-saved {
   border-color: rgba(34, 197, 94, 0.45);
   background: rgba(34, 197, 94, 0.08);
 }
 
 .achievement-card.is-locked {
   opacity: 0.78;
+}
+
+.word-card.is-fallback-word {
+  border-style: dashed;
+  opacity: 0.9;
+}
+
+.review-card.is-due {
+  border-color: rgba(245, 158, 11, 0.42);
+  background: rgba(245, 158, 11, 0.08);
 }
 
 .feature-card h3,
@@ -208,7 +219,8 @@ button:disabled {
   text-align: end;
 }
 
-.word-card .ghost-button {
+.word-card .ghost-button,
+.word-card .secondary-button {
   margin-top: 12px;
   min-height: 42px;
 }
