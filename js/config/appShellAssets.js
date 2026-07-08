@@ -57,6 +57,7 @@ export const CORE_ASSETS = [
   "./js/state.js",
   "./js/storage.js",
   "./js/ui.js",
+  "./js/config/appMeta.js",
   "./js/config/appShellAssets.js",
   "./js/i18n/i18n.js",
   "./js/i18n/translations.js",
