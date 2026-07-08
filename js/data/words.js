@@ -429,6 +429,50 @@ export const words = [
     tags: ["number"]
   },
   {
+    id: "word-six",
+    lessonId: "eng-009",
+    sectionId: "numbers-vocabulary",
+    word: "Six",
+    translation: "ستة",
+    example: "I have six books.",
+    category: "numbers",
+    difficulty: "easy",
+    tags: ["number"]
+  },
+  {
+    id: "word-seven",
+    lessonId: "eng-009",
+    sectionId: "numbers-vocabulary",
+    word: "Seven",
+    translation: "سبعة",
+    example: "Seven days are in a week.",
+    category: "numbers",
+    difficulty: "easy",
+    tags: ["number"]
+  },
+  {
+    id: "word-eight",
+    lessonId: "eng-009",
+    sectionId: "numbers-vocabulary",
+    word: "Eight",
+    translation: "ثمانية",
+    example: "Eight students are here.",
+    category: "numbers",
+    difficulty: "easy",
+    tags: ["number"]
+  },
+  {
+    id: "word-nine",
+    lessonId: "eng-009",
+    sectionId: "numbers-vocabulary",
+    word: "Nine",
+    translation: "تسعة",
+    example: "Nine pens are on the table.",
+    category: "numbers",
+    difficulty: "easy",
+    tags: ["number"]
+  },
+  {
     id: "word-ten",
     lessonId: "eng-009",
     sectionId: "numbers-vocabulary",
