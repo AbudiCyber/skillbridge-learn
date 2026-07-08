@@ -1,7 +1,8 @@
 import { ROUTES } from "./constants.js";
+import { lessons } from "./data/lessons.js";
 import { quizzes } from "./data/quizzes.js";
 import { words } from "./data/words.js";
-import { completeLesson } from "./engines/lessonEngine.js";
+import { completeLesson, getLessonById } from "./engines/lessonEngine.js";
 import { hasPassedQuiz } from "./engines/quizEngine.js";
 import { markWordReviewed } from "./engines/reviewEngine.js";
 import { applyDailyActivity } from "./engines/streakEngine.js";
@@ -33,9 +34,10 @@ function navigate(route, payload = {}) {
 
 function handleCompleteLesson(lessonId) {
   const currentState = getState();
+  const lesson = getLessonById(lessons, lessonId);
   const alreadyRewarded = hasXPEvent(currentState, "lesson", lessonId);
   const nextState = applyDailyActivity(completeLesson(currentState, lessonId));
-  const points = 20;
+  const points = lesson?.xpReward || 20;
   const stateWithXP = alreadyRewarded
     ? nextState
     : {
