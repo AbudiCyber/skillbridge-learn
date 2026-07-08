@@ -140,18 +140,29 @@ button:disabled {
 .category-card,
 .guide-action-card,
 .word-card,
-.quiz-question-card {
+.quiz-question-card,
+.achievement-card {
   padding: 14px;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background: rgba(51, 65, 85, 0.42);
 }
 
+.achievement-card.is-unlocked {
+  border-color: rgba(34, 197, 94, 0.45);
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.achievement-card.is-locked {
+  opacity: 0.78;
+}
+
 .feature-card h3,
 .lesson-card h3,
 .category-card h3,
 .guide-action-card h3,
-.quiz-question-card h3 {
+.quiz-question-card h3,
+.achievement-card h3 {
   margin: 0 0 8px;
   font-size: 1rem;
 }
@@ -161,7 +172,8 @@ button:disabled {
 .category-card p,
 .guide-action-card p,
 .word-card p,
-.quiz-question-card p {
+.quiz-question-card p,
+.achievement-card p {
   margin: 0;
   color: var(--muted);
   line-height: 1.7;
