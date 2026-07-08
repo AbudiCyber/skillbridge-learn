@@ -1,7 +1,7 @@
+import { CACHE_PREFIX, CACHE_VERSION } from "./js/config/appMeta.js";
 import { APP_SHELL, CORE_ASSETS } from "./js/config/appShellAssets.js";
 
-const CACHE_VERSION = "v0.2.2";
-const CACHE_NAME = `skillbridge-learn-${CACHE_VERSION}`;
+const CACHE_NAME = `${CACHE_PREFIX}-${CACHE_VERSION}`;
 
 async function precacheCoreAssets() {
   const cache = await caches.open(CACHE_NAME);
@@ -23,7 +23,7 @@ async function clearOldCaches() {
   const keys = await caches.keys();
   return Promise.all(
     keys
-      .filter((key) => key.startsWith("skillbridge-learn-") && key !== CACHE_NAME)
+      .filter((key) => key.startsWith(`${CACHE_PREFIX}-`) && key !== CACHE_NAME)
       .map((key) => caches.delete(key))
   );
 }
