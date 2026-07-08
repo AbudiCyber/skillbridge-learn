@@ -2,33 +2,37 @@
 
 **Small lessons. Real progress.**
 
-SkillBridge Learn is a mobile-first learning PWA designed to help Arabic-speaking beginners learn English through short lessons, word cards, mini quizzes, XP, streaks, saved words, progress tracking, and lightweight AI guide cards.
+SkillBridge Learn is a mobile-first learning PWA designed to help Arabic-speaking beginners learn English through short lessons, word cards, mini quizzes, XP, streaks, achievements, saved words, progress tracking, content QA, offline support, and lightweight AI guide cards.
 
 ## Vision
 
 Build a modular learning engine that starts with English and can later expand into programming English, other languages, and practical skills.
 
-## V1 Goal
+## v0.2.0 Goal
 
-Prove the core learning loop:
+Stabilize the core learning loop and prepare the product for a clean mobile-first public preview:
 
 ```text
-Learn → Practice → Earn XP → Track Progress → Return Tomorrow
+Learn → Practice → Quiz → Save Words → Review → Earn XP → Track Progress → Return Tomorrow
 ```
 
-## V1 Features
+## v0.2.0 Features
 
-- Onboarding
+- Mobile-first PWA shell
 - English beginner track
-- Short lessons
-- Word cards
-- Mini quizzes
+- 5 learning units
+- 15 short lessons
+- 15 mini quizzes
+- Vocabulary library
+- Saved words review system
 - XP system
 - Streak tracking
-- Saved words
+- Achievements system
 - Progress dashboard
+- Settings system
+- Content QA report
+- Offline-first Service Worker
 - Lightweight AI guide cards
-- PWA support
 
 ## Tech Stack
 
@@ -43,19 +47,20 @@ Learn → Practice → Earn XP → Track Progress → Return Tomorrow
 ## Current Version
 
 ```text
-v0.1.0 = Repository skeleton + basic app shell
+v0.2.0 = Stable learning loop + content expansion + offline/PWA hardening
 ```
 
 ## Roadmap
 
-- V1: Core Learning Loop
-- V1.5: Content Expansion
-- V2: Grammar + Library
-- V3: Audio + Smart Review
+- v0.2.0: Stable Core Learning Loop
+- v0.3.0: Review intelligence + spaced repetition foundations
+- v0.4.0: Audio and pronunciation layer
+- v0.5.0: Grammar Lite
+- V1: Public learning preview
+- V2: Multi-track expansion
+- V3: Smart Review + Analytics
 - V4: Monetization
 - V5: AI Professor
-- V6: Multi-language Expansion
-- V7: Human Teachers
 
 ## Product Rule
 
