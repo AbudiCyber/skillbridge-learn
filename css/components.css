@@ -229,9 +229,38 @@ button:disabled {
 }
 
 .card-grid,
-.word-grid {
+.word-grid,
+.timeline-list {
   display: grid;
   gap: 11px;
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  padding: 13px;
+  border: 1px solid rgba(234, 179, 8, 0.22);
+  border-radius: var(--radius-md);
+  background: rgba(15, 23, 42, 0.36);
+}
+
+.timeline-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.22);
+}
+
+.timeline-item strong {
+  overflow-wrap: anywhere;
+}
+
+.timeline-item p {
+  margin-top: 6px;
 }
 
 .feature-card,
@@ -429,5 +458,9 @@ button:disabled {
 
   .premium-stat-card {
     min-height: 76px;
+  }
+
+  .timeline-item {
+    grid-template-columns: 1fr;
   }
 }
