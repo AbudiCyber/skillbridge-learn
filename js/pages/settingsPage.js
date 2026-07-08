@@ -1,3 +1,4 @@
+import { APP_NAME, APP_VERSION } from "../constants.js";
 import { learningGoals } from "../data/learningGoals.js";
 import { createTranslator, normalizeLanguage } from "../i18n/i18n.js";
 
@@ -64,10 +65,10 @@ export function renderSettingsPage(state) {
     <section class="content-card">
       <p class="section-label">Theme</p>
       <h2>🌙 الثيم</h2>
-      <p>الوضع الداكن مفعل حالياً كخيار أساسي للنسخة الأولى.</p>
+      <p>الوضع الداكن مفعل حالياً كخيار أساسي للنسخة الحالية.</p>
       <div class="stat-grid">
         <div class="stat-card">Mode<strong>${state.themeMode || "dark"}</strong></div>
-        <div class="stat-card">Version<strong>V1</strong></div>
+        <div class="stat-card">Version<strong>v${APP_VERSION}</strong></div>
       </div>
     </section>
 
@@ -85,7 +86,8 @@ export function renderSettingsPage(state) {
       <p class="section-label">App Info</p>
       <h2>ℹ️ معلومات التطبيق</h2>
       <ul class="page-list">
-        <li>SkillBridge Learn — Small lessons. Real progress.</li>
+        <li>${APP_NAME} — Small lessons. Real progress.</li>
+        <li>Version — v${APP_VERSION}</li>
         <li>Storage — LocalStorage على هذا الجهاز.</li>
         <li>Mode — PWA / Mobile-first.</li>
       </ul>
