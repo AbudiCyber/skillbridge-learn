@@ -2,21 +2,21 @@
 
 **Small lessons. Real progress.**
 
-SkillBridge Learn is a mobile-first learning PWA designed to help Arabic-speaking beginners learn English through short lessons, word cards, mini quizzes, XP, streaks, achievements, saved words, progress tracking, content QA, offline support, and lightweight AI guide cards.
+SkillBridge Learn is a mobile-first learning PWA designed to help Arabic-speaking beginners learn English through short lessons, word cards, mini quizzes, XP, streaks, achievements, saved words, progress tracking, content QA, offline support, local analytics, activity timeline, and lightweight AI guide cards.
 
 ## Vision
 
 Build a modular learning engine that starts with English and can later expand into programming English, other languages, and practical skills.
 
-## v0.2.0 Goal
+## v0.2.1 Goal
 
-Stabilize the core learning loop and prepare the product for a clean mobile-first public preview:
+Stabilize the expanded local-first learning experience after review intelligence, analytics, premium dashboard UI, and AI guide upgrades:
 
 ```text
-Learn → Practice → Quiz → Save Words → Review → Earn XP → Track Progress → Return Tomorrow
+Learn → Practice → Quiz → Save Words → Review → Track Activity → Get Guide Plan → Return Tomorrow
 ```
 
-## v0.2.0 Features
+## v0.2.1 Features
 
 - Mobile-first PWA shell
 - English beginner track
@@ -25,14 +25,18 @@ Learn → Practice → Quiz → Save Words → Review → Earn XP → Track Prog
 - 15 mini quizzes
 - Vocabulary library
 - Saved words review system
+- Review queue foundation
 - XP system
 - Streak tracking
 - Achievements system
 - Progress dashboard
+- Local analytics foundation
+- Activity timeline
+- Premium home dashboard UI
 - Settings system
 - Content QA report
 - Offline-first Service Worker
-- Lightweight AI guide cards
+- Analytics-aware AI guide cards
 
 ## Tech Stack
 
@@ -47,12 +51,13 @@ Learn → Practice → Quiz → Save Words → Review → Earn XP → Track Prog
 ## Current Version
 
 ```text
-v0.2.0 = Stable learning loop + content expansion + offline/PWA hardening
+v0.2.1 = Stable local-first learning loop + premium UI + analytics-aware guide
 ```
 
 ## Roadmap
 
 - v0.2.0: Stable Core Learning Loop
+- v0.2.1: Premium UI + local analytics + AI guide stability
 - v0.3.0: Review intelligence + spaced repetition foundations
 - v0.4.0: Audio and pronunciation layer
 - v0.5.0: Grammar Lite
