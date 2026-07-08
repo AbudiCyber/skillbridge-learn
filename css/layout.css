@@ -2,7 +2,7 @@
   width: min(100%, 520px);
   min-height: 100vh;
   margin: 0 auto;
-  padding: 14px 14px calc(106px + var(--safe-bottom));
+  padding: 14px 14px calc(126px + var(--safe-bottom));
 }
 
 .app-header {
@@ -34,6 +34,7 @@
 .app-main {
   display: grid;
   gap: 14px;
+  padding-bottom: 36px;
 }
 
 .bottom-nav {
@@ -71,6 +72,10 @@
 }
 
 @media (max-width: 430px) {
+  .app-shell {
+    padding-bottom: calc(172px + var(--safe-bottom));
+  }
+
   .bottom-nav {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -79,7 +84,7 @@
 @media (max-width: 390px) {
   .app-shell {
     padding-inline: 10px;
-    padding-bottom: calc(142px + var(--safe-bottom));
+    padding-bottom: calc(190px + var(--safe-bottom));
   }
 
   .app-header {
