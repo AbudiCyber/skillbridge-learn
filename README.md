@@ -8,23 +8,23 @@ SkillBridge Learn is a mobile-first learning PWA designed to help Arabic-speakin
 
 Build a modular learning engine that starts with English and can later expand into programming English, other languages, and practical skills.
 
-## v0.2.8 Goal
+## v0.2.9 Goal
 
-Close the release-candidate QA findings by aligning Content QA with the current quiz data model and improving mobile bottom spacing around the fixed navigation:
+Polish the quiz completion flow so one primary action can finish the quiz, award quiz XP, complete the lesson when passed, and keep the result screen visually clean:
 
 ```text
-RC QA Findings → Content QA Patch → Mobile Spacing Polish → Freeze Candidate
+Pass Quiz → Finish Quiz + XP → Complete Lesson → Return Home
 ```
 
 ## Release Candidate Status
 
 ```text
-v0.2.8 = QA patch candidate for v0.2.x freeze
+v0.2.9 = Quiz completion UX candidate for v0.2.x freeze
 QA report: docs/release-candidate-v0.2.7.md
 Manual smoke test: docs/manual-smoke-test-v0.2.7.md
 ```
 
-## v0.2.8 Features
+## v0.2.9 Features
 
 - Mobile-first PWA shell
 - English beginner track
@@ -52,6 +52,7 @@ Manual smoke test: docs/manual-smoke-test-v0.2.7.md
 - Storage integrity guard
 - Content QA data-model patch
 - Mobile bottom spacing polish
+- Quiz completion flow polish
 - Offline-first Service Worker
 - Analytics-aware AI guide cards
 
@@ -68,7 +69,7 @@ Manual smoke test: docs/manual-smoke-test-v0.2.7.md
 ## Current Version
 
 ```text
-v0.2.8 = Content QA fix patch + mobile bottom spacing polish
+v0.2.9 = Quiz completion flow polish + clean result actions
 ```
 
 ## Roadmap
@@ -82,6 +83,7 @@ v0.2.8 = Content QA fix patch + mobile bottom spacing polish
 - v0.2.6: Storage integrity guard
 - v0.2.7: Storage QA edge cases
 - v0.2.8: Content QA patch + mobile spacing polish
+- v0.2.9: Quiz completion flow polish
 - v0.3.0: Review intelligence + spaced repetition foundations
 - v0.4.0: Audio and pronunciation layer
 - v0.5.0: Grammar Lite
