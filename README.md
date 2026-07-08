@@ -8,15 +8,15 @@ SkillBridge Learn is a mobile-first learning PWA designed to help Arabic-speakin
 
 Build a modular learning engine that starts with English and can later expand into programming English, other languages, and practical skills.
 
-## v0.2.6 Goal
+## v0.2.7 Goal
 
-Protect the app from corrupted LocalStorage by repairing invalid state shapes, stale routes, stale lesson IDs, stale section IDs, and broken arrays during load/save:
+Validate the storage integrity guard with explicit QA checks for invalid JSON, missing state, stale routes, stale IDs, broken arrays, broken objects, and invalid numbers:
 
 ```text
-Stored State → Integrity Guard → Repaired State → Stable App Boot
+Storage Integrity Guard → Storage QA Edge Cases → Safer LocalStorage Recovery
 ```
 
-## v0.2.6 Features
+## v0.2.7 Features
 
 - Mobile-first PWA shell
 - English beginner track
@@ -36,6 +36,7 @@ Stored State → Integrity Guard → Repaired State → Stable App Boot
 - Settings system
 - Expanded Content QA report
 - Runtime QA edge-case report
+- Storage QA edge-case report
 - Shared app shell asset registry
 - Module Service Worker registration
 - Runtime route and payload safety layer
@@ -57,7 +58,7 @@ Stored State → Integrity Guard → Repaired State → Stable App Boot
 ## Current Version
 
 ```text
-v0.2.6 = Storage integrity guard + repaired LocalStorage state
+v0.2.7 = Storage QA edge cases + safer LocalStorage validation
 ```
 
 ## Roadmap
@@ -69,6 +70,7 @@ v0.2.6 = Storage integrity guard + repaired LocalStorage state
 - v0.2.4: Runtime QA edge cases
 - v0.2.5: Render error boundary
 - v0.2.6: Storage integrity guard
+- v0.2.7: Storage QA edge cases
 - v0.3.0: Review intelligence + spaced repetition foundations
 - v0.4.0: Audio and pronunciation layer
 - v0.5.0: Grammar Lite
