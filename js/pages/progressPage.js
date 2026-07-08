@@ -1,6 +1,7 @@
 import { achievements } from "../data/achievements.js";
 import { lessons } from "../data/lessons.js";
 import { quizzes } from "../data/quizzes.js";
+import { buildAnalyticsSummary } from "../engines/analyticsEngine.js";
 import { buildAchievementSummaries } from "../engines/achievementEngine.js";
 import { buildProgressSummary } from "../engines/progressEngine.js";
 import { getStreakMessage } from "../engines/streakEngine.js";
@@ -23,11 +24,24 @@ function renderAchievementCard(achievement) {
   `;
 }
 
+function renderActivityDay(day) {
+  const percent = Math.min(100, day.count * 20);
+
+  return `
+    <article class="stat-card activity-day-card">
+      <span>${day.dateKey.slice(5)}</span>
+      <strong>${day.count}</strong>
+      <div class="progress-bar" aria-label="Daily activity"><span style="width: ${percent}%"></span></div>
+    </article>
+  `;
+}
+
 export function renderProgressPage(state) {
   const summary = buildProgressSummary(state, {
     lessons: lessons.length,
     quizzes: quizzes.length
   });
+  const analytics = buildAnalyticsSummary(state);
   const achievementSummaries = buildAchievementSummaries(achievements, state);
   const unlockedAchievements = achievementSummaries.filter((achievement) => achievement.progress.unlocked);
   const lockedAchievements = achievementSummaries.filter((achievement) => !achievement.progress.unlocked);
@@ -49,6 +63,24 @@ export function renderProgressPage(state) {
         <div class="stat-card">Best<strong>${state.bestStreak || 0}</strong></div>
         <div class="stat-card">Last Day<strong>${state.lastActivityDate || "None"}</strong></div>
         <div class="stat-card">Status<strong>${state.lastActivityDate ? "Tracked" : "New"}</strong></div>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2>📊 Lightweight Analytics</h2>
+      <p>تحليلات محلية بسيطة مبنية على نشاط هذا الجهاز فقط.</p>
+      <div class="stat-grid">
+        <div class="stat-card">Actions<strong>${analytics.totalActions}</strong></div>
+        <div class="stat-card">Best Day<strong>${analytics.bestDay?.count || 0}</strong></div>
+        <div class="stat-card">Reviews<strong>${analytics.reviews}</strong></div>
+        <div class="stat-card">Quiz Events<strong>${analytics.quizEvents}</strong></div>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2>آخر 7 أيام</h2>
+      <div class="stat-grid">
+        ${analytics.lastSevenDays.map(renderActivityDay).join("")}
       </div>
     </section>
 
