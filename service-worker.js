@@ -1,6 +1,6 @@
 import { APP_SHELL, CORE_ASSETS } from "./js/config/appShellAssets.js";
 
-const CACHE_VERSION = "v0.2.1";
+const CACHE_VERSION = "v0.2.2";
 const CACHE_NAME = `skillbridge-learn-${CACHE_VERSION}`;
 
 async function precacheCoreAssets() {
