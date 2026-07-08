@@ -1,4 +1,5 @@
 import { ROUTES } from "../constants.js";
+import { CACHE_PREFIX, CACHE_VERSION, APP_VERSION } from "../config/appMeta.js";
 import { CORE_ASSETS, REQUIRED_ASSETS, REQUIRED_ENGINES, ROUTE_PAGES } from "../config/appShellAssets.js";
 import { lessons } from "../data/lessons.js";
 import { quizzes } from "../data/quizzes.js";
@@ -35,7 +36,10 @@ export function renderContentQaPage() {
     routePages: ROUTE_PAGES,
     appShellAssets: CORE_ASSETS,
     requiredAssets: REQUIRED_ASSETS,
-    requiredEngines: REQUIRED_ENGINES
+    requiredEngines: REQUIRED_ENGINES,
+    appVersion: APP_VERSION,
+    cacheVersion: CACHE_VERSION,
+    cachePrefix: CACHE_PREFIX
   });
   const failedChecks = report.checks.filter((check) => check.status === "fail");
 
