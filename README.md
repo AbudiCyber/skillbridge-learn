@@ -21,6 +21,7 @@ Storage Integrity Guard → Storage QA Edge Cases → Safer LocalStorage Recover
 ```text
 v0.2.7 = Release Candidate for v0.2.x freeze
 QA report: docs/release-candidate-v0.2.7.md
+Manual smoke test: docs/manual-smoke-test-v0.2.7.md
 ```
 
 ## v0.2.7 Features
