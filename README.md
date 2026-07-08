@@ -8,15 +8,15 @@ SkillBridge Learn is a mobile-first learning PWA designed to help Arabic-speakin
 
 Build a modular learning engine that starts with English and can later expand into programming English, other languages, and practical skills.
 
-## v0.2.5 Goal
+## v0.2.6 Goal
 
-Prevent white-screen failures by wrapping route rendering with a safe error boundary that shows a recovery card when a page renderer fails:
+Protect the app from corrupted LocalStorage by repairing invalid state shapes, stale routes, stale lesson IDs, stale section IDs, and broken arrays during load/save:
 
 ```text
-Page Render Error → Error Boundary → Recovery Card → Back to Home
+Stored State → Integrity Guard → Repaired State → Stable App Boot
 ```
 
-## v0.2.5 Features
+## v0.2.6 Features
 
 - Mobile-first PWA shell
 - English beginner track
@@ -40,6 +40,7 @@ Page Render Error → Error Boundary → Recovery Card → Back to Home
 - Module Service Worker registration
 - Runtime route and payload safety layer
 - Render error boundary
+- Storage integrity guard
 - Offline-first Service Worker
 - Analytics-aware AI guide cards
 
@@ -56,7 +57,7 @@ Page Render Error → Error Boundary → Recovery Card → Back to Home
 ## Current Version
 
 ```text
-v0.2.5 = Render error boundary + white-screen protection
+v0.2.6 = Storage integrity guard + repaired LocalStorage state
 ```
 
 ## Roadmap
@@ -67,6 +68,7 @@ v0.2.5 = Render error boundary + white-screen protection
 - v0.2.3: Runtime safety layer
 - v0.2.4: Runtime QA edge cases
 - v0.2.5: Render error boundary
+- v0.2.6: Storage integrity guard
 - v0.3.0: Review intelligence + spaced repetition foundations
 - v0.4.0: Audio and pronunciation layer
 - v0.5.0: Grammar Lite
