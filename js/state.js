@@ -11,6 +11,7 @@ export const defaultState = {
   completedQuizzes: [],
   quizAnswers: {},
   xpEvents: [],
+  activityEvents: [],
   savedWords: [],
   wordReviews: {},
   selectedGoal: "daily-lesson",
