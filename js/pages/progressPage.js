@@ -1,13 +1,36 @@
+import { achievements } from "../data/achievements.js";
 import { lessons } from "../data/lessons.js";
 import { quizzes } from "../data/quizzes.js";
+import { buildAchievementSummaries } from "../engines/achievementEngine.js";
 import { buildProgressSummary } from "../engines/progressEngine.js";
 import { getStreakMessage } from "../engines/streakEngine.js";
+
+function renderAchievementCard(achievement) {
+  const unlocked = achievement.progress.unlocked;
+
+  return `
+    <article class="achievement-card ${unlocked ? "is-unlocked" : "is-locked"}">
+      <div class="track-header">
+        <h3>${achievement.icon} ${achievement.arabicTitle}</h3>
+        <span class="status-badge ${unlocked ? "is-open" : "is-locked"}">${unlocked ? "مفتوح" : "مقفل"}</span>
+      </div>
+      <p>${achievement.requirement}</p>
+      <div class="progress-bar" aria-label="Achievement progress">
+        <span style="width: ${achievement.progress.percent}%"></span>
+      </div>
+      <p style="margin-top: 10px;">${achievement.progress.value}/${achievement.progress.target}</p>
+    </article>
+  `;
+}
 
 export function renderProgressPage(state) {
   const summary = buildProgressSummary(state, {
     lessons: lessons.length,
     quizzes: quizzes.length
   });
+  const achievementSummaries = buildAchievementSummaries(achievements, state);
+  const unlockedAchievements = achievementSummaries.filter((achievement) => achievement.progress.unlocked);
+  const lockedAchievements = achievementSummaries.filter((achievement) => !achievement.progress.unlocked);
 
   return `
     <section class="content-card">
@@ -45,7 +68,7 @@ export function renderProgressPage(state) {
         <div class="stat-card">Lessons<strong>${summary.completedLessons}/${lessons.length}</strong></div>
         <div class="stat-card">Quizzes<strong>${summary.completedQuizzes}/${quizzes.length}</strong></div>
         <div class="stat-card">Saved<strong>${summary.savedWords}</strong></div>
-        <div class="stat-card">Rewards<strong>${state.xpEvents?.length || 0}</strong></div>
+        <div class="stat-card">Achievements<strong>${unlockedAchievements.length}/${achievements.length}</strong></div>
       </div>
     </section>
 
@@ -56,13 +79,18 @@ export function renderProgressPage(state) {
     </section>
 
     <section class="content-card">
-      <h2>Next Achievements</h2>
-      <ul class="page-list">
-        <li>First Lesson - complete one lesson</li>
-        <li>First Quiz - complete one quiz</li>
-        <li>3-Day Streak - learn for three days</li>
-        <li>10 Saved Words - save ten words</li>
-      </ul>
+      <h2>🏆 الإنجازات المفتوحة</h2>
+      ${unlockedAchievements.length === 0
+        ? `<p class="empty-state">لا توجد إنجازات مفتوحة بعد. أكمل أول درس لتبدأ.</p>`
+        : `<div class="card-grid">${unlockedAchievements.map(renderAchievementCard).join("")}</div>`
+      }
+    </section>
+
+    <section class="content-card">
+      <h2>الإنجازات القادمة</h2>
+      <div class="card-grid">
+        ${lockedAchievements.map(renderAchievementCard).join("")}
+      </div>
     </section>
   `;
 }
