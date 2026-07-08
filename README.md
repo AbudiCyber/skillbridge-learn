@@ -16,6 +16,13 @@ Validate the storage integrity guard with explicit QA checks for invalid JSON, m
 Storage Integrity Guard → Storage QA Edge Cases → Safer LocalStorage Recovery
 ```
 
+## Release Candidate Status
+
+```text
+v0.2.7 = Release Candidate for v0.2.x freeze
+QA report: docs/release-candidate-v0.2.7.md
+```
+
 ## v0.2.7 Features
 
 - Mobile-first PWA shell
