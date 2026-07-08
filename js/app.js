@@ -3,6 +3,7 @@ import { quizzes } from "./data/quizzes.js";
 import { words } from "./data/words.js";
 import { completeLesson } from "./engines/lessonEngine.js";
 import { hasPassedQuiz } from "./engines/quizEngine.js";
+import { markWordReviewed } from "./engines/reviewEngine.js";
 import { addXP, createXPEvent, hasXPEvent } from "./engines/xpEngine.js";
 import { applyDocumentLanguage, normalizeLanguage } from "./i18n/i18n.js";
 import { loadUserState, saveUserState } from "./storage.js";
@@ -61,6 +62,14 @@ function handleSaveWord(wordId) {
 
   saveUserState(nextState);
   renderApp(currentState.route, nextState);
+}
+
+function handleReviewWord(wordId) {
+  const currentState = getState();
+  const nextState = markWordReviewed(currentState, wordId);
+  setState(nextState);
+  saveUserState(nextState);
+  renderApp(ROUTES.SAVED, nextState);
 }
 
 function handleSetLanguage(language) {
@@ -155,6 +164,11 @@ function bindNavigation() {
 
       if (action === "save-word" && wordId) {
         handleSaveWord(wordId);
+        return;
+      }
+
+      if (action === "review-word" && wordId) {
+        handleReviewWord(wordId);
         return;
       }
 
