@@ -138,9 +138,9 @@ export const lessons = [
   {
     id: "eng-009",
     unitId: "daily-dialogue",
-    title: "Numbers 1–10",
+    title: "Numbers 1-10",
     goal: "تعلم الأرقام من 1 إلى 10.",
-    explanation: "الأرقام تستخدم في العمر، الوقت، السعر، والعدّ اليومي.",
+    explanation: "الأرقام تستخدم في العمر، الوقت، السعر، والعد اليومي.",
     words: ["one", "two", "three", "ten"],
     examples: [
       { english: "I have one book.", arabic: "لدي كتاب واحد." },
@@ -168,5 +168,90 @@ export const lessons = [
     xpReward: 30,
     estimatedMinutes: 5,
     order: 10
+  },
+  {
+    id: "eng-011",
+    unitId: "everyday-expansion",
+    title: "Days of the Week",
+    goal: "تعلم أيام الأسبوع الأكثر استخداماً في المواعيد والخطط.",
+    explanation: "أيام الأسبوع تساعدك على الكلام عن الدراسة، العمل، والأنشطة اليومية.",
+    words: ["today", "tomorrow", "monday", "friday"],
+    examples: [
+      { english: "Today is Monday.", arabic: "اليوم هو الاثنين." },
+      { english: "See you on Friday.", arabic: "أراك يوم الجمعة." }
+    ],
+    practice: "اكتب جملة واحدة عن اليوم وجملة واحدة عن الغد.",
+    aiTip: "احفظ الأيام مع جملة قصيرة حتى لا تبقى كلمات منفصلة.",
+    xpReward: 25,
+    estimatedMinutes: 5,
+    order: 11
+  },
+  {
+    id: "eng-012",
+    unitId: "everyday-expansion",
+    title: "Time Words",
+    goal: "تعلم كلمات الوقت الأساسية مثل اليوم، الآن، لاحقاً، وغداً.",
+    explanation: "كلمات الوقت مهمة عندما تريد تحديد موعد أو ترتيب نشاط بسيط.",
+    words: ["now", "later", "today", "tomorrow"],
+    examples: [
+      { english: "I study now.", arabic: "أنا أدرس الآن." },
+      { english: "We can talk later.", arabic: "يمكننا التحدث لاحقاً." }
+    ],
+    practice: "كوّن جملة واحدة تحتوي على now وجملة أخرى تحتوي على later.",
+    aiTip: "كلمات الوقت الصغيرة تجعل كلامك أوضح حتى لو كانت الجملة بسيطة.",
+    xpReward: 25,
+    estimatedMinutes: 5,
+    order: 12
+  },
+  {
+    id: "eng-013",
+    unitId: "everyday-expansion",
+    title: "Family Words",
+    goal: "تعلم كلمات العائلة الأساسية.",
+    explanation: "كلمات العائلة تظهر كثيراً عند التعريف بنفسك أو الحديث عن حياتك اليومية.",
+    words: ["father", "mother", "brother", "sister"],
+    examples: [
+      { english: "My father is kind.", arabic: "أبي طيب." },
+      { english: "My sister is a student.", arabic: "أختي طالبة." }
+    ],
+    practice: "اكتب جملة تبدأ بـ My mother أو My brother.",
+    aiTip: "استخدم My قبل أفراد العائلة حتى تبني جملة مفيدة بسرعة.",
+    xpReward: 25,
+    estimatedMinutes: 5,
+    order: 13
+  },
+  {
+    id: "eng-014",
+    unitId: "everyday-expansion",
+    title: "Basic Colors",
+    goal: "تعلم الألوان الأساسية واستخدامها في جملة قصيرة.",
+    explanation: "الألوان تساعدك على وصف الأشياء مثل الكتاب، القلم، الحقيبة، والملابس.",
+    words: ["red", "blue", "green", "black"],
+    examples: [
+      { english: "My bag is black.", arabic: "حقيبتي سوداء." },
+      { english: "The pen is blue.", arabic: "القلم أزرق." }
+    ],
+    practice: "اختر شيئاً حولك واكتب لونه بالإنجليزية.",
+    aiTip: "اربط اللون بشيء تراه أمامك حتى تحفظه بسرعة.",
+    xpReward: 25,
+    estimatedMinutes: 5,
+    order: 14
+  },
+  {
+    id: "eng-015",
+    unitId: "everyday-expansion",
+    title: "Daily Mini Sentences",
+    goal: "اجمع كلمات الوقت والعائلة والألوان في جمل يومية قصيرة.",
+    explanation: "الجمل القصيرة هي الجسر بين حفظ الكلمات والقدرة على المحادثة.",
+    words: ["I have", "I like", "today", "my"],
+    examples: [
+      { english: "I have a blue pen.", arabic: "لدي قلم أزرق." },
+      { english: "Today I study English.", arabic: "اليوم أدرس الإنجليزية." }
+    ],
+    practice: "اكتب ثلاث جمل قصيرة تبدأ بـ I have أو I like.",
+    aiTip: "لا تنتظر أن تعرف قواعد كثيرة. ابدأ بجمل قصيرة وصحيحة.",
+    xpReward: 30,
+    estimatedMinutes: 6,
+    order: 15
   }
 ];
