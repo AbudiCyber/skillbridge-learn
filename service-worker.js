@@ -43,6 +43,7 @@ const CORE_ASSETS = [
   "./js/data/learningGoals.js",
   "./js/data/lessons.js",
   "./js/data/quizzes.js",
+  "./js/data/tracks.js",
   "./js/data/units.js",
   "./js/data/words.js",
   "./js/data/vocabularySections.js"
