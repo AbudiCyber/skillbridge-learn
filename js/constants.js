@@ -11,7 +11,8 @@ export const ROUTES = {
   PROGRESS: "progress",
   SAVED: "saved",
   GUIDE: "guide",
-  SETTINGS: "settings"
+  SETTINGS: "settings",
+  CONTENT_QA: "content-qa"
 };
 
 export const STORAGE_KEYS = {
