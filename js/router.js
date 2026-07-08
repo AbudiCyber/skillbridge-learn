@@ -1,4 +1,5 @@
 import { ROUTES } from "./constants.js";
+import { safelyRenderRoute } from "./engines/errorBoundaryEngine.js";
 import { renderHomePage } from "./pages/homePage.js";
 import { renderLearnPage } from "./pages/learnPage.js";
 import { renderLessonPage } from "./pages/lessonPage.js";
@@ -27,5 +28,5 @@ const routeRenderers = {
 
 export function renderRoute(route, state) {
   const render = routeRenderers[route] || routeRenderers[ROUTES.HOME];
-  return render(state);
+  return safelyRenderRoute(render, state, { route });
 }
