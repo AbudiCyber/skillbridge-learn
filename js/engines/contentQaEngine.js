@@ -19,11 +19,13 @@ function createCheck(id, title, passed, details) {
   };
 }
 
+function lessonHasWords(lesson, words) {
+  return words.some((word) => word.lessonId === lesson.id) || Boolean(lesson.words?.length);
+}
+
 export function runContentQA({ lessons, units, words, quizzes, vocabularySections }) {
   const lessonIds = new Set(lessons.map((lesson) => lesson.id));
   const unitIds = new Set(units.map((unit) => unit.id));
-  const wordIds = new Set(words.map((word) => word.id));
-  const quizIds = new Set(quizzes.map((quiz) => quiz.id));
   const sectionIds = new Set(vocabularySections.map((section) => section.id));
 
   const duplicateIds = [
@@ -34,7 +36,7 @@ export function runContentQA({ lessons, units, words, quizzes, vocabularySection
     ...findDuplicateIds(vocabularySections)
   ];
 
-  const lessonsWithoutWords = lessons.filter((lesson) => !words.some((word) => word.lessonId === lesson.id));
+  const lessonsWithoutWords = lessons.filter((lesson) => !lessonHasWords(lesson, words));
   const lessonsWithoutQuizzes = lessons.filter((lesson) => !quizzes.some((quiz) => quiz.lessonId === lesson.id));
   const quizzesWithoutLessons = quizzes.filter((quiz) => !lessonIds.has(quiz.lessonId));
   const wordsWithoutSections = words.filter((word) => !sectionIds.has(word.sectionId));
