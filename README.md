@@ -8,23 +8,23 @@ SkillBridge Learn is a mobile-first learning PWA designed to help Arabic-speakin
 
 Build a modular learning engine that starts with English and can later expand into programming English, other languages, and practical skills.
 
-## v0.2.11 Goal
+## v0.2.12 Goal
 
-Close the remaining Numbers 1-10 data gap by adding complete vocabulary cards for Six, Seven, Eight, and Nine so the lesson, vocabulary library, saved words, and QA all use complete number data:
+Close the Numbers 1-10 quiz coverage gap by expanding the mini quiz to include the middle numbers Six, Eight, and Nine while keeping the test short and phone-friendly:
 
 ```text
-Numbers Gap → Add 6/7/8/9 Cards → Complete Lesson Data → Freeze Candidate
+Numbers Cards → Quiz Coverage → Six/Eight/Nine Checks → Freeze Candidate
 ```
 
 ## Release Candidate Status
 
 ```text
-v0.2.11 = Numbers data completion candidate for v0.2.x freeze
+v0.2.12 = Numbers quiz coverage candidate for v0.2.x freeze
 QA report: docs/release-candidate-v0.2.7.md
 Manual smoke test: docs/manual-smoke-test-v0.2.7.md
 ```
 
-## v0.2.11 Features
+## v0.2.12 Features
 
 - Mobile-first PWA shell
 - English beginner track
@@ -54,6 +54,7 @@ Manual smoke test: docs/manual-smoke-test-v0.2.7.md
 - Quiz completion flow polish
 - Completed Numbers 1-10 lesson sequence
 - Complete number vocabulary cards from One to Ten
+- Expanded Numbers quiz coverage
 - Locked lesson completion until quiz pass
 - Compact mobile bottom navigation
 - Deeper premium dark theme
@@ -73,7 +74,7 @@ Manual smoke test: docs/manual-smoke-test-v0.2.7.md
 ## Current Version
 
 ```text
-v0.2.11 = Numbers 1-10 data completion
+v0.2.12 = Numbers quiz coverage
 ```
 
 ## Roadmap
@@ -90,6 +91,7 @@ v0.2.11 = Numbers 1-10 data completion
 - v0.2.9: Quiz completion flow polish
 - v0.2.10: Final mobile UX + content polish
 - v0.2.11: Numbers 1-10 data completion
+- v0.2.12: Numbers quiz coverage
 - v0.3.0: Review intelligence + spaced repetition foundations
 - v0.4.0: Audio and pronunciation layer
 - v0.5.0: Grammar Lite
