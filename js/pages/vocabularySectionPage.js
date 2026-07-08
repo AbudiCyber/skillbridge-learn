@@ -2,7 +2,21 @@ import { vocabularySections } from "../data/vocabularySections.js";
 import { words } from "../data/words.js";
 import { getVocabularySectionById, getWordsBySection } from "../engines/vocabularyEngine.js";
 
-function renderSectionWords(sectionWords) {
+function isWordSaved(state, wordId) {
+  return (state.savedWords || []).some((word) => word.id === wordId);
+}
+
+function renderSaveButton(word, state) {
+  const saved = isWordSaved(state, word.id);
+
+  return `
+    <button class="${saved ? "secondary-button" : "ghost-button"}" data-action="save-word" data-word-id="${word.id}" ${saved ? "disabled" : ""}>
+      ${saved ? "محفوظة بالفعل ✅" : "حفظ الكلمة"}
+    </button>
+  `;
+}
+
+function renderSectionWords(sectionWords, state) {
   if (!sectionWords.length) {
     return `
       <div class="empty-state">
@@ -14,20 +28,25 @@ function renderSectionWords(sectionWords) {
 
   return `
     <div class="word-grid">
-      ${sectionWords.map((word) => `
-        <article class="word-card">
-          <div>
-            <strong>${word.word}</strong>
-            <span>${word.translation}</span>
-          </div>
-          <p>${word.example}</p>
-          <div class="category-meta">
-            <span>${word.category}</span>
-            <span>${word.difficulty}</span>
-          </div>
-          <button class="ghost-button" data-action="save-word" data-word-id="${word.id}">حفظ الكلمة</button>
-        </article>
-      `).join("")}
+      ${sectionWords.map((word) => {
+        const saved = isWordSaved(state, word.id);
+
+        return `
+          <article class="word-card ${saved ? "is-saved" : ""}">
+            <div>
+              <strong>${word.word}</strong>
+              <span>${word.translation}</span>
+            </div>
+            <p>${word.example}</p>
+            <div class="category-meta">
+              <span>${word.category}</span>
+              <span>${word.difficulty}</span>
+              ${saved ? "<span>saved</span>" : ""}
+            </div>
+            ${renderSaveButton(word, state)}
+          </article>
+        `;
+      }).join("")}
     </div>
   `;
 }
@@ -53,7 +72,7 @@ export function renderVocabularySectionPage(state) {
     <section class="content-card">
       <h2>الكلمات داخل القسم</h2>
       <p>${sectionWords.length} كلمة مرتبطة بهذا القسم.</p>
-      ${renderSectionWords(sectionWords)}
+      ${renderSectionWords(sectionWords, state)}
     </section>
   `;
 }
