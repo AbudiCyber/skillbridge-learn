@@ -1,3 +1,5 @@
+import { buildReviewQueue } from "./reviewEngine.js";
+
 function getNextLesson(lessons, state) {
   const completedLessons = state.completedLessons || [];
   return lessons
@@ -8,13 +10,14 @@ function getNextLesson(lessons, state) {
 
 function getReviewNeed(state) {
   const savedWords = state.savedWords || [];
-  const wordReviews = state.wordReviews || {};
-  const pendingWords = savedWords.filter((word) => !wordReviews[word.id] || wordReviews[word.id].reviewCount === 0);
+  const queue = buildReviewQueue(state, 5);
+  const dueQueue = queue.filter((item) => item.status.isDue);
 
   return {
     savedCount: savedWords.length,
-    pendingCount: pendingWords.length,
-    shouldReview: savedWords.length > 0 && pendingWords.length > 0
+    pendingCount: dueQueue.length,
+    queue,
+    shouldReview: savedWords.length > 0 && dueQueue.length > 0
   };
 }
 
@@ -41,7 +44,8 @@ export function getGuideMessage(state, lessons = [], quizzes = []) {
   }
 
   if (reviewNeed.shouldReview) {
-    return `لديك ${reviewNeed.pendingCount} كلمة محفوظة تحتاج مراجعة. راجع كلمة أو كلمتين قبل درس جديد حتى تثبت المفردات.`;
+    const firstWord = reviewNeed.queue[0]?.word?.word;
+    return `لديك ${reviewNeed.pendingCount} كلمات تحتاج مراجعة. ابدأ بـ ${firstWord || "الكلمة الأولى"} قبل درس جديد.`;
   }
 
   if (quizNeed.shouldQuiz) {
@@ -66,9 +70,11 @@ export function buildTodayPlan(state, lessons = [], quizzes = []) {
   const plan = [];
 
   if (reviewNeed.shouldReview) {
+    const firstItems = reviewNeed.queue.slice(0, 3).map((item) => item.word.word).join(", ");
+
     plan.push({
       title: "راجع الكلمات المحفوظة",
-      description: `ابدأ بـ ${Math.min(3, reviewNeed.pendingCount)} كلمات تحتاج تثبيتاً.`,
+      description: `ابدأ بهذه الكلمات: ${firstItems}.`,
       route: "saved",
       priority: "high"
     });
@@ -111,6 +117,8 @@ export function buildGuideInsights(state, lessons = [], quizzes = []) {
   const completedQuizzes = state.completedQuizzes?.length || 0;
   const savedWords = state.savedWords?.length || 0;
   const reviews = Object.values(state.wordReviews || {}).filter((review) => review.reviewCount > 0).length;
+  const reviewQueue = buildReviewQueue(state, 5);
+  const dueWords = reviewQueue.filter((item) => item.status.isDue).length;
 
   return [
     {
@@ -126,7 +134,7 @@ export function buildGuideInsights(state, lessons = [], quizzes = []) {
     {
       label: "الكلمات",
       value: savedWords,
-      hint: savedWords < 3 ? "احفظ كلمات أكثر" : "مكتبة جيدة"
+      hint: dueWords > 0 ? `${dueWords} تحتاج مراجعة` : "مكتبة جيدة"
     },
     {
       label: "المراجعات",
