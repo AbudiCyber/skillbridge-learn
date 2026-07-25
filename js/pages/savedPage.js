@@ -11,6 +11,22 @@ function getConfidenceLabel(confidence) {
   return confidenceLabels[confidence] || confidence;
 }
 
+function renderReviewActions(wordId) {
+  return `
+    <div class="review-rating-grid" aria-label="تقييم المراجعة">
+      <button class="review-rating-button is-again" data-action="rate-review" data-word-id="${wordId}" data-rating="again">
+        🔴 نسيتها
+      </button>
+      <button class="review-rating-button is-hard" data-action="rate-review" data-word-id="${wordId}" data-rating="hard">
+        🟡 صعبة
+      </button>
+      <button class="review-rating-button is-good" data-action="rate-review" data-word-id="${wordId}" data-rating="good">
+        🟢 جيدة
+      </button>
+    </div>
+  `;
+}
+
 function renderSavedWordCard(word, state) {
   const review = getReviewRecord(state, word.id);
   const status = getReviewStatus(review);
@@ -24,13 +40,13 @@ function renderSavedWordCard(word, state) {
       </div>
       <p>${word.example}</p>
       <div class="category-meta">
-        <span>Reviews: ${review.reviewCount}</span>
-        <span>Last: ${formatReviewDate(review.lastReviewedAt)}</span>
-        <span>Next: ${status.nextReviewHint}</span>
+        <span>المراجعات: ${review.reviewCount}</span>
+        <span>الصحيحة: ${review.correctCount}</span>
+        <span>الخاطئة: ${review.wrongCount}</span>
+        <span>آخر مراجعة: ${formatReviewDate(review.lastReviewedAt)}</span>
+        <span>القادمة: ${status.nextReviewHint}</span>
       </div>
-      <button class="primary-button" data-action="review-word" data-word-id="${word.id}" style="margin-top: 12px;">
-        راجعت هذه الكلمة
-      </button>
+      ${renderReviewActions(word.id)}
     </article>
   `;
 }
@@ -46,13 +62,11 @@ function renderQueueCard(item) {
       </div>
       <p>${item.word.translation} — ${item.word.example}</p>
       <div class="category-meta">
-        <span>Priority: ${item.status.priority}</span>
-        <span>Reviews: ${item.record.reviewCount}</span>
-        <span>Next: ${item.status.nextReviewHint}</span>
+        <span>الأولوية: ${item.status.priority}</span>
+        <span>المراجعات: ${item.record.reviewCount}</span>
+        <span>القادمة: ${item.status.nextReviewHint}</span>
       </div>
-      <button class="primary-button" data-action="review-word" data-word-id="${item.word.id}" style="margin-top: 12px;">
-        مراجعة الآن
-      </button>
+      ${renderReviewActions(item.word.id)}
     </article>
   `;
 }
@@ -90,7 +104,7 @@ export function renderSavedPage(state) {
     <section class="content-card">
       <p class="section-label">Saved Review</p>
       <h2 class="page-title">⭐ مراجعة المحفوظات</h2>
-      <p>الكلمات المحفوظة أصبحت مركز مراجعة ذكي. الكلمات الجديدة أو الضعيفة تظهر أولاً.</p>
+      <p>قيّم كل كلمة حسب صعوبتها، وسيحسب SkillBridge موعد المراجعة القادمة تلقائياً.</p>
     </section>
 
     <section class="content-card">
