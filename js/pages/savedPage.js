@@ -143,6 +143,10 @@ function renderReviewDashboard(summary) {
         </div>
         <p>${summary.due ? `بقيت ${summary.due} كلمة مستحقة اليوم.` : "أكملت الكلمات المستحقة اليوم ✅"}</p>
       </div>
+
+      <button class="primary-button" data-action="start-review-session" ${summary.due ? "" : "disabled"} style="margin-top: 14px;">
+        ${summary.due ? `▶️ ابدأ جلسة مراجعة (${summary.due})` : "✅ لا توجد مراجعة مستحقة"}
+      </button>
     </section>
   `;
 }
