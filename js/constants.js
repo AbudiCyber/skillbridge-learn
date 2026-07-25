@@ -9,6 +9,7 @@ export const ROUTES = {
   VOCABULARY_SECTION: "vocabulary-section",
   PROGRESS: "progress",
   SAVED: "saved",
+  REVIEW_SESSION: "review-session",
   GUIDE: "guide",
   SETTINGS: "settings",
   CONTENT_QA: "content-qa"
