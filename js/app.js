@@ -6,7 +6,8 @@ import { words } from "./data/words.js";
 import { appendActivityEvent, createActivityEvent } from "./engines/analyticsEngine.js";
 import { completeLesson, getLessonById } from "./engines/lessonEngine.js";
 import { hasPassedQuiz } from "./engines/quizEngine.js";
-import { buildReviewQueue, rateWordReview } from "./engines/reviewEngine.js";
+import { rateWordReview } from "./engines/reviewEngine.js";
+import { advanceReviewSession, createReviewSessionState, getReviewSessionSnapshot } from "./engines/reviewSessionEngine.js";
 import { ensureArray, getSafeLessonId, normalizeRoute, sanitizeRoutePayload, sanitizeStateForRoute } from "./engines/runtimeSafetyEngine.js";
 import { applyDailyActivity } from "./engines/streakEngine.js";
 import { addXP, createXPEvent, hasXPEvent } from "./engines/xpEngine.js";
@@ -110,14 +111,12 @@ function handleRateReview(wordId, rating) {
 
 function handleStartReviewSession() {
   const currentState = getState();
-  const dueQueue = buildReviewQueue(currentState, 100).filter((item) => item.status.isDue);
-  if (!dueQueue.length) return;
+  const sessionState = createReviewSessionState(currentState, 100);
+  if (!sessionState.reviewSessionTotal) return;
 
   const nextState = setState({
+    ...sessionState,
     route: ROUTES.REVIEW_SESSION,
-    reviewSessionIndex: 0,
-    reviewSessionCompleted: 0,
-    reviewSessionTotal: dueQueue.length,
     resetConfirmArmed: false
   });
 
@@ -127,19 +126,17 @@ function handleStartReviewSession() {
 
 function handleRateReviewSession(wordId, rating) {
   const currentState = getState();
+  const snapshot = getReviewSessionSnapshot(currentState);
   const hasWord = ensureArray(currentState.savedWords).some((word) => word.id === wordId);
-  if (!hasWord) return;
+  if (!hasWord || snapshot.isComplete || snapshot.activeWordId !== wordId) return;
 
-  const completedCount = Math.max(0, Number(currentState.reviewSessionCompleted) || 0) + 1;
   const reviewedState = appendActivityEvent(
     applyDailyActivity(rateWordReview(currentState, wordId, rating)),
     createActivityEvent("review_word", wordId, { rating, source: "daily_session" })
   );
   const nextState = {
-    ...reviewedState,
-    route: ROUTES.REVIEW_SESSION,
-    reviewSessionCompleted: completedCount,
-    reviewSessionIndex: completedCount
+    ...advanceReviewSession(reviewedState, wordId, rating),
+    route: ROUTES.REVIEW_SESSION
   };
 
   setState(nextState);
