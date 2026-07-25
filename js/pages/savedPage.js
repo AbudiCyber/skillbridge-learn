@@ -43,6 +43,7 @@ function renderSavedWordCard(word, state) {
         <span>المراجعات: ${review.reviewCount}</span>
         <span>الصحيحة: ${review.correctCount}</span>
         <span>الخاطئة: ${review.wrongCount}</span>
+        <span>الدقة: ${status.accuracy}%</span>
         <span>آخر مراجعة: ${formatReviewDate(review.lastReviewedAt)}</span>
         <span>القادمة: ${status.nextReviewHint}</span>
       </div>
@@ -63,6 +64,7 @@ function renderQueueCard(item) {
       <p>${item.word.translation} — ${item.word.example}</p>
       <div class="category-meta">
         <span>الأولوية: ${item.status.priority}</span>
+        <span>الدقة: ${item.status.accuracy}%</span>
         <span>المراجعات: ${item.record.reviewCount}</span>
         <span>القادمة: ${item.status.nextReviewHint}</span>
       </div>
@@ -95,6 +97,56 @@ function renderQueueContent(savedWords, reviewQueue) {
   return `<div class="saved-word-preview">${reviewQueue.map(renderQueueCard).join("")}</div>`;
 }
 
+function renderReviewDashboard(summary) {
+  const completedToday = Math.max(0, summary.totalSaved - summary.due);
+  const progressPercent = summary.totalSaved
+    ? Math.round((completedToday / summary.totalSaved) * 100)
+    : 0;
+  const rescueCount = summary.weak;
+
+  return `
+    <section class="content-card review-dashboard-card">
+      <div class="track-header">
+        <div>
+          <p class="section-label">Review Dashboard</p>
+          <h2>🧠 لوحة المراجعة الذكية</h2>
+        </div>
+        <span class="status-badge ${summary.due ? "is-locked" : "is-open"}">${summary.due ? `${summary.due} مستحقة` : "مكتملة"}</span>
+      </div>
+
+      <div class="review-dashboard-grid">
+        <div class="review-metric-card">
+          <span>الدقة العامة</span>
+          <strong>${summary.averageAccuracy}%</strong>
+        </div>
+        <div class="review-metric-card">
+          <span>تحتاج إنقاذاً</span>
+          <strong>${rescueCount}</strong>
+        </div>
+        <div class="review-metric-card">
+          <span>الكلمات القوية</span>
+          <strong>${summary.strong}</strong>
+        </div>
+        <div class="review-metric-card">
+          <span>مراجعة اليوم</span>
+          <strong>${summary.due}</strong>
+        </div>
+      </div>
+
+      <div class="review-progress-block">
+        <div class="track-header">
+          <strong>تقدم المراجعة اليومية</strong>
+          <span>${progressPercent}%</span>
+        </div>
+        <div class="progress-bar review-progress-bar" aria-label="تقدم المراجعة اليومية" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progressPercent}">
+          <span style="width: ${progressPercent}%"></span>
+        </div>
+        <p>${summary.due ? `بقيت ${summary.due} كلمة مستحقة اليوم.` : "أكملت الكلمات المستحقة اليوم ✅"}</p>
+      </div>
+    </section>
+  `;
+}
+
 export function renderSavedPage(state) {
   const savedWords = state.savedWords || [];
   const summary = getSavedWordsReviewSummary(state);
@@ -106,6 +158,8 @@ export function renderSavedPage(state) {
       <h2 class="page-title">⭐ مراجعة المحفوظات</h2>
       <p>قيّم كل كلمة حسب صعوبتها، وسيحسب SkillBridge موعد المراجعة القادمة تلقائياً.</p>
     </section>
+
+    ${renderReviewDashboard(summary)}
 
     <section class="content-card">
       <h2>ملخص المراجعة</h2>
