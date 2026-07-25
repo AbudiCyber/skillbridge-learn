@@ -14,6 +14,13 @@ export const defaultState = {
   activityEvents: [],
   savedWords: [],
   wordReviews: {},
+  reviewSessionQueue: [],
+  reviewSessionIndex: 0,
+  reviewSessionCompleted: 0,
+  reviewSessionTotal: 0,
+  reviewSessionResults: [],
+  reviewSessionStartedAt: null,
+  reviewSessionCompletedAt: null,
   selectedGoal: "daily-lesson",
   resetConfirmArmed: false
 };
