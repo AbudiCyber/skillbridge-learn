@@ -6,7 +6,7 @@ import { words } from "./data/words.js";
 import { appendActivityEvent, createActivityEvent } from "./engines/analyticsEngine.js";
 import { completeLesson, getLessonById } from "./engines/lessonEngine.js";
 import { hasPassedQuiz } from "./engines/quizEngine.js";
-import { markWordReviewed } from "./engines/reviewEngine.js";
+import { rateWordReview } from "./engines/reviewEngine.js";
 import { ensureArray, getSafeLessonId, normalizeRoute, sanitizeRoutePayload, sanitizeStateForRoute } from "./engines/runtimeSafetyEngine.js";
 import { applyDailyActivity } from "./engines/streakEngine.js";
 import { addXP, createXPEvent, hasXPEvent } from "./engines/xpEngine.js";
@@ -93,15 +93,16 @@ function handleSaveWord(wordId) {
   renderApp(currentState.route, nextState);
 }
 
-function handleReviewWord(wordId) {
+function handleRateReview(wordId, rating) {
   const currentState = getState();
   const hasWord = ensureArray(currentState.savedWords).some((word) => word.id === wordId);
   if (!hasWord) return;
 
   const nextState = appendActivityEvent(
-    applyDailyActivity(markWordReviewed(currentState, wordId)),
-    createActivityEvent("review_word", wordId)
+    applyDailyActivity(rateWordReview(currentState, wordId, rating)),
+    createActivityEvent("review_word", wordId, { rating })
   );
+
   setState(nextState);
   saveUserState(nextState);
   renderApp(ROUTES.SAVED, nextState);
@@ -239,7 +240,7 @@ function bindNavigation() {
   document.addEventListener("click", (event) => {
     const actionTarget = event.target.closest("[data-action]");
     if (actionTarget) {
-      const { action, lessonId, wordId, language, questionId, answer, quizId, goalId } = actionTarget.dataset;
+      const { action, lessonId, wordId, rating, language, questionId, answer, quizId, goalId } = actionTarget.dataset;
 
       if (action === "complete-lesson" && lessonId) {
         handleCompleteLesson(lessonId);
@@ -251,8 +252,8 @@ function bindNavigation() {
         return;
       }
 
-      if (action === "review-word" && wordId) {
-        handleReviewWord(wordId);
+      if (action === "rate-review" && wordId && rating) {
+        handleRateReview(wordId, rating);
         return;
       }
 
