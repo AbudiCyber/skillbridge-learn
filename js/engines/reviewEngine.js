@@ -71,6 +71,40 @@ function getNextStrengthScore(rating, currentRecord) {
   return Math.min(10, currentScore + 2);
 }
 
+function getAccuracy(record) {
+  const correct = Math.max(0, Number(record.correctCount) || 0);
+  const wrong = Math.max(0, Number(record.wrongCount) || 0);
+  const total = correct + wrong;
+  if (total <= 0) return 0;
+  return Math.round((correct / total) * 100);
+}
+
+function getAdaptivePriority(record, status) {
+  if ((record.reviewCount || 0) <= 0) return 100;
+
+  const accuracy = getAccuracy(record);
+  const errorRate = 100 - accuracy;
+  const errorWeight = Math.round(errorRate * 0.35);
+  const overdueWeight = status.isDue
+    ? Math.min(25, Math.max(0, status.daysSinceReview || 0) * 3)
+    : 0;
+  const confidenceWeight = {
+    new: 30,
+    weak: 24,
+    learning: 14,
+    strong: 4
+  }[status.confidence] ?? 10;
+  const ratingWeight = {
+    again: 24,
+    hard: 12,
+    good: 0
+  }[record.lastRating] ?? 8;
+  const strengthPenalty = Math.max(0, 10 - (record.strengthScore || 0));
+  const dueGate = status.isDue ? 20 : 0;
+
+  return Math.min(150, dueGate + confidenceWeight + ratingWeight + strengthPenalty + errorWeight + overdueWeight);
+}
+
 export function getReviewRecord(state, wordId) {
   const existing = state.wordReviews?.[wordId] || {};
   const reviewCount = Math.max(0, Number(existing.reviewCount) || 0);
@@ -111,24 +145,21 @@ export function getReviewStatus(record, today = new Date()) {
         ? "بعد يوم"
         : `بعد ${daysUntilReview} أيام`;
 
-  const overdueBoost = isDue ? Math.min(20, Math.max(0, daysSinceReview)) : 0;
-  const basePriority = {
-    new: 100,
-    weak: 80,
-    learning: 55,
-    strong: 25
-  }[confidence] ?? 50;
-
-  return {
+  const baseStatus = {
     confidence,
     label: confidence,
     strength: confidence,
-    priority: basePriority + overdueBoost,
     nextReviewHint,
     daysSinceReview,
     daysUntilReview,
     nextReviewAt,
-    isDue
+    isDue,
+    accuracy: getAccuracy(record)
+  };
+
+  return {
+    ...baseStatus,
+    priority: getAdaptivePriority(record, baseStatus)
   };
 }
 
@@ -203,6 +234,9 @@ export function getSavedWordsReviewSummary(state) {
   const strongWords = reviewItems.filter((status) => status.confidence === REVIEW_CONFIDENCE.STRONG);
   const weakWords = reviewItems.filter((status) => status.confidence === REVIEW_CONFIDENCE.WEAK || status.confidence === REVIEW_CONFIDENCE.NEW);
   const dueWords = reviewItems.filter((status) => status.isDue);
+  const averageAccuracy = reviewItems.length
+    ? Math.round(reviewItems.reduce((sum, status) => sum + status.accuracy, 0) / reviewItems.length)
+    : 0;
 
   return {
     totalSaved: savedWords.length,
@@ -210,7 +244,8 @@ export function getSavedWordsReviewSummary(state) {
     strong: strongWords.length,
     weak: weakWords.length,
     due: dueWords.length,
-    pending: Math.max(0, savedWords.length - reviewedWords.length)
+    pending: Math.max(0, savedWords.length - reviewedWords.length),
+    averageAccuracy
   };
 }
 
