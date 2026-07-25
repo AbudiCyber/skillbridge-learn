@@ -8,6 +8,7 @@ import { renderLibraryPage } from "./pages/libraryPage.js";
 import { renderVocabularySectionPage } from "./pages/vocabularySectionPage.js";
 import { renderProgressPage } from "./pages/progressPage.js";
 import { renderSavedPage } from "./pages/savedPage.js";
+import { renderReviewSessionPage } from "./pages/reviewSessionPage.js";
 import { renderAiGuidePage } from "./pages/aiGuidePage.js";
 import { renderSettingsPage } from "./pages/settingsPage.js";
 import { renderContentQaPage } from "./pages/contentQaPage.js";
@@ -21,6 +22,7 @@ const routeRenderers = {
   [ROUTES.VOCABULARY_SECTION]: renderVocabularySectionPage,
   [ROUTES.PROGRESS]: renderProgressPage,
   [ROUTES.SAVED]: renderSavedPage,
+  [ROUTES.REVIEW_SESSION]: renderReviewSessionPage,
   [ROUTES.GUIDE]: renderAiGuidePage,
   [ROUTES.SETTINGS]: renderSettingsPage,
   [ROUTES.CONTENT_QA]: renderContentQaPage
