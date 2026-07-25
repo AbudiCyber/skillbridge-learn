@@ -6,7 +6,7 @@ import { words } from "./data/words.js";
 import { appendActivityEvent, createActivityEvent } from "./engines/analyticsEngine.js";
 import { completeLesson, getLessonById } from "./engines/lessonEngine.js";
 import { hasPassedQuiz } from "./engines/quizEngine.js";
-import { rateWordReview } from "./engines/reviewEngine.js";
+import { buildReviewQueue, rateWordReview } from "./engines/reviewEngine.js";
 import { ensureArray, getSafeLessonId, normalizeRoute, sanitizeRoutePayload, sanitizeStateForRoute } from "./engines/runtimeSafetyEngine.js";
 import { applyDailyActivity } from "./engines/streakEngine.js";
 import { addXP, createXPEvent, hasXPEvent } from "./engines/xpEngine.js";
@@ -106,6 +106,45 @@ function handleRateReview(wordId, rating) {
   setState(nextState);
   saveUserState(nextState);
   renderApp(ROUTES.SAVED, nextState);
+}
+
+function handleStartReviewSession() {
+  const currentState = getState();
+  const dueQueue = buildReviewQueue(currentState, 100).filter((item) => item.status.isDue);
+  if (!dueQueue.length) return;
+
+  const nextState = setState({
+    route: ROUTES.REVIEW_SESSION,
+    reviewSessionIndex: 0,
+    reviewSessionCompleted: 0,
+    reviewSessionTotal: dueQueue.length,
+    resetConfirmArmed: false
+  });
+
+  saveUserState(nextState);
+  renderApp(ROUTES.REVIEW_SESSION, nextState);
+}
+
+function handleRateReviewSession(wordId, rating) {
+  const currentState = getState();
+  const hasWord = ensureArray(currentState.savedWords).some((word) => word.id === wordId);
+  if (!hasWord) return;
+
+  const completedCount = Math.max(0, Number(currentState.reviewSessionCompleted) || 0) + 1;
+  const reviewedState = appendActivityEvent(
+    applyDailyActivity(rateWordReview(currentState, wordId, rating)),
+    createActivityEvent("review_word", wordId, { rating, source: "daily_session" })
+  );
+  const nextState = {
+    ...reviewedState,
+    route: ROUTES.REVIEW_SESSION,
+    reviewSessionCompleted: completedCount,
+    reviewSessionIndex: completedCount
+  };
+
+  setState(nextState);
+  saveUserState(nextState);
+  renderApp(ROUTES.REVIEW_SESSION, nextState);
 }
 
 function handleSetLanguage(language) {
@@ -254,6 +293,16 @@ function bindNavigation() {
 
       if (action === "rate-review" && wordId && rating) {
         handleRateReview(wordId, rating);
+        return;
+      }
+
+      if (action === "start-review-session") {
+        handleStartReviewSession();
+        return;
+      }
+
+      if (action === "rate-review-session" && wordId && rating) {
+        handleRateReviewSession(wordId, rating);
         return;
       }
 
