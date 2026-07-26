@@ -40,6 +40,33 @@ export function runStorageQA({ routes, lessons = [], vocabularySections = [] }) 
     streak: Number.NaN,
     bestStreak: "text"
   }, context);
+  const reviewSessionShapeState = repairUserState({
+    reviewSessionQueue: ["word-1", "", 123, null, "word-2"],
+    reviewSessionResults: [
+      { wordId: "word-1", rating: "good" },
+      null,
+      "bad-result",
+      { wordId: "word-2", rating: "hard" }
+    ],
+    reviewSessionIndex: -4,
+    reviewSessionCompleted: 10,
+    reviewSessionTotal: 2,
+    reviewSessionStartedAt: 123,
+    reviewSessionCompletedAt: {}
+  }, context);
+  const reviewSessionBoundsState = repairUserState({
+    reviewSessionQueue: ["word-1", "word-2"],
+    reviewSessionResults: [
+      { wordId: "word-1", rating: "good" },
+      { wordId: "word-2", rating: "hard" },
+      { wordId: "word-3", rating: "again" }
+    ],
+    reviewSessionIndex: 99,
+    reviewSessionCompleted: 99,
+    reviewSessionTotal: 1,
+    reviewSessionStartedAt: "2026-07-01T10:00:00.000Z",
+    reviewSessionCompletedAt: "2026-07-01T10:05:00.000Z"
+  }, context);
 
   const checks = [
     createStorageCheck(
@@ -51,7 +78,11 @@ export function runStorageQA({ routes, lessons = [], vocabularySections = [] }) 
     createStorageCheck(
       "missing-state-filled",
       "Missing state fields are filled",
-      missingState.route === defaultState.route && Array.isArray(missingState.savedWords) && isPlainObject(missingState.quizAnswers),
+      missingState.route === defaultState.route
+        && Array.isArray(missingState.savedWords)
+        && isPlainObject(missingState.quizAnswers)
+        && Array.isArray(missingState.reviewSessionQueue)
+        && Array.isArray(missingState.reviewSessionResults),
       missingState.route === defaultState.route ? [] : [`Got ${missingState.route}`]
     ),
     createStorageCheck(
@@ -93,6 +124,45 @@ export function runStorageQA({ routes, lessons = [], vocabularySections = [] }) 
       "Number fields are repaired",
       numberRepairState.xp === 0 && numberRepairState.streak === 0 && numberRepairState.bestStreak === 0,
       [`xp=${numberRepairState.xp}`, `streak=${numberRepairState.streak}`, `best=${numberRepairState.bestStreak}`]
+    ),
+    createStorageCheck(
+      "review-session-shape-repaired",
+      "Review session arrays and timestamps are repaired",
+      reviewSessionShapeState.reviewSessionQueue.length === 2
+        && reviewSessionShapeState.reviewSessionQueue.every((wordId) => typeof wordId === "string" && wordId.trim())
+        && reviewSessionShapeState.reviewSessionResults.length === 2
+        && reviewSessionShapeState.reviewSessionStartedAt === null
+        && reviewSessionShapeState.reviewSessionCompletedAt === null,
+      [
+        `Queue=${reviewSessionShapeState.reviewSessionQueue.length}`,
+        `Results=${reviewSessionShapeState.reviewSessionResults.length}`,
+        `Started=${reviewSessionShapeState.reviewSessionStartedAt}`,
+        `CompletedAt=${reviewSessionShapeState.reviewSessionCompletedAt}`
+      ]
+    ),
+    createStorageCheck(
+      "review-session-bounds-repaired",
+      "Review session counters are clamped safely",
+      reviewSessionBoundsState.reviewSessionTotal === 2
+        && reviewSessionBoundsState.reviewSessionIndex === 2
+        && reviewSessionBoundsState.reviewSessionCompleted === 2
+        && reviewSessionBoundsState.reviewSessionResults.length === 2,
+      [
+        `Total=${reviewSessionBoundsState.reviewSessionTotal}`,
+        `Index=${reviewSessionBoundsState.reviewSessionIndex}`,
+        `Completed=${reviewSessionBoundsState.reviewSessionCompleted}`,
+        `Results=${reviewSessionBoundsState.reviewSessionResults.length}`
+      ]
+    ),
+    createStorageCheck(
+      "review-session-dates-preserved",
+      "Valid review session timestamps are preserved",
+      reviewSessionBoundsState.reviewSessionStartedAt === "2026-07-01T10:00:00.000Z"
+        && reviewSessionBoundsState.reviewSessionCompletedAt === "2026-07-01T10:05:00.000Z",
+      [
+        `Started=${reviewSessionBoundsState.reviewSessionStartedAt || "null"}`,
+        `CompletedAt=${reviewSessionBoundsState.reviewSessionCompletedAt || "null"}`
+      ]
     )
   ];
 
