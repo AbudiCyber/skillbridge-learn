@@ -11,6 +11,7 @@ export const ROUTE_PAGES = {
   [ROUTES.VOCABULARY_SECTION]: "./js/pages/vocabularySectionPage.js",
   [ROUTES.PROGRESS]: "./js/pages/progressPage.js",
   [ROUTES.SAVED]: "./js/pages/savedPage.js",
+  [ROUTES.REVIEW_SESSION]: "./js/pages/reviewSessionPage.js",
   [ROUTES.GUIDE]: "./js/pages/aiGuidePage.js",
   [ROUTES.SETTINGS]: "./js/pages/settingsPage.js",
   [ROUTES.CONTENT_QA]: "./js/pages/contentQaPage.js"
@@ -23,6 +24,7 @@ export const REQUIRED_ENGINES = [
   "./js/engines/xpEngine.js",
   "./js/engines/vocabularyEngine.js",
   "./js/engines/reviewEngine.js",
+  "./js/engines/reviewSessionEngine.js",
   "./js/engines/streakEngine.js",
   "./js/engines/achievementEngine.js",
   "./js/engines/aiGuideEngine.js",
