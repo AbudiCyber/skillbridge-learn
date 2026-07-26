@@ -9,6 +9,11 @@ function ensureNumber(value, fallback = 0) {
   return Number.isFinite(value) ? value : fallback;
 }
 
+function ensureNonNegativeInteger(value, fallback = 0) {
+  const safeValue = ensureNumber(value, fallback);
+  return Math.max(0, Math.floor(safeValue));
+}
+
 function ensureString(value, fallback) {
   return typeof value === "string" && value.trim() ? value : fallback;
 }
@@ -21,11 +26,32 @@ function ensureNullableString(value) {
   return typeof value === "string" ? value : null;
 }
 
+function repairReviewSession(source) {
+  const queue = ensureArray(source.reviewSessionQueue)
+    .filter((wordId) => typeof wordId === "string" && wordId.trim());
+  const results = ensureArray(source.reviewSessionResults)
+    .filter((result) => result && typeof result === "object" && !Array.isArray(result));
+  const total = Math.max(queue.length, ensureNonNegativeInteger(source.reviewSessionTotal));
+  const index = Math.min(total, ensureNonNegativeInteger(source.reviewSessionIndex));
+  const completed = Math.min(total, ensureNonNegativeInteger(source.reviewSessionCompleted));
+
+  return {
+    reviewSessionQueue: queue,
+    reviewSessionIndex: index,
+    reviewSessionCompleted: completed,
+    reviewSessionTotal: total,
+    reviewSessionResults: results.slice(0, completed),
+    reviewSessionStartedAt: ensureNullableString(source.reviewSessionStartedAt),
+    reviewSessionCompletedAt: ensureNullableString(source.reviewSessionCompletedAt)
+  };
+}
+
 export function repairUserState(rawState, { routes, lessons = [], vocabularySections = [] }) {
   const source = ensureObject(rawState);
   const safeRoute = normalizeRoute(source.route || defaultState.route, routes);
   const activeLessonId = getSafeLessonId(lessons, source.activeLessonId || defaultState.activeLessonId);
   const activeVocabularySectionId = getSafeVocabularySectionId(vocabularySections, source.activeVocabularySectionId);
+  const reviewSessionState = repairReviewSession(source);
 
   return {
     ...defaultState,
@@ -46,6 +72,7 @@ export function repairUserState(rawState, { routes, lessons = [], vocabularySect
     activityEvents: ensureArray(source.activityEvents),
     savedWords: ensureArray(source.savedWords),
     wordReviews: ensureObject(source.wordReviews),
+    ...reviewSessionState,
     selectedGoal: ensureString(source.selectedGoal, defaultState.selectedGoal),
     resetConfirmArmed: ensureBoolean(source.resetConfirmArmed, defaultState.resetConfirmArmed)
   };
