@@ -55,6 +55,33 @@ function renderTimelineItem(item) {
   `;
 }
 
+function renderDailyGoal(goal) {
+  return `
+    <section class="content-card daily-goal-card">
+      <div class="track-header">
+        <div>
+          <p class="section-label">Daily Goal</p>
+          <h2>🎯 ${goal.title}</h2>
+        </div>
+        <span class="status-badge ${goal.isComplete ? "is-open" : "is-locked"}">
+          ${goal.isComplete ? "مكتمل" : `${goal.completed}/${goal.target}`}
+        </span>
+      </div>
+      <p>${goal.description}</p>
+      <div class="review-progress-block">
+        <div class="track-header">
+          <strong>تقدم هدف اليوم</strong>
+          <span>${goal.progressPercent}%</span>
+        </div>
+        <div class="progress-bar" aria-label="Daily goal progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${goal.progressPercent}">
+          <span style="width: ${goal.progressPercent}%"></span>
+        </div>
+        <p>${goal.isComplete ? "أكملت هدف اليوم ✅" : `بقي ${goal.remaining} لإكمال الهدف.`}</p>
+      </div>
+    </section>
+  `;
+}
+
 export function renderProgressPage(state) {
   const summary = buildProgressSummary(state, {
     lessons: lessons.length,
@@ -73,6 +100,8 @@ export function renderProgressPage(state) {
       <div class="progress-bar" aria-label="Lesson progress"><span style="width: ${summary.lessonProgressPercent}%"></span></div>
       <p style="margin-top: 10px;">Lesson progress: ${summary.lessonProgressPercent}%</p>
     </section>
+
+    ${renderDailyGoal(summary.dailyGoal)}
 
     <section class="content-card">
       <h2>Daily Streak</h2>
