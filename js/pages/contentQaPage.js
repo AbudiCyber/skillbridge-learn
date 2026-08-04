@@ -7,6 +7,7 @@ import { units } from "../data/units.js";
 import { vocabularySections } from "../data/vocabularySections.js";
 import { words } from "../data/words.js";
 import { runContentQA } from "../engines/contentQaEngine.js";
+import { runDailyGoalQA } from "../engines/dailyGoalQaEngine.js";
 import { runReviewSessionQA } from "../engines/reviewSessionQaEngine.js";
 import { runRuntimeQA } from "../engines/runtimeQaEngine.js";
 import { runStorageQA } from "../engines/storageQaEngine.js";
@@ -47,18 +48,22 @@ export function renderContentQaPage() {
   const runtimeReport = runRuntimeQA({ routes: ROUTES, lessons, vocabularySections });
   const storageReport = runStorageQA({ routes: ROUTES, lessons, vocabularySections });
   const reviewSessionReport = runReviewSessionQA();
+  const dailyGoalReport = runDailyGoalQA();
   const failedChecks = report.checks.filter((check) => check.status === "fail");
   const failedRuntimeChecks = runtimeReport.checks.filter((check) => check.status === "fail");
   const failedStorageChecks = storageReport.checks.filter((check) => check.status === "fail");
   const failedReviewSessionChecks = reviewSessionReport.checks.filter((check) => check.status === "fail");
+  const failedDailyGoalChecks = dailyGoalReport.checks.filter((check) => check.status === "fail");
   const totalFailed = report.totals.failed
     + runtimeReport.totals.failed
     + storageReport.totals.failed
-    + reviewSessionReport.totals.failed;
+    + reviewSessionReport.totals.failed
+    + dailyGoalReport.totals.failed;
   const finalStatus = report.status === "pass"
     && runtimeReport.status === "pass"
     && storageReport.status === "pass"
     && reviewSessionReport.status === "pass"
+    && dailyGoalReport.status === "pass"
     ? "pass"
     : "fail";
 
@@ -67,7 +72,7 @@ export function renderContentQaPage() {
       <button class="ghost-button inline-back-button" data-route="settings">← الرجوع إلى الإعدادات</button>
       <p class="section-label" style="margin-top: 14px;">Content QA</p>
       <h2 class="page-title">🧪 فحص تناسق المحتوى</h2>
-      <p>هذا التقرير يفحص المحتوى، المسارات، ملفات offline، حالات التشغيل الطرفية، سلامة التخزين المحلي، ومنطق جلسات المراجعة.</p>
+      <p>هذا التقرير يفحص المحتوى، المسارات، ملفات offline، حالات التشغيل الطرفية، سلامة التخزين المحلي، جلسات المراجعة، ومنطق الأهداف اليومية.</p>
       <span class="status-badge ${finalStatus === "pass" ? "is-open" : "is-locked"}">
         ${finalStatus === "pass" ? "All checks passed" : "Needs review"}
       </span>
@@ -84,11 +89,16 @@ export function renderContentQaPage() {
         <div class="stat-card">Runtime QA<strong>${runtimeReport.totals.passed}/${runtimeReport.totals.checks}</strong></div>
         <div class="stat-card">Storage QA<strong>${storageReport.totals.passed}/${storageReport.totals.checks}</strong></div>
         <div class="stat-card">Review QA<strong>${reviewSessionReport.totals.passed}/${reviewSessionReport.totals.checks}</strong></div>
+        <div class="stat-card">Daily Goal QA<strong>${dailyGoalReport.totals.passed}/${dailyGoalReport.totals.checks}</strong></div>
         <div class="stat-card">Failed<strong>${totalFailed}</strong></div>
       </div>
     </section>
 
-    ${failedChecks.length || failedRuntimeChecks.length || failedStorageChecks.length || failedReviewSessionChecks.length
+    ${failedChecks.length
+      || failedRuntimeChecks.length
+      || failedStorageChecks.length
+      || failedReviewSessionChecks.length
+      || failedDailyGoalChecks.length
       ? `
         <section class="content-card">
           <h2>⚠️ يحتاج مراجعة</h2>
@@ -97,7 +107,8 @@ export function renderContentQaPage() {
               ...failedChecks,
               ...failedRuntimeChecks,
               ...failedStorageChecks,
-              ...failedReviewSessionChecks
+              ...failedReviewSessionChecks,
+              ...failedDailyGoalChecks
             ].map(renderCheck).join("")}
           </div>
         </section>
@@ -106,11 +117,19 @@ export function renderContentQaPage() {
         <section class="content-card">
           <div class="empty-state">
             <h3>كل الفحوصات ناجحة ✅</h3>
-            <p>المحتوى، المسارات، ملفات offline، runtime، localStorage، وجلسات المراجعة متناسقة حالياً.</p>
+            <p>المحتوى، المسارات، ملفات offline، runtime، localStorage، جلسات المراجعة، والأهداف اليومية متناسقة حالياً.</p>
           </div>
         </section>
       `
     }
+
+    <section class="content-card">
+      <h2>Daily Goal QA</h2>
+      <p>فحص أهداف الدرس والمراجعة والاختبار، التقدم الجزئي، تجاهل نشاط الأيام السابقة، والرجوع الآمن للهدف الافتراضي.</p>
+      <div class="card-grid">
+        ${dailyGoalReport.checks.map(renderCheck).join("")}
+      </div>
+    </section>
 
     <section class="content-card">
       <h2>Review Session QA</h2>
