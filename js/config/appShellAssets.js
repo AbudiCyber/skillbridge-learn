@@ -30,6 +30,7 @@ export const REQUIRED_ENGINES = [
   "./js/engines/dailyGoalQaEngine.js",
   "./js/engines/streakEngine.js",
   "./js/engines/achievementEngine.js",
+  "./js/engines/achievementQaEngine.js",
   "./js/engines/aiGuideEngine.js",
   "./js/engines/contentQaEngine.js",
   "./js/engines/runtimeSafetyEngine.js",
