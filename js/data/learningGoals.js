@@ -8,27 +8,19 @@ export const learningGoals = [
     arabicDescription: "إكمال درس صغير كل يوم."
   },
   {
-    id: "vocabulary-builder",
-    icon: "⭐",
-    title: "Vocabulary Builder",
-    arabicTitle: "بناء المفردات",
-    description: "Save and review new words regularly.",
-    arabicDescription: "حفظ ومراجعة كلمات جديدة بانتظام."
+    id: "daily-review",
+    icon: "🧠",
+    title: "Daily Review",
+    arabicTitle: "مراجعة يومية",
+    description: "Review five saved words every day.",
+    arabicDescription: "مراجعة خمس كلمات محفوظة كل يوم."
   },
   {
-    id: "quiz-practice",
+    id: "daily-quiz",
     icon: "📝",
-    title: "Quiz Practice",
-    arabicTitle: "تدريب الاختبارات",
-    description: "Focus on short quizzes after lessons.",
-    arabicDescription: "التركيز على الاختبارات القصيرة بعد الدروس."
-  },
-  {
-    id: "streak-builder",
-    icon: "🔥",
-    title: "Streak Builder",
-    arabicTitle: "بناء الاستمرارية",
-    description: "Build a daily learning streak.",
-    arabicDescription: "بناء سلسلة تعلم يومية."
+    title: "Daily Quiz",
+    arabicTitle: "اختبار يومي",
+    description: "Finish one short quiz every day.",
+    arabicDescription: "إنهاء اختبار قصير واحد كل يوم."
   }
 ];
