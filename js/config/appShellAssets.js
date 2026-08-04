@@ -26,6 +26,8 @@ export const REQUIRED_ENGINES = [
   "./js/engines/reviewEngine.js",
   "./js/engines/reviewSessionEngine.js",
   "./js/engines/reviewSessionQaEngine.js",
+  "./js/engines/progressEngine.js",
+  "./js/engines/dailyGoalQaEngine.js",
   "./js/engines/streakEngine.js",
   "./js/engines/achievementEngine.js",
   "./js/engines/aiGuideEngine.js",
