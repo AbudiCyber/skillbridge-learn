@@ -9,6 +9,7 @@ import { words } from "../data/words.js";
 import { runAchievementQA } from "../engines/achievementQaEngine.js";
 import { runContentQA } from "../engines/contentQaEngine.js";
 import { runDailyGoalQA } from "../engines/dailyGoalQaEngine.js";
+import { runProgressQA } from "../engines/progressQaEngine.js";
 import { runReviewSessionQA } from "../engines/reviewSessionQaEngine.js";
 import { runRuntimeQA } from "../engines/runtimeQaEngine.js";
 import { runStorageQA } from "../engines/storageQaEngine.js";
@@ -53,6 +54,8 @@ export function renderContentQaPage() {
   const dailyGoalReport = runDailyGoalQA();
   const achievementReport = runAchievementQA();
   const streakReport = runStreakQA();
+  const progressReport = runProgressQA();
+
   const failedChecks = report.checks.filter((check) => check.status === "fail");
   const failedRuntimeChecks = runtimeReport.checks.filter((check) => check.status === "fail");
   const failedStorageChecks = storageReport.checks.filter((check) => check.status === "fail");
@@ -60,13 +63,17 @@ export function renderContentQaPage() {
   const failedDailyGoalChecks = dailyGoalReport.checks.filter((check) => check.status === "fail");
   const failedAchievementChecks = achievementReport.checks.filter((check) => check.status === "fail");
   const failedStreakChecks = streakReport.checks.filter((check) => check.status === "fail");
+  const failedProgressChecks = progressReport.checks.filter((check) => check.status === "fail");
+
   const totalFailed = report.totals.failed
     + runtimeReport.totals.failed
     + storageReport.totals.failed
     + reviewSessionReport.totals.failed
     + dailyGoalReport.totals.failed
     + achievementReport.totals.failed
-    + streakReport.totals.failed;
+    + streakReport.totals.failed
+    + progressReport.totals.failed;
+
   const finalStatus = report.status === "pass"
     && runtimeReport.status === "pass"
     && storageReport.status === "pass"
@@ -74,6 +81,7 @@ export function renderContentQaPage() {
     && dailyGoalReport.status === "pass"
     && achievementReport.status === "pass"
     && streakReport.status === "pass"
+    && progressReport.status === "pass"
     ? "pass"
     : "fail";
 
@@ -82,7 +90,7 @@ export function renderContentQaPage() {
       <button class="ghost-button inline-back-button" data-route="settings">← الرجوع إلى الإعدادات</button>
       <p class="section-label" style="margin-top: 14px;">Content QA</p>
       <h2 class="page-title">🧪 فحص تناسق المحتوى</h2>
-      <p>هذا التقرير يفحص المحتوى، المسارات، ملفات offline، حالات التشغيل الطرفية، سلامة التخزين المحلي، جلسات المراجعة، الأهداف اليومية، الإنجازات، ومنطق الـ Streak.</p>
+      <p>هذا التقرير يفحص المحتوى، المسارات، ملفات offline، حالات التشغيل الطرفية، سلامة التخزين المحلي، جلسات المراجعة، الأهداف اليومية، الإنجازات، الـ Streak، ومنطق التقدم.</p>
       <span class="status-badge ${finalStatus === "pass" ? "is-open" : "is-locked"}">
         ${finalStatus === "pass" ? "All checks passed" : "Needs review"}
       </span>
@@ -102,6 +110,7 @@ export function renderContentQaPage() {
         <div class="stat-card">Daily Goal QA<strong>${dailyGoalReport.totals.passed}/${dailyGoalReport.totals.checks}</strong></div>
         <div class="stat-card">Achievement QA<strong>${achievementReport.totals.passed}/${achievementReport.totals.checks}</strong></div>
         <div class="stat-card">Streak QA<strong>${streakReport.totals.passed}/${streakReport.totals.checks}</strong></div>
+        <div class="stat-card">Progress QA<strong>${progressReport.totals.passed}/${progressReport.totals.checks}</strong></div>
         <div class="stat-card">Failed<strong>${totalFailed}</strong></div>
       </div>
     </section>
@@ -113,6 +122,7 @@ export function renderContentQaPage() {
       || failedDailyGoalChecks.length
       || failedAchievementChecks.length
       || failedStreakChecks.length
+      || failedProgressChecks.length
       ? `
         <section class="content-card">
           <h2>⚠️ يحتاج مراجعة</h2>
@@ -124,7 +134,8 @@ export function renderContentQaPage() {
               ...failedReviewSessionChecks,
               ...failedDailyGoalChecks,
               ...failedAchievementChecks,
-              ...failedStreakChecks
+              ...failedStreakChecks,
+              ...failedProgressChecks
             ].map(renderCheck).join("")}
           </div>
         </section>
@@ -133,11 +144,19 @@ export function renderContentQaPage() {
         <section class="content-card">
           <div class="empty-state">
             <h3>كل الفحوصات ناجحة ✅</h3>
-            <p>المحتوى، المسارات، ملفات offline، runtime، localStorage، جلسات المراجعة، الأهداف اليومية، الإنجازات، والـ Streak متناسقة حالياً.</p>
+            <p>المحتوى، المسارات، ملفات offline، runtime، localStorage، جلسات المراجعة، الأهداف اليومية، الإنجازات، الـ Streak، والتقدم متناسقة حالياً.</p>
           </div>
         </section>
       `
     }
+
+    <section class="content-card">
+      <h2>Progress QA</h2>
+      <p>فحص نسب التقدم، حدود المستويات، XP المتبقي، أعداد الدروس والاختبارات والكلمات المحفوظة، وربط الهدف اليومي بملخص التقدم.</p>
+      <div class="card-grid">
+        ${progressReport.checks.map(renderCheck).join("")}
+      </div>
+    </section>
 
     <section class="content-card">
       <h2>Streak QA</h2>
