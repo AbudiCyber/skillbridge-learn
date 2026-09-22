@@ -1,3 +1,4 @@
+import { learningGoals } from "../data/learningGoals.js";
 import { defaultState } from "../state.js";
 import { ensureArray, getSafeLessonId, getSafeVocabularySectionId, normalizeRoute } from "./runtimeSafetyEngine.js";
 
@@ -20,6 +21,26 @@ function ensureString(value, fallback) {
 
 function ensureBoolean(value, fallback = false) {
   return typeof value === "boolean" ? value : fallback;
+}
+
+const VALID_GOAL_IDS = new Set(learningGoals.map((goal) => goal.id));
+const LEGACY_GOAL_MIGRATIONS = {
+  "vocabulary-builder": "daily-review",
+  "quiz-practice": "daily-quiz",
+  "streak-builder": "daily-lesson"
+};
+
+function normalizeSelectedGoal(value) {
+  const candidate = ensureString(value, defaultState.selectedGoal);
+
+  if (VALID_GOAL_IDS.has(candidate)) {
+    return candidate;
+  }
+
+  const migratedGoal = LEGACY_GOAL_MIGRATIONS[candidate];
+  return migratedGoal && VALID_GOAL_IDS.has(migratedGoal)
+    ? migratedGoal
+    : defaultState.selectedGoal;
 }
 
 function ensureNullableString(value) {
@@ -73,7 +94,7 @@ export function repairUserState(rawState, { routes, lessons = [], vocabularySect
     savedWords: ensureArray(source.savedWords),
     wordReviews: ensureObject(source.wordReviews),
     ...reviewSessionState,
-    selectedGoal: ensureString(source.selectedGoal, defaultState.selectedGoal),
+    selectedGoal: normalizeSelectedGoal(source.selectedGoal),
     resetConfirmArmed: ensureBoolean(source.resetConfirmArmed, defaultState.resetConfirmArmed)
   };
 }
