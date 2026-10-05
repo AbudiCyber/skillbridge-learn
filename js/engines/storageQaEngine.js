@@ -54,6 +54,12 @@ export function runStorageQA({ routes, lessons = [], vocabularySections = [] }) 
     reviewSessionStartedAt: 123,
     reviewSessionCompletedAt: {}
   }, context);
+  const legacyVocabularyGoalState = repairUserState({ selectedGoal: "vocabulary-builder" }, context);
+  const legacyQuizGoalState = repairUserState({ selectedGoal: "quiz-practice" }, context);
+  const legacyStreakGoalState = repairUserState({ selectedGoal: "streak-builder" }, context);
+  const validGoalState = repairUserState({ selectedGoal: "daily-review" }, context);
+  const unknownGoalState = repairUserState({ selectedGoal: "unknown-goal" }, context);
+
   const reviewSessionBoundsState = repairUserState({
     reviewSessionQueue: ["word-1", "word-2"],
     reviewSessionResults: [
@@ -124,6 +130,30 @@ export function runStorageQA({ routes, lessons = [], vocabularySections = [] }) 
       "Number fields are repaired",
       numberRepairState.xp === 0 && numberRepairState.streak === 0 && numberRepairState.bestStreak === 0,
       [`xp=${numberRepairState.xp}`, `streak=${numberRepairState.streak}`, `best=${numberRepairState.bestStreak}`]
+    ),
+    createStorageCheck(
+      "learning-goal-legacy-migrations",
+      "Legacy learning goals are migrated to supported goals",
+      legacyVocabularyGoalState.selectedGoal === "daily-review"
+        && legacyQuizGoalState.selectedGoal === "daily-quiz"
+        && legacyStreakGoalState.selectedGoal === "daily-lesson",
+      [
+        `vocabulary-builder→${legacyVocabularyGoalState.selectedGoal}`,
+        `quiz-practice→${legacyQuizGoalState.selectedGoal}`,
+        `streak-builder→${legacyStreakGoalState.selectedGoal}`
+      ]
+    ),
+    createStorageCheck(
+      "learning-goal-valid-preserved",
+      "Supported learning goals are preserved",
+      validGoalState.selectedGoal === "daily-review",
+      [`Goal=${validGoalState.selectedGoal}`]
+    ),
+    createStorageCheck(
+      "learning-goal-unknown-fallback",
+      "Unknown learning goals fall back safely",
+      unknownGoalState.selectedGoal === defaultState.selectedGoal,
+      [`Goal=${unknownGoalState.selectedGoal}`]
     ),
     createStorageCheck(
       "review-session-shape-repaired",
