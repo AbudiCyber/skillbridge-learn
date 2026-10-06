@@ -9,6 +9,7 @@ import { words } from "../data/words.js";
 import { runAchievementQA } from "../engines/achievementQaEngine.js";
 import { runContentQA } from "../engines/contentQaEngine.js";
 import { runDailyGoalQA } from "../engines/dailyGoalQaEngine.js";
+import { runLearningGoalQA } from "../engines/learningGoalQaEngine.js";
 import { runProgressQA } from "../engines/progressQaEngine.js";
 import { runReviewSessionQA } from "../engines/reviewSessionQaEngine.js";
 import { runRuntimeQA } from "../engines/runtimeQaEngine.js";
@@ -52,6 +53,7 @@ export function renderContentQaPage() {
   const storageReport = runStorageQA({ routes: ROUTES, lessons, vocabularySections });
   const reviewSessionReport = runReviewSessionQA();
   const dailyGoalReport = runDailyGoalQA();
+  const learningGoalReport = runLearningGoalQA();
   const achievementReport = runAchievementQA();
   const streakReport = runStreakQA();
   const progressReport = runProgressQA();
@@ -61,6 +63,7 @@ export function renderContentQaPage() {
   const failedStorageChecks = storageReport.checks.filter((check) => check.status === "fail");
   const failedReviewSessionChecks = reviewSessionReport.checks.filter((check) => check.status === "fail");
   const failedDailyGoalChecks = dailyGoalReport.checks.filter((check) => check.status === "fail");
+  const failedLearningGoalChecks = learningGoalReport.checks.filter((check) => check.status === "fail");
   const failedAchievementChecks = achievementReport.checks.filter((check) => check.status === "fail");
   const failedStreakChecks = streakReport.checks.filter((check) => check.status === "fail");
   const failedProgressChecks = progressReport.checks.filter((check) => check.status === "fail");
@@ -79,6 +82,7 @@ export function renderContentQaPage() {
     && storageReport.status === "pass"
     && reviewSessionReport.status === "pass"
     && dailyGoalReport.status === "pass"
+    && learningGoalReport.status === "pass"
     && achievementReport.status === "pass"
     && streakReport.status === "pass"
     && progressReport.status === "pass"
@@ -108,6 +112,7 @@ export function renderContentQaPage() {
         <div class="stat-card">Storage QA<strong>${storageReport.totals.passed}/${storageReport.totals.checks}</strong></div>
         <div class="stat-card">Review QA<strong>${reviewSessionReport.totals.passed}/${reviewSessionReport.totals.checks}</strong></div>
         <div class="stat-card">Daily Goal QA<strong>${dailyGoalReport.totals.passed}/${dailyGoalReport.totals.checks}</strong></div>
+        <div class="stat-card">Learning Goal QA<strong>${learningGoalReport.totals.passed}/${learningGoalReport.totals.checks}</strong></div>
         <div class="stat-card">Achievement QA<strong>${achievementReport.totals.passed}/${achievementReport.totals.checks}</strong></div>
         <div class="stat-card">Streak QA<strong>${streakReport.totals.passed}/${streakReport.totals.checks}</strong></div>
         <div class="stat-card">Progress QA<strong>${progressReport.totals.passed}/${progressReport.totals.checks}</strong></div>
@@ -120,6 +125,7 @@ export function renderContentQaPage() {
       || failedStorageChecks.length
       || failedReviewSessionChecks.length
       || failedDailyGoalChecks.length
+      || failedLearningGoalChecks.length
       || failedAchievementChecks.length
       || failedStreakChecks.length
       || failedProgressChecks.length
@@ -133,6 +139,7 @@ export function renderContentQaPage() {
               ...failedStorageChecks,
               ...failedReviewSessionChecks,
               ...failedDailyGoalChecks,
+              ...failedLearningGoalChecks,
               ...failedAchievementChecks,
               ...failedStreakChecks,
               ...failedProgressChecks
@@ -179,6 +186,14 @@ export function renderContentQaPage() {
       <p>فحص أهداف الدرس والمراجعة والاختبار، التقدم الجزئي، تجاهل نشاط الأيام السابقة، والرجوع الآمن للهدف الافتراضي.</p>
       <div class="card-grid">
         ${dailyGoalReport.checks.map(renderCheck).join("")}
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2>Learning Goal QA</h2>
+      <p>فحص تعريف أهداف التعلم، سلامة الـ IDs، الهدف الافتراضي، بقاء الاختيار بعد إصلاح state، والحفاظ عليه بعد إعادة التقدم.</p>
+      <div class="card-grid">
+        ${learningGoalReport.checks.map(renderCheck).join("")}
       </div>
     </section>
 
