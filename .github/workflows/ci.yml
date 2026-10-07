@@ -1,0 +1,46 @@
+name: SkillBridge CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  javascript-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          find js -type f -name "*.js" -print0 | while IFS= read -r -d '' file; do
+            node --check "$file"
+          done
+
+      - name: Run Learning Goal QA
+        shell: bash
+        run: |
+          node --input-type=module <<'EOF'
+          import { runLearningGoalQA } from "./js/engines/learningGoalQaEngine.js";
+
+          const report = runLearningGoalQA();
+
+          console.log(JSON.stringify(report, null, 2));
+
+          if (report.status !== "pass") {
+            process.exit(1);
+          }
+          EOF
