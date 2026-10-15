@@ -73,6 +73,7 @@ export function renderContentQaPage() {
     + storageReport.totals.failed
     + reviewSessionReport.totals.failed
     + dailyGoalReport.totals.failed
+    + learningGoalReport.totals.failed
     + achievementReport.totals.failed
     + streakReport.totals.failed
     + progressReport.totals.failed;
